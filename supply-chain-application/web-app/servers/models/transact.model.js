@@ -1,7 +1,9 @@
-const network = require('../fabric/network.js');
-const apiResponse = require('../utils/apiResponse.js');
+"use strict";
 
-exports.orderProduct = async information => {
+import network from './network.model';
+import appUtil from "../utils/appUtil";
+
+const orderProduct = async information => {
     const { productId, id } = information;
 
     const networkObj = await network.connect(false, true, id, 'supply');
@@ -18,7 +20,7 @@ exports.orderProduct = async information => {
     };
 };
 
-exports.sellProduct = async information => {
+const sellProduct = async information => {
     const { productId, id } = information;
 
     const networkObj = await network.connect(true, false, id, 'supply');
@@ -35,7 +37,7 @@ exports.sellProduct = async information => {
     };
 };
 
-exports.deliverProduct = async information => {
+const deliverProduct = async information => {
     const { productId, id } = information;
 
     const networkObj = await network.connect(false, true, id, 'supply');
@@ -52,7 +54,7 @@ exports.deliverProduct = async information => {
     };
 };
 
-exports.getAllTransact = async (isManufacturer, isConsumer, information) => {
+const getAllTransact = async (isManufacturer, isConsumer, information) => {
     const { id } = information;
 
     const networkObj = await network.connect(isManufacturer, isConsumer, id, 'supply');
@@ -76,3 +78,10 @@ exports.getAllTransact = async (isManufacturer, isConsumer, information) => {
         key: 'getAllTransact',
     };
 };
+
+export default {
+    orderProduct,
+    sellProduct,
+    deliverProduct,
+    getAllTransact
+}

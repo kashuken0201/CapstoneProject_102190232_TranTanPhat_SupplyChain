@@ -3,6 +3,13 @@
 const adminUserId = process.env.ADMIN;
 const adminUserPasswd = process.env.ADMIN_SECRET;
 
+/**
+ * 
+ * @param {*} FabricCAServices 
+ * @param {*} ccp 
+ * @param {*} caHostName 
+ * @returns 
+ */
 const buildCAClient = (FabricCAServices, ccp, caHostName) => {
   // Create a new CA client for interacting with the CA.
   const caInfo = ccp.certificateAuthorities[caHostName]; //lookup CA details from config
@@ -17,6 +24,13 @@ const buildCAClient = (FabricCAServices, ccp, caHostName) => {
   return caClient;
 };
 
+/**
+ * 
+ * @param {*} caClient 
+ * @param {*} wallet 
+ * @param {*} orgMspId 
+ * @returns 
+ */
 const enrollAdmin = async (caClient, wallet, orgMspId) => {
   try {
     // Check to see if we've already enrolled the admin user.
@@ -50,6 +64,15 @@ const enrollAdmin = async (caClient, wallet, orgMspId) => {
   }
 };
 
+/**
+ * 
+ * @param {*} caClient 
+ * @param {*} wallet 
+ * @param {*} orgMspId 
+ * @param {*} userId 
+ * @param {*} affiliation 
+ * @returns 
+ */
 const registerAndEnrollUser = async (
   caClient,
   wallet,

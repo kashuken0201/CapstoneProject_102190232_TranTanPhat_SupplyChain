@@ -1,10 +1,13 @@
-const network = require('../fabric/network.js');
-const channel = 'milkchannel'
+"use strict";
 
-var sha = require('js-sha256');
-var asn = require('asn1.js');
-var calculateBlockHash = function (header) {
-    let headerAsn = asn.define('headerAsn', function () {
+import network from './network.model';
+import appUtil from "../utils/appUtil";
+
+import sha from 'js-sha256';
+import asn from 'asn1.js';
+
+const calculateBlockHash = (header) => {
+    let headerAsn = asn.define('headerAsn', () => {
         this.seq().obj(
             this.key('Number').int(),
             this.key('PreviousHash').octstr(),
@@ -21,7 +24,7 @@ var calculateBlockHash = function (header) {
     return hash;
 };
 
-exports.getChainInfo = async (isManufacturer, isConsumer, information) => {
+const getChainInfo = async (isManufacturer, isConsumer, information) => {
     const info = information;
 
     const networkObj = await network.connect(isManufacturer, isConsumer, 'admin', 'qscc');
@@ -33,8 +36,7 @@ exports.getChainInfo = async (isManufacturer, isConsumer, information) => {
     };
 };
 
-
-exports.getBlocks = async (isManufacturer, isConsumer) => {
+const getBlocks = async (isManufacturer, isConsumer) => {
     let result = [];
     let number = 0;
     while (true) {
@@ -70,7 +72,7 @@ exports.getBlocks = async (isManufacturer, isConsumer) => {
 
 };
 
-exports.getBlockByHash = async (isManufacturer, isConsumer, information) => {
+const getBlockByHash = async (isManufacturer, isConsumer, information) => {
     const info = information;
 
     const networkObj = await network.connect(isManufacturer, isConsumer, 'admin', 'qscc');
@@ -82,7 +84,7 @@ exports.getBlockByHash = async (isManufacturer, isConsumer, information) => {
     };
 };
 
-exports.getTransactionByID = async (isManufacturer, isConsumer, information) => {
+const getTransactionByID = async (isManufacturer, isConsumer, information) => {
     const info = information;
 
     const networkObj = await network.connect(isManufacturer, isConsumer, 'admin', 'qscc');
@@ -94,7 +96,7 @@ exports.getTransactionByID = async (isManufacturer, isConsumer, information) => 
     };
 };
 
-exports.getBlockByTxID = async (isManufacturer, isConsumer, information) => {
+const getBlockByTxID = async (isManufacturer, isConsumer, information) => {
     const info = information;
 
     const networkObj = await network.connect(isManufacturer, isConsumer, 'admin', 'qscc');
@@ -105,3 +107,11 @@ exports.getBlockByTxID = async (isManufacturer, isConsumer, information) => {
         key: 'getBlockByTxID',
     };
 };
+
+export default {
+    getChainInfo,
+    getBlocks,
+    getBlockByHash,
+    getTransactionByID,
+    getBlockByTxID
+}

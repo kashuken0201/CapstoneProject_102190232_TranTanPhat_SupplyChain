@@ -3,8 +3,8 @@
 import { FabricCAServices } from "fabric-ca-client";
 import { Wallets, Gateway } from "fabric-network";
 import { BlockDecoder } from "fabric-common";
-import appUtil from "../utils/appUtil.js";
-import caUtil from "../utils/caUtil.js";
+import appUtil from "../utils/appUtil";
+import caUtil from "../utils/caUtil";
 
 const getConnectionMaterial = (orgName) => {
   const connectionMaterial = {};
@@ -15,8 +15,7 @@ const getConnectionMaterial = (orgName) => {
     process.env[`${_orgName}_WALLET`]
   );
   connectionMaterial.orgMSP = process.env[`${_orgName}_MSP`];
-
-  // connectionMaterial.caURL = process.env.MANUFACTURER_CA_ADDR;
+  
   return connectionMaterial;
 };
 

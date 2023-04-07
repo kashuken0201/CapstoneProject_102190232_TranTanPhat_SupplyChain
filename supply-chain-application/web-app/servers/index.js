@@ -4,8 +4,8 @@ import http from "http";
 import cors from "cors";
 import morgan from "morgan";
 
-import routes from "./src/routes/index.js";
-import network from "./fabric/network.js";
+import routes from "./routes/routes";
+import network from "./models/network.model";
 
 const port = process.env.NODE_SERVER_PORT || 5000;
 const hostname = process.env.NODE_SERVER_IP;

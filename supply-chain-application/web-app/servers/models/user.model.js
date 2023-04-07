@@ -1,25 +1,32 @@
-import network from '../fabric/network.js';
-import appUtil from "../utils/appUtil.js";
+"use strict";
+
+import network from './network.model';
+import appUtil from "../utils/appUtil";
 
 const signup = async (orgName, params) => {
-    const { username, password, email, userType, address } = params;
+    try {
+        const { username, password, email, userType, address } = params;
 
-    const networkObj = await network.connect(orgName, 'admin', 'fsc');
-    const res = await networkObj.contract.submitTransaction('CreateUser', username, email, userType, address, password);
-    res = appUtil.prettyJSONString(res);
-    await network.registerUser(orgName, res.UserID);
+        const networkObj = await network.connect(orgName, 'admin', 'fsc');
+        const res = await networkObj.contract.submitTransaction('CreateUser', username, email, userType, address, password);
+        res = appUtil.prettyJSONString(res);
+        await network.registerUser(orgName, res.UserID);
 
-    return {
-        data: res,
-        key: 'signup',
-    };
+        return {
+            data: res,
+            key: 'signup',
+        };
+    } catch (err) {
+
+    }
+
 };
 
 const signin = async (orgName, params) => {
     const { email, password, userType } = params;
 
     const networkObj = await network.connect(orgName, 'admin', 'fsc');
-    const res =await networkObj.contract.evaluateTransaction('SignIn', email, password);
+    const res = await networkObj.contract.evaluateTransaction('SignIn', email, password);
     res = appUtil.prettyJSONString(res);
 
     if (res.Role === 'admin') {
