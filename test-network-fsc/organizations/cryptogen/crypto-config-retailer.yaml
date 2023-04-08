@@ -4,16 +4,18 @@
 #
 
 # ---------------------------------------------------------------------------
-# "OrdererOrgs" - Definition of organizations managing orderer nodes
+# "PeerOrgs" - Definition of organizations managing peer nodes
 # ---------------------------------------------------------------------------
-OrdererOrgs:
+PeerOrgs:
   # ---------------------------------------------------------------------------
-  # Orderer
+  # Retailer
   # ---------------------------------------------------------------------------
-  - Name: Orderer
-    Domain: supplychain.com
+  - Name: Retailer
+    Domain: retailer.supplychain.com
     EnableNodeOUs: true
-    Specs:
-      - Hostname: orderer
-        SANS:
-          - localhost
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 1

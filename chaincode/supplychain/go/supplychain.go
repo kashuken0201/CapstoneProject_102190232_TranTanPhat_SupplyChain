@@ -1,12 +1,11 @@
 package main
 
-// Available/Out of stock => Ordered => Sold => Delivering => Received
-
 import (
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
+
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -19,51 +18,68 @@ type CounterNO struct {
 }
 
 type User struct {
-	Name      string `json:"Name"`
-	User_ID   string `json:"UserID"`
-	Email     string `json:"Email"`
-	User_Type string `json:"UserType"`
-	Role	  string `json:"Role"`
-	Address   string `json:"Address"`
-	Password  string `json:"Password"`
+	UserId   string `json:"UserId"`
+	Email    string `json:"Email"`
+	Password string `json:"Password"`
+	UserName string `json:"UserName"`
+	Address  string `json:"Address"`
+	UserType string `json:"UserType"`
+	Role     string `json:"Role"`
+	Status   string `json:"Status"`
 }
 
 type ProductDates struct {
-	ManufactureDate    string `json:"ManufacturedDate"`
-	SellToConsumerDate string `json:"SoldDate"`
-	OrderedDate        string `json:"OrderedDate"`
-	DeliveredDate      string `json:"DeliveredDate"`
+	Cultivated   string `json:"Cultivated"`
+	Harvested    string `json:"Harvested"`
+	Manufactured string `json:"Manufactured"`
+	Distributed  string `json:"Distributed"`
+	Ordered      string `json:"Ordered"`
+	Sold         string `json:"Sold"`
+	Delivered    string `json:"Delivered"`
+	Received     string `json:"Received"`
 }
 
+type ProductActors struct {
+	FarmerId       string `json:"FarmerId"`
+	ManufacturerId string `json:"ManufacturerId"`
+	DistributorId  string `json:"DistributorId"`
+	RetailerId     string `json:"RetailerId"`
+	ConsumerId     string `json:"ConsumerId"`
+}
+
+// Unit: kg, box/boxes, bottle, bottles, unit/units
+
+// Farmer: id, cultivate, harvest => cultivating, harvested
+// Manufacturer: id, manufacture, sell => manufactured/manufacturing, sold
+// Distributor: id, distribute, deliver => distributed/distributing, delivered/delivering
+// Retailer: id, sell => sold
+// Consumer: id, order, receive => ordered, received
 type Product struct {
-	Product_ID        string       `json:"ProductID"`
-	Order_ID          string       `json:"OrderID"`
-	Name              string       `json:"Name"`
-	Consumer_ID       string       `json:"ConsumerID"`
-	Manufacturer_ID   string       `json:"ManufacturerID"`
-	Manufacturer_Name string       `json:"ManufacturerName"`
-	Quantity		  int		   `json:"Quantity"`
-	Status            string       `json:"Status"`
-	Date              ProductDates `json:"Date"`
-	Price             float64      `json:"Price"`
-	Description       string       `json:"Description"`
+	ProductId   string        `json:"ProductId"`
+	ProductName string        `json:"ProductName"`
+	Dates       ProductDates  `json:"Dates"`
+	Actors      ProductActors `json:"Actors"`
+	Quantity    int           `json:"Quantity"`
+	Status      string        `json:"Status"`
+	Price       float64       `json:"Price"`
+	Unit        string        `json:"Unit"`
+	Description string        `json:"Description"`
+	OrderId     string        `json:"OrderID"`
 }
 
 type ProductResult struct {
-	Key    string `json:"Key"`
 	Record *Product
 }
 
 type UserResult struct {
-	Key    string `json:"Key"`
 	Record *User
 }
 
 type ProductHistory struct {
-	TxId    	string 	`json:"TxId"`
-	Value    	string 	`json:"Value"`
-	Timestamp   string 	`json:"Timestamp"`
-	IsDelete    string 	`json:"IsDelete"`
+	TxId      string `json:"TxId"`
+	Value     string `json:"Value"`
+	Timestamp string `json:"Timestamp"`
+	IsDelete  string `json:"IsDelete"`
 }
 
 // Init initializes chaincode
@@ -101,28 +117,28 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	}
 
 	// seed admin
-	entityUser := User{Name: "admin", User_ID: "User1", Email: "admin@pg.com", User_Type: "manufacturer", Role: "admin", Address: "VietNam", Password: "adminpw"}
+	entityUser := User{Name: "admin", UserId: "User1", Email: "admin@pg.com", UserType: "manufacturer", Role: "admin", Address: "VietNam", Password: "adminpw"}
 	entityUserAsBytes, errMarshal := json.Marshal(entityUser)
 
 	if errMarshal != nil {
 		return fmt.Errorf("Marshal Error in user: %s", errMarshal.Error())
 	}
 
-	errPut := ctx.GetStub().PutState(entityUser.User_ID, entityUserAsBytes)
+	errPut := ctx.GetStub().PutState(entityUser.UserId, entityUserAsBytes)
 	if errPut != nil {
-		return fmt.Errorf("Failed to create Entity Asset: %s --- %s", entityUser.User_ID, errPut.Error())
+		return fmt.Errorf("Failed to create Entity Asset: %s --- %s", entityUser.UserId, errPut.Error())
 	}
 
-	entityUser = User{Name: "admin", User_ID: "User2", Email: "admin@pg.com", User_Type: "consumer", Role: "admin", Address: "VietNam", Password: "adminpw"}
+	entityUser = User{Name: "admin", UserId: "User2", Email: "admin@pg.com", UserType: "consumer", Role: "admin", Address: "VietNam", Password: "adminpw"}
 	entityUserAsBytes, errMarshal = json.Marshal(entityUser)
 
 	if errMarshal != nil {
 		return fmt.Errorf("Marshal Error in user: %s", errMarshal.Error())
 	}
 
-	errPut = ctx.GetStub().PutState(entityUser.User_ID, entityUserAsBytes)
+	errPut = ctx.GetStub().PutState(entityUser.UserId, entityUserAsBytes)
 	if errPut != nil {
-		return fmt.Errorf("Failed to create Entity Asset: %s --- %s", entityUser.User_ID, errPut.Error())
+		return fmt.Errorf("Failed to create Entity Asset: %s --- %s", entityUser.UserId, errPut.Error())
 	}
 
 	return nil
@@ -175,11 +191,11 @@ func (s *SmartContract) SignIn(ctx contractapi.TransactionContextInterface, emai
 	if err != nil {
 		return nil, err
 	}
-	
+
 	for _, user := range results {
 		_email := (*user.Record).Email
 		_password := (*user.Record).Password
-		_userId := (*user.Record).User_ID
+		_userId := (*user.Record).UserId
 		if _email != email || _password != password {
 			return nil, fmt.Errorf("Email or password is wrong.")
 		}
@@ -192,28 +208,42 @@ func (s *SmartContract) SignIn(ctx contractapi.TransactionContextInterface, emai
 }
 
 // create user
-func (s *SmartContract) CreateUser(ctx contractapi.TransactionContextInterface, name string, email string, userType string, address string, password string) error {
+func (s *SmartContract) CreateUser(ctx contractapi.TransactionContextInterface, email string, password string, name string, address string, userType string) error {
+
+	results, err := s.GetAllUsers(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	for _, user := range results {
+		_email := (*user.Record).Email
+		if _email != email {
+			return fmt.Errorf("This user is exists.")
+		}
+	}
 
 	userCounter, _ := getCounter(ctx, "UserCounterNO")
 	userCounter++
 
-	comAsset := User{
-		Name: name, 
-		User_ID: "User" + strconv.Itoa(userCounter), 
-		Email: email, 
-		User_Type: userType, 
-		Address: address, 
+	user := User{
+		UserId:   "User" + strconv.Itoa(userCounter),
+		Email:    email,
 		Password: password,
+		Name:     name,
+		Address:  address,
+		UserType: userType,
+		Role:     "client",
 	}
 
-	comAssetAsBytes, errMarshal := json.Marshal(comAsset)
+	userAsBytes, errMarshal := json.Marshal(user)
 	if errMarshal != nil {
 		return fmt.Errorf("Marshal Error in Product: %s", errMarshal)
 	}
 
 	incrementCounter(ctx, "UserCounterNO")
 
-	return ctx.GetStub().PutState(comAsset.User_ID, comAssetAsBytes)
+	return ctx.GetStub().PutState(user.UserId, userAsBytes)
 }
 
 // create product
@@ -229,7 +259,7 @@ func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterfac
 	_ = json.Unmarshal(userBytes, &user)
 
 	// User type check for the function
-	if user.User_Type != "manufacturer" {
+	if user.UserType != "manufacturer" {
 		return fmt.Errorf("User must be a manufacturer")
 	}
 
@@ -246,19 +276,19 @@ func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterfac
 	dates := ProductDates{}
 	dates.ManufactureDate = txTimeAsPtr
 	var product = Product{
-		Product_ID: "Product" + strconv.Itoa(productCounter),
-		Order_ID: "",
-		Name: name,
-		Consumer_ID: "",
-		Manufacturer_ID: userId,
+		ProductId:         "Product" + strconv.Itoa(productCounter),
+		OrderId:           "",
+		Name:              name,
+		Consumer_ID:       "",
+		Manufacturer_ID:   userId,
 		Manufacturer_Name: manufacturerName,
-		Quantity: quantity,
-		Status: "",
-		Date: dates,
-		Price: price,
-		Description: description,
+		Quantity:          quantity,
+		Status:            "",
+		Date:              dates,
+		Price:             price,
+		Description:       description,
 	}
-	
+
 	if product.Quantity <= 0 {
 		product.Status = "Out of stock"
 	} else {
@@ -269,7 +299,7 @@ func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterfac
 
 	incrementCounter(ctx, "ProductCounterNO")
 
-	return ctx.GetStub().PutState(product.Product_ID, productAsBytes)
+	return ctx.GetStub().PutState(product.ProductId, productAsBytes)
 }
 
 // update product
@@ -285,7 +315,7 @@ func (s *SmartContract) UpdateProduct(ctx contractapi.TransactionContextInterfac
 	_ = json.Unmarshal(userBytes, &user)
 
 	// User type check for the function
-	if user.User_Type != "manufacturer" {
+	if user.UserType != "manufacturer" {
 		return fmt.Errorf("User must be a manufacturer")
 	}
 
@@ -299,8 +329,8 @@ func (s *SmartContract) UpdateProduct(ctx contractapi.TransactionContextInterfac
 	_ = json.Unmarshal(productBytes, &product)
 
 	// Updating the product values withe the new values
-	product.Name = name        
-	product.Price = price        
+	product.Name = name
+	product.Price = price
 	product.Description = description
 	product.Quantity = quantity
 
@@ -312,7 +342,7 @@ func (s *SmartContract) UpdateProduct(ctx contractapi.TransactionContextInterfac
 
 	updatedProductAsBytes, _ := json.Marshal(product)
 
-	return ctx.GetStub().PutState(product.Product_ID, updatedProductAsBytes)
+	return ctx.GetStub().PutState(product.ProductId, updatedProductAsBytes)
 }
 
 // order product
@@ -327,7 +357,7 @@ func (s *SmartContract) OrderProduct(ctx contractapi.TransactionContextInterface
 	_ = json.Unmarshal(userBytes, &user)
 
 	// User type check for the function
-	if user.User_Type != "consumer" {
+	if user.UserType != "consumer" {
 		return fmt.Errorf("User must be a consumer")
 	}
 
@@ -337,7 +367,7 @@ func (s *SmartContract) OrderProduct(ctx contractapi.TransactionContextInterface
 	}
 
 	product := new(Product)
-	if product.Status != "Available" || product.Status == "Out of stock"{
+	if product.Status != "Available" || product.Status == "Out of stock" {
 		return fmt.Errorf("Cannot order this product")
 	}
 	_ = json.Unmarshal(productBytes, &product)
@@ -350,8 +380,8 @@ func (s *SmartContract) OrderProduct(ctx contractapi.TransactionContextInterface
 		return fmt.Errorf("Returning error in Transaction TimeStamp")
 	}
 
-	product.Order_ID = "Order" + strconv.Itoa(orderCounter)
-	product.Consumer_ID = user.User_ID
+	product.OrderId = "Order" + strconv.Itoa(orderCounter)
+	product.Consumer_ID = user.UserId
 	product.Status = "Ordered"
 	product.Date.OrderedDate = txTimeAsPtr
 
@@ -359,7 +389,7 @@ func (s *SmartContract) OrderProduct(ctx contractapi.TransactionContextInterface
 
 	incrementCounter(ctx, "OrderCounterNO")
 
-	return ctx.GetStub().PutState(product.Product_ID, updatedProductAsBytes)
+	return ctx.GetStub().PutState(product.ProductId, updatedProductAsBytes)
 }
 
 // sell the product to consumer
@@ -374,7 +404,7 @@ func (s *SmartContract) SellToConsumer(ctx contractapi.TransactionContextInterfa
 	_ = json.Unmarshal(userBytes, &user)
 
 	// User type check for the function
-	if user.User_Type != "manufacturer" {
+	if user.UserType != "manufacturer" {
 		return fmt.Errorf("User must be a manufacturer")
 	}
 
@@ -388,7 +418,7 @@ func (s *SmartContract) SellToConsumer(ctx contractapi.TransactionContextInterfa
 	_ = json.Unmarshal(productBytes, &product)
 
 	// check if the product is ordered or not
-	if product.Order_ID == "" {
+	if product.OrderId == "" {
 		return fmt.Errorf("Product has not been ordered yet")
 	}
 
@@ -407,8 +437,8 @@ func (s *SmartContract) SellToConsumer(ctx contractapi.TransactionContextInterfa
 	product.Date.SellToConsumerDate = txTimeAsPtr
 	product.Status = "Sold"
 	updatedProductAsBytes, _ := json.Marshal(product)
-	
-	return ctx.GetStub().PutState(product.Product_ID, updatedProductAsBytes)
+
+	return ctx.GetStub().PutState(product.ProductId, updatedProductAsBytes)
 }
 
 // deliver product
@@ -423,7 +453,7 @@ func (s *SmartContract) DeliveredProduct(ctx contractapi.TransactionContextInter
 	_ = json.Unmarshal(userBytes, user)
 
 	// User type check for the function
-	if user.User_Type != "consumer" {
+	if user.UserType != "consumer" {
 		return fmt.Errorf("User must be a consumer")
 	}
 
@@ -448,7 +478,7 @@ func (s *SmartContract) DeliveredProduct(ctx contractapi.TransactionContextInter
 	product.Status = "Delivered"
 	updatedProductAsBytes, _ := json.Marshal(product)
 
-	return ctx.GetStub().PutState(product.Product_ID, updatedProductAsBytes)
+	return ctx.GetStub().PutState(product.ProductId, updatedProductAsBytes)
 }
 
 // get a asset
@@ -496,7 +526,7 @@ func (s *SmartContract) GetAllUsers(ctx contractapi.TransactionContextInterface)
 		_ = json.Unmarshal(queryResponse.Value, &user)
 
 		queryResult := UserResult{Key: queryResponse.Key, Record: user}
-	
+
 		results = append(results, queryResult)
 	}
 
@@ -515,7 +545,7 @@ func (s *SmartContract) GetAllProducts(ctx contractapi.TransactionContextInterfa
 	}
 
 	defer resultsIterator.Close()
-	
+
 	results := []ProductResult{}
 
 	for resultsIterator.HasNext() {
@@ -529,7 +559,7 @@ func (s *SmartContract) GetAllProducts(ctx contractapi.TransactionContextInterfa
 		_ = json.Unmarshal(queryResponse.Value, &product)
 
 		queryResult := ProductResult{Key: queryResponse.Key, Record: product}
-	
+
 		results = append(results, queryResult)
 	}
 
@@ -555,10 +585,10 @@ func (s *SmartContract) GetHistory(ctx contractapi.TransactionContextInterface, 
 		}
 
 		queryResult := ProductHistory{
-			TxId: response.TxId,
-			Value: string(response.Value),
+			TxId:      response.TxId,
+			Value:     string(response.Value),
 			Timestamp: time.Unix(response.Timestamp.Seconds, int64(response.Timestamp.Nanos)).String(),
-			IsDelete: strconv.FormatBool(response.IsDelete),
+			IsDelete:  strconv.FormatBool(response.IsDelete),
 		}
 		results = append(results, queryResult)
 	}

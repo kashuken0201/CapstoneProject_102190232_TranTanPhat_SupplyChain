@@ -25,7 +25,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: ../organizations/ordererOrganizations/fsc.com/msp
+        MSPDir: ../organizations/ordererOrganizations/scm.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -42,7 +42,33 @@ Organizations:
                 Rule: "OR('OrdererMSP.admin')"
 
         OrdererEndpoints:
-            - orderer.fsc.com:7050
+            - orderer.scm.com:7050
+    - &Farmer
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: FarmerMSP
+
+        # ID to load the MSP definition as
+        ID: FarmerMSP
+
+        MSPDir: ../organizations/peerOrganizations/farmer.scm.com/msp
+
+        # Policies defines the set of policies at this level of the config tree
+        # For organization policies, their canonical path is usually
+        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('FarmerMSP.admin', 'FarmerMSP.peer', 'FarmerMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('FarmerMSP.admin', 'FarmerMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('FarmerMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('FarmerMSP.peer')"
 
     - &Manufacturer
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -52,7 +78,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: ManufacturerMSP
 
-        MSPDir: ../organizations/peerOrganizations/manufacturer.fsc.com/msp
+        MSPDir: ../organizations/peerOrganizations/manufacturer.scm.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -71,6 +97,60 @@ Organizations:
                 Type: Signature
                 Rule: "OR('ManufacturerMSP.peer')"
 
+    - &Distributor
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: DistributorMSP
+
+        # ID to load the MSP definition as
+        ID: DistributorMSP
+
+        MSPDir: ../organizations/peerOrganizations/distributor.scm.com/msp
+
+        # Policies defines the set of policies at this level of the config tree
+        # For organization policies, their canonical path is usually
+        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin', 'DistributorMSP.peer', 'DistributorMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin', 'DistributorMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('DistributorMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('DistributorMSP.peer')"
+
+    - &Retailer
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: RetailerMSP
+
+        # ID to load the MSP definition as
+        ID: RetailerMSP
+
+        MSPDir: ../organizations/peerOrganizations/retailer.scm.com/msp
+
+        # Policies defines the set of policies at this level of the config tree
+        # For organization policies, their canonical path is usually
+        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin', 'RetailerMSP.peer', 'RetailerMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin', 'RetailerMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('RetailerMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('RetailerMSP.peer')"
+
     - &Consumer
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
@@ -79,7 +159,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: ConsumerMSP
 
-        MSPDir: ../organizations/peerOrganizations/consumer.fsc.com/msp
+        MSPDir: ../organizations/peerOrganizations/consumer.scm.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -208,14 +288,14 @@ Orderer: &OrdererDefaults
     # as TLS validation.  The preferred way to specify orderer addresses is now
     # to include the OrdererEndpoints item in your org definition
     Addresses:
-        - orderer.fsc.com:7050
+        - orderer.scm.com:7050
 
     EtcdRaft:
         Consenters:
-        - Host: orderer.fsc.com
+        - Host: orderer.scm.com
           Port: 7050
-          ClientTLSCert: ../organizations/ordererOrganizations/fsc.com/orderers/orderer.fsc.com/tls/server.crt
-          ServerTLSCert: ../organizations/ordererOrganizations/fsc.com/orderers/orderer.fsc.com/tls/server.crt
+          ClientTLSCert: ../organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/tls/server.crt
+          ServerTLSCert: ../organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/tls/server.crt
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -300,16 +380,43 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
 
-    TwoOrgsApplicationGenesis:
-        <<: *ChannelDefaults
+    OrdererGenesis:
+        Capabilities:
+            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             Organizations:
                 - *OrdererOrg
-            Capabilities: *OrdererCapabilities
+            Capabilities: 
+            <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Farmer
+                    - *Manufacturer
+                    - *Distributor
+                    - *Retailer
+                    - *Consumer
+    ChannelAllOrgs:
+        Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
+                - *Farmer
                 - *Manufacturer
+                - *Distributor
+                - *Retailer
                 - *Consumer
-            Capabilities: *ApplicationCapabilities
+            Capabilities:
+                <<: *ApplicationCapabilities
+
+    # ChannelThreeOrgs:
+    #     Consortium: SampleConsortium
+    #     Application:
+    #         <<: *ApplicationDefaults
+    #         Organizations:
+    #             - *Manufacturer
+    #             - *Distributor
+    #             - *Consumer
+    #         Capabilities:
+    #             <<: *ApplicationCapabilities                 

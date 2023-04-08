@@ -6,9 +6,12 @@
 version: '3.7'
 
 volumes:
-  orderer.fsc.com:
-  peer0.manufacturer.fsc.com:
-  peer0.consumer.fsc.com:
+  orderer.scm.com:
+  peer0.farmer.scm.com:
+  peer0.manufacturer.scm.com:
+  peer0.distributor.scm.com:
+  peer0.retailer.scm.com:
+  peer0.consumer.scm.com:
 
 networks:
   test:
@@ -16,8 +19,8 @@ networks:
 
 services:
 
-  orderer.fsc.com:
-    container_name: orderer.fsc.com
+  orderer.scm.com:
+    container_name: orderer.scm.com
     image: hyperledger/fabric-orderer:latest
     labels:
       service: hyperledger-fabric
@@ -43,14 +46,14 @@ services:
       - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
-      - ORDERER_OPERATIONS_LISTENADDRESS=orderer.fsc.com:9443
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer.scm.com:9443
       - ORDERER_METRICS_PROVIDER=prometheus
     working_dir: /root
     command: orderer
     volumes:
-        - ../organizations/ordererOrganizations/fsc.com/orderers/orderer.fsc.com/msp:/var/hyperledger/orderer/msp
-        - ../organizations/ordererOrganizations/fsc.com/orderers/orderer.fsc.com/tls/:/var/hyperledger/orderer/tls
-        - orderer.fsc.com:/var/hyperledger/production/orderer
+        - ../organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/msp:/var/hyperledger/orderer/msp
+        - ../organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/tls/:/var/hyperledger/orderer/tls
+        - orderer.scm.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
       - 7053:7053
@@ -58,8 +61,8 @@ services:
     networks:
       - test
 
-  peer0.manufacturer.fsc.com:
-    container_name: peer0.manufacturer.fsc.com
+  peer0.farmer.scm.com:
+    container_name: peer0.farmer.scm.com
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -73,22 +76,22 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.manufacturer.fsc.com
-      - CORE_PEER_ADDRESS=peer0.manufacturer.fsc.com:7051
+      - CORE_PEER_ID=peer0.farmer.scm.com
+      - CORE_PEER_ADDRESS=peer0.farmer.scm.com:7051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.manufacturer.fsc.com:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.farmer.scm.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.manufacturer.fsc.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.manufacturer.fsc.com:7051
-      - CORE_PEER_LOCALMSPID=ManufacturerMSP
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.farmer.scm.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.farmer.scm.com:7051
+      - CORE_PEER_LOCALMSPID=FarmerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.manufacturer.fsc.com:9444
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.farmer.scm.com:9444
       - CORE_METRICS_PROVIDER=prometheus
-      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0manufacturer"}
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0farmer"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/manufacturer.fsc.com/peers/peer0.manufacturer.fsc.com:/etc/hyperledger/fabric
-        - peer0.manufacturer.fsc.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/farmer.scm.com/peers/peer0.farmer.scm.com:/etc/hyperledger/fabric
+        - peer0.farmer.scm.com:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -96,9 +99,9 @@ services:
       - 9444:9444
     networks:
       - test
-
-  peer0.consumer.fsc.com:
-    container_name: peer0.consumer.fsc.com
+  
+  peer0.manufacturer.scm.com:
+    container_name: peer0.manufacturer.scm.com
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -112,27 +115,144 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.consumer.fsc.com
-      - CORE_PEER_ADDRESS=peer0.consumer.fsc.com:9051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.consumer.fsc.com:9052
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.consumer.fsc.com:9051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.consumer.fsc.com:9051
+      - CORE_PEER_ID=peer0.manufacturer.scm.com
+      - CORE_PEER_ADDRESS=peer0.manufacturer.scm.com:7061
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7061
+      - CORE_PEER_CHAINCODEADDRESS=peer0.manufacturer.scm.com:7062
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7062
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.manufacturer.scm.com:7061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.manufacturer.scm.com:7061
+      - CORE_PEER_LOCALMSPID=ManufacturerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.manufacturer.scm.com:9544
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0manufacturer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+        - ../organizations/peerOrganizations/manufacturer.scm.com/peers/peer0.manufacturer.scm.com:/etc/hyperledger/fabric
+        - peer0.manufacturer.scm.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7061:7061
+      - 9544:9544
+    networks:
+      - test
+
+  peer0.distributor.scm.com:
+    container_name: peer0.distributor.scm.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.distributor.scm.com
+      - CORE_PEER_ADDRESS=peer0.distributor.scm.com:7071
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7071
+      - CORE_PEER_CHAINCODEADDRESS=peer0.distributor.scm.com:7072
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7072
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.distributor.scm.com:7071
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.distributor.scm.com:7071
+      - CORE_PEER_LOCALMSPID=DistributorMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.distributor.scm.com:9644
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0distributor"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+        - ../organizations/peerOrganizations/distributor.scm.com/peers/peer0.distributor.scm.com:/etc/hyperledger/fabric
+        - peer0.distributor.scm.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7071:7071
+      - 9644:9644
+    networks:
+      - test
+
+  peer0.retailer.scm.com:
+    container_name: peer0.retailer.scm.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.retailer.scm.com
+      - CORE_PEER_ADDRESS=peer0.retailer.scm.com:7081
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7081
+      - CORE_PEER_CHAINCODEADDRESS=peer0.retailer.scm.com:7082
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7082
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.retailer.scm.com:7081
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.retailer.scm.com:7081
+      - CORE_PEER_LOCALMSPID=RetailerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.retailer.scm.com:9744
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0retailer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+        - ../organizations/peerOrganizations/retailer.scm.com/peers/peer0.retailer.scm.com:/etc/hyperledger/fabric
+        - peer0.retailer.scm.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7081:7081
+      - 9744:9744
+    networks:
+      - test
+
+  peer0.consumer.scm.com:
+    container_name: peer0.consumer.scm.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.consumer.scm.com
+      - CORE_PEER_ADDRESS=peer0.consumer.scm.com:7091
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7091
+      - CORE_PEER_CHAINCODEADDRESS=peer0.consumer.scm.com:7092
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7092
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.consumer.scm.com:7091
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.consumer.scm.com:7091
       - CORE_PEER_LOCALMSPID=ConsumerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp      
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.consumer.fsc.com:9445
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.consumer.scm.com:9844
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0consumer"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/consumer.fsc.com/peers/peer0.consumer.fsc.com:/etc/hyperledger/fabric
-        - peer0.consumer.fsc.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/consumer.scm.com/peers/peer0.consumer.scm.com:/etc/hyperledger/fabric
+        - peer0.consumer.scm.com:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
-      - 9051:9051
-      - 9445:9445
+      - 7091:7091
+      - 9844:9844
     networks:
       - test
 
@@ -154,7 +274,10 @@ services:
         - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
         - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     depends_on:
-      - peer0.manufacturer.fsc.com
-      - peer0.consumer.fsc.com
+      - peer0.farmer.scm.com
+      - peer0.manufacturer.scm.com
+      - peer0.distributor.scm.com
+      - peer0.retailer.scm.com
+      - peer0.consumer.scm.com
     networks:
       - test

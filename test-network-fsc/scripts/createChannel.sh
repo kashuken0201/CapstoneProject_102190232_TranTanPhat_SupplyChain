@@ -8,7 +8,7 @@ CHANNEL_NAME="$1"
 DELAY="$2"
 MAX_RETRY="$3"
 VERBOSE="$4"
-: ${CHANNEL_NAME:="fschannel"}
+: ${CHANNEL_NAME:="scm-channel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
 : ${VERBOSE:="false"}
@@ -34,7 +34,7 @@ createChannelGenesisBlock() {
 }
 
 createChannel() {
-	setGlobals 1
+	setGlobals farmer
 	# Poll in case the raft leader is not set yet
 	local rc=1
 	local COUNTER=1
@@ -69,7 +69,7 @@ joinChannel() {
 		COUNTER=$(expr $COUNTER + 1)
 	done
 	cat log.txt
-	verifyResult $res "After $MAX_RETRY attempts, peer0.org${ORG} has failed to join channel '$CHANNEL_NAME' "
+	verifyResult $res "After $MAX_RETRY attempts, peer0.${ORG} has failed to join channel '$CHANNEL_NAME' "
 }
 
 setAnchorPeer() {
@@ -92,15 +92,27 @@ createChannel
 successln "Channel '$CHANNEL_NAME' created"
 
 ## Join all the peers to the channel
+infoln "Joining farmer peer to the channel..."
+joinChannel farmer
 infoln "Joining manufacturer peer to the channel..."
-joinChannel 1
+joinChannel manufacturer
+infoln "Joining distributor peer to the channel..."
+joinChannel distributor
+infoln "Joining retailer peer to the channel..."
+joinChannel retailer
 infoln "Joining consumer peer to the channel..."
-joinChannel 2
+joinChannel consumer
 
 ## Set the anchor peers for each org in the channel
+infoln "Setting anchor peer for farmer..."
+setAnchorPeer farmer
 infoln "Setting anchor peer for manufacturer..."
-setAnchorPeer 1
+setAnchorPeer manufacturer
+infoln "Setting anchor peer for distributor..."
+setAnchorPeer distributor
+infoln "Setting anchor peer for retailer..."
+setAnchorPeer retailer
 infoln "Setting anchor peer for consumer..."
-setAnchorPeer 2
+setAnchorPeer consumer
 
 successln "Channel '$CHANNEL_NAME' joined"

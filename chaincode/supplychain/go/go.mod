@@ -1,4 +1,4 @@
-module github.com/hyperledger/fabric-samples/chaincode/fsc/go
+module github.com/hyperledger/fabric-samples/chaincode/supplychain/go
 
 go 1.13
 

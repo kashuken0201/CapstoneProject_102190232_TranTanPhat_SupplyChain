@@ -15,19 +15,25 @@ createAnchorPeerUpdate() {
   infoln "Fetching channel config for channel $CHANNEL_NAME"
   fetchChannelConfig $ORG $CHANNEL_NAME ${CORE_PEER_LOCALMSPID}config.json
 
-  infoln "Generating anchor peer update transaction for Org${ORG} on channel $CHANNEL_NAME"
+  infoln "Generating anchor peer update transaction for ${ORG} on channel $CHANNEL_NAME"
 
   if [ $ORG -eq 1 ]; then
-    HOST="peer0.manufacturer.fsc.com"
+    HOST="peer0.farmer.scm.com"
     PORT=7051
   elif [ $ORG -eq 2 ]; then
-    HOST="peer0.consumer.fsc.com"
-    PORT=9051
+    HOST="peer0.manufacturer.scm.com"
+    PORT=7061
   elif [ $ORG -eq 3 ]; then
-    HOST="peer0.org3.example.com"
-    PORT=11051
+    HOST="peer0.distributor.scm.com"
+    PORT=7071
+  elif [ $ORG -eq 4 ]; then
+    HOST="peer0.retailer.scm.com"
+    PORT=7081
+  elif [ $ORG -eq 5 ]; then
+    HOST="peer0.consumer.scm.com"
+    PORT=7091
   else
-    errorln "Org${ORG} unknown"
+    errorln "${ORG} unknown"
   fi
 
   set -x
@@ -42,7 +48,7 @@ createAnchorPeerUpdate() {
 }
 
 updateAnchorPeer() {
-  peer channel update -o orderer.fsc.com:7050 --ordererTLSHostnameOverride orderer.fsc.com -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile "$ORDERER_CA" >&log.txt
+  peer channel update -o orderer.scm.com:7050 --ordererTLSHostnameOverride orderer.scm.com -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile "$ORDERER_CA" >&log.txt
   res=$?
   cat log.txt
   verifyResult $res "Anchor peer update failed"
