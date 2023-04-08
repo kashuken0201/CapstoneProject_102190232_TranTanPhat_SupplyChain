@@ -1,0 +1,43 @@
+version: '3.7'
+
+networks:
+  fsc:
+    name: fsc
+
+services:
+  fsc_node:
+    labels:
+      service: fsc
+    container_name: fsc_node
+    build: 
+      context: ./web-app/servers
+      dockerfile: Dockerfile.node
+    restart: unless-stopped
+    ports:
+      - 5555:5555
+    volumes:
+      - ./web-app/servers/.env:/web-app/servers/.env
+      - ./web-app/servers:/web-app/servers
+      - /web-app/servers/node_modules
+    networks:
+      - fsc
+  fsc_react:
+    labels:
+      service: fsc
+    container_name: fsc_react
+    build:
+      context: ./web-app/client
+      dockerfile: Dockerfile.react
+    restart: unless-stopped
+    ports:
+      - 3333:3333
+    volumes:
+      # - ./web-app/client/.env:/app/web-app/client/.env
+      - ./web-app/client:/web-app/client
+      - /web-app/client/node_modules
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true 
+    networks:
+      - fsc
