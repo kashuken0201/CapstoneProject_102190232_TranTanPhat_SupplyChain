@@ -16,7 +16,6 @@ export PEER0_FARMER_CA=${PWD}/organizations/peerOrganizations/farmer.scm.com/tls
 export PEER0_MANUFACTURER_CA=${PWD}/organizations/peerOrganizations/manufacturer.scm.com/tlsca/tlsca.manufacturer.scm.com-cert.pem
 export PEER0_DISTRIBUTOR_CA=${PWD}/organizations/peerOrganizations/distributor.scm.com/tlsca/tlsca.distributor.scm.com-cert.pem
 export PEER0_RETAILER_CA=${PWD}/organizations/peerOrganizations/retailer.scm.com/tlsca/tlsca.retailer.scm.com-cert.pem
-export PEER0_CONSUMER_CA=${PWD}/organizations/peerOrganizations/consumer.scm.com/tlsca/tlsca.consumer.scm.com-cert.pem
 export ORDERER_ADMIN_TLS_SIGN_CERT=${PWD}/organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/tls/server.crt
 export ORDERER_ADMIN_TLS_PRIVATE_KEY=${PWD}/organizations/ordererOrganizations/scm.com/orderers/orderer.scm.com/tls/server.key
 
@@ -53,11 +52,6 @@ setGlobals() {
     export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/retailer.scm.com/users/Admin@retailer.scm.com/msp
     export CORE_PEER_ADDRESS=localhost:7081
 
-  elif [ $USING_ORG = consumer ]; then
-    export CORE_PEER_LOCALMSPID="ConsumerMSP"
-    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_CONSUMER_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/consumer.scm.com/users/Admin@consumer.scm.com/msp
-    export CORE_PEER_ADDRESS=localhost:7091
   else
     errorln "ORG Unknown"
   fi
@@ -85,8 +79,6 @@ setGlobalsCLI() {
     export CORE_PEER_ADDRESS=peer0.distributor.scm.com:7071
   elif [ $USING_ORG = retailer ]; then
     export CORE_PEER_ADDRESS=peer0.retailer.scm.com:7081
-  elif [ $USING_ORG = consumer ]; then
-    export CORE_PEER_ADDRESS=peer0.consumer.scm.com:7091
   else
     errorln "ORG Unknown"
   fi

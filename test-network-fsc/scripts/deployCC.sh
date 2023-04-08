@@ -149,22 +149,18 @@ infoln "Installing chaincode on peer0.distributor..."
 installChaincode distributor
 infoln "Installing chaincode on peer0.retailer..."
 installChaincode retailer
-infoln "Install chaincode on peer0.consumer..."
-installChaincode consumer
 
 ## query whether the chaincode is installed
 queryInstalled farmer
 queryInstalled manufacturer
 queryInstalled distributor
 queryInstalled retailer
-queryInstalled consumer
 
 ## approve the definition for all organizations and check
 approveForMyOrg farmer
 approveForMyOrg manufacturer
 approveForMyOrg distributor
 approveForMyOrg retailer
-approveForMyOrg consumer
 
 ## check whether the chaincode definition is ready to be committed
 
@@ -174,17 +170,16 @@ approveForMyOrg consumer
 # checkCommitReadiness consumer "\"ManufacturerMSP\": true" "\"ConsumerMSP\": false"
 
 ## now that we know for sure all organizations have approved, commit the definition
-commitChaincodeDefinition farmer manufacturer distributor retailer consumer
+commitChaincodeDefinition farmer manufacturer distributor retailer
 
 ## query on all organizations to see that the definition committed successfully
 queryCommitted farmer
 queryCommitted manufacturer
 queryCommitted distributor
 queryCommitted retailer
-queryCommitted consumer
 
 ## Invoke the chaincode
-chaincodeInvokeInit farmer manufacturer distributor retailer consumer
+chaincodeInvokeInit farmer manufacturer distributor retailer
 
 ## Invoke the chaincode - this does require that the chaincode have the 'initLedger'
 if [ "$CC_INIT_FCN" = "NA" ]; then

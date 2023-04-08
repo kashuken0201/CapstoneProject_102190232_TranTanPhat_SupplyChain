@@ -177,16 +177,6 @@ function createOrgs() {
       fatalln "Failed to generate certificates..."
     fi
 
-    infoln "Creating Consumer Identities"
-
-    set -x
-    cryptogen generate --config=./organizations/cryptogen/crypto-config-consumer.yaml --output="organizations"
-    res=$?
-    { set +x; } 2>/dev/null
-    if [ $res -ne 0 ]; then
-      fatalln "Failed to generate certificates..."
-    fi
-
     infoln "Creating Orderer Identities"
 
     set -x
@@ -230,10 +220,6 @@ function createOrgs() {
     infoln "Creating Retailer Identities"
 
     createRetailer
-
-    infoln "Creating Consumer Identities"
-
-    createConsumer
 
     infoln "Creating Orderer Org Identities"
 
@@ -294,7 +280,7 @@ function networkUp() {
   fi
 }
 
-# call the script to create the channel, join the peers of manufacturer and consumer,
+# call the script to create the channel, join the peers of all,
 # and then update the anchor peers for each organization
 function createChannel() {
   # Bring up the network if it is not already up.
@@ -353,7 +339,7 @@ function networkDown() {
   COMPOSE_FILES="${COMPOSE_BASE_FILES} ${COMPOSE_COUCH_FILES} ${COMPOSE_CA_FILES}"
 
   if [ "${CONTAINER_CLI}" == "docker" ]; then
-    DOCKER_SOCK=$DOCKER_SOCK ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} ${COMPOSE_ORG3_FILES} down --volumes --remove-orphans
+    DOCKER_SOCK=$DOCKER_SOCK ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} down --volumes --remove-orphans
   else
     fatalln "Container CLI  ${CONTAINER_CLI} not supported"
   fi
@@ -362,7 +348,7 @@ function networkDown() {
   # Don't remove the generated artifacts -- note, the ledgers are always removed
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
-    ${CONTAINER_CLI} volume rm docker_orderer.scm.com docker_peer0.farm.scm.com docker_peer0.manufacturer.scm.com docker_peer0.distributor.scm.com docker_peer0.retailer.scm.com docker_peer0.consumer.scm.com
+    ${CONTAINER_CLI} volume rm docker_orderer.scm.com docker_peer0.farm.scm.com docker_peer0.manufacturer.scm.com docker_peer0.distributor.scm.com docker_peer0.retailer.scm.com
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images
@@ -376,7 +362,6 @@ function networkDown() {
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/manufacturer/msp organizations/fabric-ca/manufacturer/tls-cert.pem organizations/fabric-ca/manufacturer/ca-cert.pem organizations/fabric-ca/manufacturer/IssuerPublicKey organizations/fabric-ca/manufacturer/IssuerRevocationPublicKey organizations/fabric-ca/manufacturer/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/distributor/msp organizations/fabric-ca/distributor/tls-cert.pem organizations/fabric-ca/distributor/ca-cert.pem organizations/fabric-ca/distributor/IssuerPublicKey organizations/fabric-ca/distributor/IssuerRevocationPublicKey organizations/fabric-ca/distributor/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/retailer/msp organizations/fabric-ca/retailer/tls-cert.pem organizations/fabric-ca/retailer/ca-cert.pem organizations/fabric-ca/retailer/IssuerPublicKey organizations/fabric-ca/retailer/IssuerRevocationPublicKey organizations/fabric-ca/retailer/fabric-ca-server.db'
-    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/consumer/msp organizations/fabric-ca/consumer/tls-cert.pem organizations/fabric-ca/consumer/ca-cert.pem organizations/fabric-ca/consumer/IssuerPublicKey organizations/fabric-ca/consumer/IssuerRevocationPublicKey organizations/fabric-ca/consumer/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
     
     # remove channel and script artifacts
@@ -409,12 +394,6 @@ COMPOSE_FILE_BASE=compose-test-net.yaml
 COMPOSE_FILE_COUCH=compose-couch.yaml
 # certificate authorities compose file
 COMPOSE_FILE_CA=compose-ca.yaml
-# use this as the default docker-compose yaml definition for org3
-COMPOSE_FILE_ORG3_BASE=compose-org3.yaml
-# use this as the docker compose couch file for org3
-COMPOSE_FILE_ORG3_COUCH=compose-couch-org3.yaml
-# certificate authorities compose file
-COMPOSE_FILE_ORG3_CA=compose-ca-org3.yaml
 #
 # chaincode language defaults to "NA"
 CC_SRC_LANGUAGE="NA"
