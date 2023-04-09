@@ -1,8 +1,8 @@
-module github.com/hyperledger/fabric-samples/chaincode/fsc/external
+module github.com/hyperledger/CapstoneProject_102190232_TranTanPhat_SupplyChain/chaincode/supplychain/go
 
-go 1.13
+go 1.17
 
 require (
-	github.com/hyperledger/fabric-chaincode-go v0.0.0-20200424173110-d7076418f212
-	github.com/hyperledger/fabric-contract-api-go v1.1.0
+	github.com/golang/protobuf v1.5.2
+	github.com/hyperledger/fabric-contract-api-go v1.2.1
 )

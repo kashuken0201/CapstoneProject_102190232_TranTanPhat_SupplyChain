@@ -13,13 +13,13 @@ starttime=$(date +%s)
 CC_SRC_LANGUAGE=${1:-"go"}
 CC_SRC_LANGUAGE=`echo "$CC_SRC_LANGUAGE" | tr [:upper:] [:lower:]`
 if [ "$CC_SRC_LANGUAGE" = "go" -o "$CC_SRC_LANGUAGE" = "golang" ] ; then
-	CC_SRC_PATH="../chaincode/fsc/go/"
+	CC_SRC_PATH="../chaincode/supplychain/go/"
 elif [ "$CC_SRC_LANGUAGE" = "javascript" ]; then
-	CC_SRC_PATH="../chaincode/fsc/javascript/"
+	CC_SRC_PATH="../chaincode/supplychain/javascript/"
 elif [ "$CC_SRC_LANGUAGE" = "java" ]; then
-	CC_SRC_PATH="../chaincode/fsc/java"
+	CC_SRC_PATH="../chaincode/supplychain/java"
 elif [ "$CC_SRC_LANGUAGE" = "typescript" ]; then
-	CC_SRC_PATH="../chaincode/fsc/typescript/"
+	CC_SRC_PATH="../chaincode/supplychain/typescript/"
 else
 	echo The chaincode language ${CC_SRC_LANGUAGE} is not supported by this script
 	echo Supported chaincode languages are: go, java, javascript, and typescript
@@ -33,10 +33,10 @@ rm -rf typescript/wallet/*
 rm -rf go/wallet/*
 
 # launch network; create channel and join peer to channel
-pushd ../test-network-fsc
+pushd ../test-network-supply-chain
 ./network.sh down
 ./network.sh up createChannel -ca -s couchdb
-./network.sh deployCC -ccn fsc -ccv 1 -cci InitLedger -ccl ${CC_SRC_LANGUAGE} -ccp ${CC_SRC_PATH}
+./network.sh deployCC -ccn supplychain -ccv 1 -cci InitLedger -ccl ${CC_SRC_LANGUAGE} -ccp ${CC_SRC_PATH}
 popd
 
 cd web-app/servers/
