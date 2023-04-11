@@ -1,21 +1,23 @@
 "use strict";
 
-import { FabricCAServices } from "fabric-ca-client";
+import pkg from "fabric-ca-client";
 import { Wallets, Gateway } from "fabric-network";
 import { BlockDecoder } from "fabric-common";
-import appUtil from "../utils/appUtil";
-import caUtil from "../utils/caUtil";
+import appUtil from "../utils/appUtil.js";
+import caUtil from "../utils/caUtil.js";
+import path from "path";
 
 const getConnectionMaterial = (orgName) => {
   const connectionMaterial = {};
-  const _orgName = orgName.toUpperCase();
-
+  const _orgName = orgName.toUpperCase()
+  
   connectionMaterial.walletPath = path.join(
     process.cwd(),
     process.env[`${_orgName}_WALLET`]
   );
+
   connectionMaterial.orgMSP = process.env[`${_orgName}_MSP`];
-  
+
   return connectionMaterial;
 };
 
@@ -121,21 +123,20 @@ const invoke = async (networkObj, ...funcAndArgs) => {
 
 const enrollAdmin = async (orgName) => {
   try {
-    const ccp = appUtil.buildCCPOrg();
+    const ccp = appUtil.buildCCPOrg(orgName);
     const caClient = caUtil.buildCAClient(
-      FabricCAServices,
+      pkg,
       ccp,
-      `ca.${orgName}.supplychain.com`
+      `ca.${orgName}.scm.com`
     );
 
     const connectionMaterial = getConnectionMaterial(orgName);
-    const wallet = await buildWallet(Wallets, connectionMaterial.walletPath);
+    const wallet = await appUtil.buildWallet(Wallets, connectionMaterial.walletPath);
+
     await caUtil.enrollAdmin(caClient, wallet, connectionMaterial.orgMSP);
   } catch (err) {
     console.error(`Failed to enroll admin user: ${err}`);
     process.exit(1);
-  } finally {
-    await gateway.disconnect();
   }
 };
 
@@ -149,7 +150,7 @@ const registerUser = async (orgName, userID) => {
     );
 
     const connectionMaterial = getConnectionMaterial(orgName);
-    const wallet = await buildWallet(Wallets, connectionMaterial.walletPath);
+    const wallet = await appUtil.buildWallet(Wallets, connectionMaterial.walletPath);
 
     await caUtil.registerAndEnrollUser(
       caClient,
@@ -161,8 +162,6 @@ const registerUser = async (orgName, userID) => {
   } catch (err) {
     console.error(`Failed to register user ${userID}: ${err}`);
     return { status: 500, error: err.toString() };
-  } finally {
-    await gateway.disconnect();
   }
 };
 
@@ -172,7 +171,8 @@ const checkExistUser = async (userId) => {
     if (!userIdentity) {
       console.error(
         `An identity for the user ${userID} does not exist in the wallet. Register ${userID} first`
-      );contractRes
+      );
+      contractRes;
       return false;
     }
     return true;
@@ -182,6 +182,13 @@ const checkExistUser = async (userId) => {
   }
 };
 
+const init = async () => {
+  await enrollAdmin("farmer");
+  await enrollAdmin("manufacturer");
+  await enrollAdmin("distributor");
+  await enrollAdmin("retailer");
+};
+
 export default {
   connect,
   queryBlock,
@@ -189,4 +196,5 @@ export default {
   invoke,
   enrollAdmin,
   registerUser,
+  init,
 };

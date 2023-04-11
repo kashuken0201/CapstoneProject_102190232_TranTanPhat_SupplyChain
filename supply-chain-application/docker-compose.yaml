@@ -5,6 +5,17 @@ networks:
     name: fsc
 
 services:
+  mongodb:
+    image: mongo:5.0.6
+    container_name: mongodb
+    ports:
+      - "27077:27017"
+    volumes:
+      - ./mongodb/config/mongod.conf:/data/configdb/mongod.conf
+      - ./mongodb/data:/data/db
+      - ./mongodb/log:/var/log/mongodb
+    command: ["/usr/bin/mongod", "-f", "/data/configdb/mongod.conf"]
+    restart: always
   fsc_node:
     labels:
       service: fsc
@@ -18,7 +29,7 @@ services:
     volumes:
       - ./web-app/servers/.env:/web-app/servers/.env
       - ./web-app/servers:/web-app/servers
-      - /web-app/servers/node_modules
+      - ./web-app/servers/node_modules:/web-app/servers/node_modules
     networks:
       - fsc
   fsc_react:
@@ -34,7 +45,7 @@ services:
     volumes:
       # - ./web-app/client/.env:/app/web-app/client/.env
       - ./web-app/client:/web-app/client
-      - /web-app/client/node_modules
+      - ./web-app/client/node_modules:/web-app/client/node_modules
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true

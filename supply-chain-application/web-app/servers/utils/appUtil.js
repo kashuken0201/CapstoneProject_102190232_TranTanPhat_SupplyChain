@@ -3,6 +3,8 @@
 import fs from "fs";
 import path from "path";
 
+const __dirname = path.resolve();
+
 /**
  *
  * @param {*} orgName
@@ -13,7 +15,7 @@ const buildCCPOrg = (orgName) => {
   const ccpPath = path.resolve(
     __dirname,
     "..",
-    "fabric",
+    "servers/configs",
     `connection-${orgName}.json`
   );
   const fileExists = fs.existsSync(ccpPath);
@@ -65,5 +67,5 @@ const prettyJSONString = (inputString) => {
 export default {
   buildCCPOrg,
   buildWallet,
-  prettyJSONString
+  prettyJSONString,
 };

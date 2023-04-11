@@ -1,76 +1,107 @@
 "use strict";
 
-import network from './network.model';
-import appUtil from "../utils/appUtil";
+import network from "./network.model.js";
+import appUtil from "../utils/appUtil.js";
 
-const createProduct = async information => {
-    const { name, id, price, manuName, desc } = information;
+const createProduct = async (information) => {
+  const { name, id, price, manuName, desc } = information;
 
-    const networkObj = await network.connect(true, false, id, 'supply');
-    const contractRes = await network.invoke(networkObj, 'createProduct', name, id, manuName, price, desc);
+  const networkObj = await network.connect(true, false, id, "supply");
+  const contractRes = await network.invoke(
+    networkObj,
+    "createProduct",
+    name,
+    id,
+    manuName,
+    price,
+    desc
+  );
 
-    return {
-        data: contractRes,
-        key: 'createProduct',
-    };
+  return {
+    data: contractRes,
+    key: "createProduct",
+  };
 };
 
-const updateProduct = async information => {
-    const { productId, name, id, price, desc } = information;
+const updateProduct = async (information) => {
+  const { productId, name, id, price, desc } = information;
 
-    const networkObj = await network.connect(true, false, id, 'supply');
-    const contractRes = await network.invoke(networkObj, 'updateProduct', productId, id, name, price, desc);
+  const networkObj = await network.connect(true, false, id, "supply");
+  const contractRes = await network.invoke(
+    networkObj,
+    "updateProduct",
+    productId,
+    id,
+    name,
+    price,
+    desc
+  );
 
-    return {
-        data: contractRes,
-        key: 'updateProduct',
-    };
+  return {
+    data: contractRes,
+    key: "updateProduct",
+  };
 };
 
 const getProductById = async (isManufacturer, isConsumer, information) => {
-    const { productId, id } = information;
+  const { productId, id } = information;
 
-    const networkObj = await network.connect(isManufacturer, isConsumer, id, 'supply');
-    const contractRes = await network.query(networkObj, 'queryAsset', productId);
+  const networkObj = await network.connect(
+    isManufacturer,
+    isConsumer,
+    id,
+    "supply"
+  );
+  const contractRes = await network.query(networkObj, "queryAsset", productId);
 
-    return {
-        data: contractRes,
-        key: 'getProductById',
-    };
+  return {
+    data: contractRes,
+    key: "getProductById",
+  };
 };
 
 const getAllProducts = async (isManufacturer, isConsumer, information) => {
-    const { id } = information;
+  const { id } = information;
 
-    const networkObj = await network.connect(isManufacturer, isConsumer, id, 'supply');
-    const contractRes = await network.query(networkObj, 'queryAll', 'Product');
+  const networkObj = await network.connect(
+    isManufacturer,
+    isConsumer,
+    id,
+    "supply"
+  );
+  const contractRes = await network.query(networkObj, "queryAll", "Product");
 
-    const res = [];
-    contractRes.forEach(element => {
-        res.push(element.Record)
-    });
-    return {
-        data: res,
-        key: 'getAllProducts',
-    };
+  const res = [];
+  contractRes.forEach((element) => {
+    res.push(element.Record);
+  });
+  return {
+    data: res,
+    key: "getAllProducts",
+  };
 };
 
 const getLog = async (isManufacturer, isConsumer, information) => {
-    const { productId, id } = information;
+  const { productId, id } = information;
 
-    const networkObj = await network.connect(isManufacturer, isConsumer, id, 'supply');
-    const contractRes = await network.query(networkObj, 'getHistory', productId);
+  const networkObj = await network.connect(
+    isManufacturer,
+    isConsumer,
+    id,
+    "supply"
+  );
+  const contractRes = await network.query(networkObj, "getHistory", productId);
 
-    return {
-        data: contractRes,
-        key: 'getLog',
-    };
+  return {
+    data: contractRes,
+    key: "getLog",
+  };
 };
 
 export default {
-    getAllProducts,
-    getProductById,
-    getLog,
-    createProduct,
-    updateProduct
-}
+  getAllProducts,
+  getProductById,
+  getLog,
+  createProduct,
+  updateProduct,
+};

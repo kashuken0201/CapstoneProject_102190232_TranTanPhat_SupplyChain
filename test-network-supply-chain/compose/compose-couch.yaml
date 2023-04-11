@@ -8,6 +8,10 @@ version: '3.7'
 networks:
   test:
     name: fabric_test
+    ipam:
+     config:
+       - subnet: 192.168.144.0/20
+         gateway: 192.168.144.1
 
 services:
   couchdb.farmer:
@@ -21,7 +25,8 @@ services:
     ports:
       - "5984:5984"
     networks:
-      - test
+      test:
+        ipv4_address: 192.168.144.21
 
   peer0.farmer.scm.com:
     environment:
@@ -43,7 +48,8 @@ services:
     ports:
       - "6984:5984"
     networks:
-      - test
+      test:
+        ipv4_address: 192.168.144.22
 
   peer0.manufacturer.scm.com:
     environment:
@@ -65,7 +71,8 @@ services:
     ports:
       - "7984:5984"
     networks:
-      - test
+      test:
+        ipv4_address: 192.168.144.23
 
   peer0.distributor.scm.com:
     environment:
@@ -87,7 +94,8 @@ services:
     ports:
       - "8984:5984"
     networks:
-      - test
+      test:
+        ipv4_address: 192.168.144.24
 
   peer0.retailer.scm.com:
     environment:

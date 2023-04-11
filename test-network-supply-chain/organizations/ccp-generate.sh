@@ -61,4 +61,3 @@ CAPEM=organizations/peerOrganizations/retailer.scm.com/ca/ca.retailer.scm.com-ce
 
 echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.json
 echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.yaml
-

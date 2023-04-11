@@ -229,7 +229,8 @@ function createOrgs() {
 
   infoln "Generating CCP files for all organizations"
   ./organizations/ccp-generate.sh
-}
+
+  }
 
 # Once you create the organization crypto material, you need to create the
 # genesis block of the application channel.

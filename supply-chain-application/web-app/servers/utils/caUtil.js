@@ -4,11 +4,11 @@ const adminUserId = process.env.ADMIN;
 const adminUserPasswd = process.env.ADMIN_SECRET;
 
 /**
- * 
- * @param {*} FabricCAServices 
- * @param {*} ccp 
- * @param {*} caHostName 
- * @returns 
+ *
+ * @param {*} FabricCAServices
+ * @param {*} ccp
+ * @param {*} caHostName
+ * @returns
  */
 const buildCAClient = (FabricCAServices, ccp, caHostName) => {
   // Create a new CA client for interacting with the CA.
@@ -25,11 +25,11 @@ const buildCAClient = (FabricCAServices, ccp, caHostName) => {
 };
 
 /**
- * 
- * @param {*} caClient 
- * @param {*} wallet 
- * @param {*} orgMspId 
- * @returns 
+ *
+ * @param {*} caClient
+ * @param {*} wallet
+ * @param {*} orgMspId
+ * @returns
  */
 const enrollAdmin = async (caClient, wallet, orgMspId) => {
   try {
@@ -41,12 +41,13 @@ const enrollAdmin = async (caClient, wallet, orgMspId) => {
       );
       return;
     }
-
+   
     // Enroll the admin user, and import the new identity into the wallet.
     const enrollment = await caClient.enroll({
       enrollmentID: adminUserId,
       enrollmentSecret: adminUserPasswd,
     });
+
     const x509Identity = {
       credentials: {
         certificate: enrollment.certificate,
@@ -55,6 +56,7 @@ const enrollAdmin = async (caClient, wallet, orgMspId) => {
       mspId: orgMspId,
       type: "X.509",
     };
+
     await wallet.put(adminUserId, x509Identity);
     console.log(
       "Successfully enrolled admin user and imported it into the wallet"
@@ -65,13 +67,13 @@ const enrollAdmin = async (caClient, wallet, orgMspId) => {
 };
 
 /**
- * 
- * @param {*} caClient 
- * @param {*} wallet 
- * @param {*} orgMspId 
- * @param {*} userId 
- * @param {*} affiliation 
- * @returns 
+ *
+ * @param {*} caClient
+ * @param {*} wallet
+ * @param {*} orgMspId
+ * @param {*} userId
+ * @param {*} affiliation
+ * @returns
  */
 const registerAndEnrollUser = async (
   caClient,
@@ -89,7 +91,7 @@ const registerAndEnrollUser = async (
       );
       return;
     }
-    connectionMaterial
+    connectionMaterial;
     // Must use an admin to register a new user
     const adminIdentity = await wallet.get(adminUserId);
     if (!adminIdentity) {
@@ -140,5 +142,5 @@ const registerAndEnrollUser = async (
 export default {
   buildCAClient,
   enrollAdmin,
-  registerAndEnrollUser
-}
+  registerAndEnrollUser,
+};

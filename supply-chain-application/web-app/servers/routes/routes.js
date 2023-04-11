@@ -1,16 +1,16 @@
 "use strict";
 
-import express from "express"
-import userRouter from './user.routes';
-import productRouter from './product.routes';
-import transactRouter from './transact.routes';
-import chaincodeRouter from './chaincode.routes';
+import express from "express";
+import userRouter from "./user.routes.js";
+import productRouter from "./product.routes.js";
+import transactRouter from "./transact.routes.js";
+import chaincodeRouter from "./chaincode.routes.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.use('/user', userRouter);
-router.use('/product', productRouter);
-router.use('/transact', transactRouter);
-router.use('/chaincode', chaincodeRouter);
+router.use("/user", userRouter);
+router.use("/product", productRouter);
+router.use("/transact", transactRouter);
+router.use("/chaincode", chaincodeRouter);
 
-export default router
+export default router;

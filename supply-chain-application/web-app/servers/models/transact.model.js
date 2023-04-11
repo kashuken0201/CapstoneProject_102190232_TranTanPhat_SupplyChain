@@ -1,87 +1,104 @@
 "use strict";
 
-import network from './network.model';
-import appUtil from "../utils/appUtil";
+import network from "./network.model.js";
+import appUtil from "../utils/appUtil.js";
 
-const orderProduct = async information => {
-    const { productId, id } = information;
+const orderProduct = async (information) => {
+  const { productId, id } = information;
 
-    const networkObj = await network.connect(false, true, id, 'supply');
-    const contractRes = await network.invoke(networkObj, 'orderProduct', id, productId);
+  const networkObj = await network.connect(false, true, id, "supply");
+  const contractRes = await network.invoke(
+    networkObj,
+    "orderProduct",
+    id,
+    productId
+  );
 
-    // const error = networkObj.error || contractRes.error;
-    // if (error) {
-    //     const status = networkObj.status || contractRes.status;
-    //     return apiResponse.createModelRes(status, error);
-    // }
-    return {
-        data: contractRes,
-        key: 'orderProduct',
-    };
+  // const error = networkObj.error || contractRes.error;
+  // if (error) {
+  //     const status = networkObj.status || contractRes.status;
+  //     return apiResponse.createModelRes(status, error);
+  // }
+  return {
+    data: contractRes,
+    key: "orderProduct",
+  };
 };
 
-const sellProduct = async information => {
-    const { productId, id } = information;
+const sellProduct = async (information) => {
+  const { productId, id } = information;
 
-    const networkObj = await network.connect(true, false, id, 'supply');
-    const contractRes = await network.invoke(networkObj, 'sellToConsumer', productId);
+  const networkObj = await network.connect(true, false, id, "supply");
+  const contractRes = await network.invoke(
+    networkObj,
+    "sellToConsumer",
+    productId
+  );
 
-    // const error = networkObj.error || contractRes.error;
-    // if (error) {
-    //     const status = networkObj.status || contractRes.status;
-    //     return apiResponse.createModelRes(status, error);
-    // }
-    return {
-        data: contractRes,
-        key: 'sellProduct',
-    };
+  // const error = networkObj.error || contractRes.error;
+  // if (error) {
+  //     const status = networkObj.status || contractRes.status;
+  //     return apiResponse.createModelRes(status, error);
+  // }
+  return {
+    data: contractRes,
+    key: "sellProduct",
+  };
 };
 
-const deliverProduct = async information => {
-    const { productId, id } = information;
+const deliverProduct = async (information) => {
+  const { productId, id } = information;
 
-    const networkObj = await network.connect(false, true, id, 'supply');
-    const contractRes = await network.invoke(networkObj, 'deliveredProduct', productId);
+  const networkObj = await network.connect(false, true, id, "supply");
+  const contractRes = await network.invoke(
+    networkObj,
+    "deliveredProduct",
+    productId
+  );
 
-    // const error = networkObj.error || contractRes.error;
-    // if (error) {
-    //     const status = networkObj.status || contractRes.status;
-    //     return apiResponse.createModelRes(status, error);
-    // }
-    return {
-        data: contractRes,
-        key: 'deliverProduct',
-    };
+  // const error = networkObj.error || contractRes.error;
+  // if (error) {
+  //     const status = networkObj.status || contractRes.status;
+  //     return apiResponse.createModelRes(status, error);
+  // }
+  return {
+    data: contractRes,
+    key: "deliverProduct",
+  };
 };
 
 const getAllTransact = async (isManufacturer, isConsumer, information) => {
-    const { id } = information;
+  const { id } = information;
 
-    const networkObj = await network.connect(isManufacturer, isConsumer, id, 'supply');
-    const contractRes = await network.query(networkObj, 'queryAll', 'Product');
+  const networkObj = await network.connect(
+    isManufacturer,
+    isConsumer,
+    id,
+    "supply"
+  );
+  const contractRes = await network.query(networkObj, "queryAll", "Product");
 
-    // const error = networkObj.error || contractRes.error;
-    // if (error) {
-    //     const status = networkObj.status || contractRes.status;
-    //     return apiResponse.createModelRes(status, error);
-    // }
+  // const error = networkObj.error || contractRes.error;
+  // if (error) {
+  //     const status = networkObj.status || contractRes.status;
+  //     return apiResponse.createModelRes(status, error);
+  // }
 
-    // return apiResponse.createModelRes(200, 'Success', contractRes);
-    const res = [];
-    contractRes.forEach(element => {
-        if (element.Record.OrderID !== "")
-            res.push(element.Record)
-    });
-    console.log(res)
-    return {
-        data: res,
-        key: 'getAllTransact',
-    };
+  // return apiResponse.createModelRes(200, 'Success', contractRes);
+  const res = [];
+  contractRes.forEach((element) => {
+    if (element.Record.OrderID !== "") res.push(element.Record);
+  });
+  console.log(res);
+  return {
+    data: res,
+    key: "getAllTransact",
+  };
 };
 
 export default {
-    orderProduct,
-    sellProduct,
-    deliverProduct,
-    getAllTransact
-}
+  orderProduct,
+  sellProduct,
+  deliverProduct,
+  getAllTransact,
+};
