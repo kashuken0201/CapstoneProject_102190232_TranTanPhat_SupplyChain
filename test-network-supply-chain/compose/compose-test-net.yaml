@@ -15,10 +15,6 @@ volumes:
 networks:
   test:
     name: fabric_test
-    ipam:
-     config:
-       - subnet: 192.168.144.0/20
-         gateway: 192.168.144.1
 
 services:
 
@@ -63,7 +59,6 @@ services:
       - 9443:9443
     networks:
       test:
-        ipv4_address: 192.168.144.31
 
   peer0.farmer.scm.com:
     container_name: peer0.farmer.scm.com
@@ -103,7 +98,6 @@ services:
       - 9444:9444
     networks:
       test:
-        ipv4_address: 192.168.144.32
   
   peer0.manufacturer.scm.com:
     container_name: peer0.manufacturer.scm.com
@@ -143,7 +137,6 @@ services:
       - 9544:9544
     networks:
       test:
-        ipv4_address: 192.168.144.33
 
   peer0.distributor.scm.com:
     container_name: peer0.distributor.scm.com
@@ -183,7 +176,6 @@ services:
       - 9644:9644
     networks:
       test:
-        ipv4_address: 192.168.144.34
 
   peer0.retailer.scm.com:
     container_name: peer0.retailer.scm.com
@@ -223,7 +215,6 @@ services:
       - 9744:9744
     networks:
       test:
-        ipv4_address: 192.168.144.35
 
   cli:
     container_name: cli
@@ -249,4 +240,3 @@ services:
       - peer0.retailer.scm.com
     networks:
       test:
-        ipv4_address: 192.168.144.100

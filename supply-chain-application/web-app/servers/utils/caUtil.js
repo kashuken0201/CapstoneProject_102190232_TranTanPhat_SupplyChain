@@ -91,7 +91,7 @@ const registerAndEnrollUser = async (
       );
       return;
     }
-    connectionMaterial;
+    
     // Must use an admin to register a new user
     const adminIdentity = await wallet.get(adminUserId);
     if (!adminIdentity) {
@@ -107,7 +107,7 @@ const registerAndEnrollUser = async (
       .getProviderRegistry()
       .getProvider(adminIdentity.type);
     const adminUser = await provider.getUserContext(adminIdentity, adminUserId);
-
+    console.log(affiliation);
     // Register the user, enroll the user, and import the new identity into the wallet.
     // if affiliation is specified by client, the affiliation value must be configured in CA
     const secret = await caClient.register(
@@ -118,6 +118,7 @@ const registerAndEnrollUser = async (
       },
       adminUser
     );
+    
     const enrollment = await caClient.enroll({
       enrollmentID: userId,
       enrollmentSecret: secret,

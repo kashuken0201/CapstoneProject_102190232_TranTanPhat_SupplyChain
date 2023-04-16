@@ -9,8 +9,8 @@ import path from "path";
 
 const getConnectionMaterial = (orgName) => {
   const connectionMaterial = {};
-  const _orgName = orgName.toUpperCase()
-  
+  const _orgName = orgName.toUpperCase();
+
   connectionMaterial.walletPath = path.join(
     process.cwd(),
     process.env[`${_orgName}_WALLET`]
@@ -21,22 +21,19 @@ const getConnectionMaterial = (orgName) => {
   return connectionMaterial;
 };
 
-const connect = async (orgName, userID, contractName) => {
+const connect = async (orgName, userId, contractName) => {
   const gateway = new Gateway();
 
   try {
-    if (!checkExistUser(userID)) {
-      return {
-        status: 401,
-        error: "User identity does not exist in the wallet.",
-      };
-    }
-    const ccp = appUtil.buildCCPOrg();
+    const ccp = appUtil.buildCCPOrg(orgName);
     const connectionMaterial = getConnectionMaterial(orgName);
-    const wallet = await buildWallet(Wallets, connectionMaterial.walletPath);
+    const wallet = await appUtil.buildWallet(
+      Wallets,
+      connectionMaterial.walletPath
+    );
     await gateway.connect(ccp, {
       wallet,
-      identity: userID,
+      identity: userId,
       discovery: {
         enabled: true,
         asLocalhost: Boolean(process.env.AS_LOCALHOST),
@@ -124,14 +121,13 @@ const invoke = async (networkObj, ...funcAndArgs) => {
 const enrollAdmin = async (orgName) => {
   try {
     const ccp = appUtil.buildCCPOrg(orgName);
-    const caClient = caUtil.buildCAClient(
-      pkg,
-      ccp,
-      `ca.${orgName}.scm.com`
-    );
+    const caClient = caUtil.buildCAClient(pkg, ccp, `ca.${orgName}.scm.com`);
 
     const connectionMaterial = getConnectionMaterial(orgName);
-    const wallet = await appUtil.buildWallet(Wallets, connectionMaterial.walletPath);
+    const wallet = await appUtil.buildWallet(
+      Wallets,
+      connectionMaterial.walletPath
+    );
 
     await caUtil.enrollAdmin(caClient, wallet, connectionMaterial.orgMSP);
   } catch (err) {
@@ -140,18 +136,15 @@ const enrollAdmin = async (orgName) => {
   }
 };
 
-const registerUser = async (orgName, userID) => {
+const registerUser = async (orgName, userId) => {
   try {
-    const ccp = appUtil.buildCCPOrg();
-    const caClient = caUtil.buildCAClient(
-      FabricCAServices,
-      ccp,
-      `ca.${orgName}.supplychain.com`
-    );
-
+    const ccp = appUtil.buildCCPOrg(orgName);
+    const caClient = caUtil.buildCAClient(pkg, ccp, `ca.${orgName}.scm.com`);
     const connectionMaterial = getConnectionMaterial(orgName);
-    const wallet = await appUtil.buildWallet(Wallets, connectionMaterial.walletPath);
-
+    const wallet = await appUtil.buildWallet(
+      Wallets,
+      connectionMaterial.walletPath
+    );
     await caUtil.registerAndEnrollUser(
       caClient,
       wallet,
@@ -160,7 +153,7 @@ const registerUser = async (orgName, userID) => {
       `${orgName}.department`
     );
   } catch (err) {
-    console.error(`Failed to register user ${userID}: ${err}`);
+    console.error(`Failed to register user ${userId}: ${err}`);
     return { status: 500, error: err.toString() };
   }
 };
@@ -170,9 +163,8 @@ const checkExistUser = async (userId) => {
     const userIdentity = await wallet.get(userId);
     if (!userIdentity) {
       console.error(
-        `An identity for the user ${userID} does not exist in the wallet. Register ${userID} first`
+        `An identity for the user ${userId} does not exist in the wallet. Register ${userId} first`
       );
-      contractRes;
       return false;
     }
     return true;
@@ -184,9 +176,26 @@ const checkExistUser = async (userId) => {
 
 const init = async () => {
   await enrollAdmin("farmer");
-  await enrollAdmin("manufacturer");
-  await enrollAdmin("distributor");
-  await enrollAdmin("retailer");
+  // await enrollAdmin("manufacturer");
+  // await enrollAdmin("distributor");
+  // await enrollAdmin("retailer");
+  const networkObj = await connect("farmer", "admin", "supplychain");
+  // const res = await networkObj.contract.submitTransaction(
+  //   "CreateUser",
+  //   "kashukiller@gmail.com",
+  //   "kashuken",
+  //   "kashuken",
+  //   "",
+  //   "farmer",
+  //   "client"
+  // );
+  // await registerUser("farmer", "User1");
+  const res = await networkObj.contract.evaluateTransaction(
+    "SignIn",
+    "kashukiller@gmail.com",
+    "kashuken"
+  );
+  console.log(appUtil.prettyJSONString(res));
 };
 
 export default {

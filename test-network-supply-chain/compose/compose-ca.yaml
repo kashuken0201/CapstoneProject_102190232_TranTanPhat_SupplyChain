@@ -8,10 +8,6 @@ version: '3.7'
 networks:
   test:
     name: fabric_test
-    ipam:
-     config:
-       - subnet: 192.168.144.0/20
-         gateway: 192.168.144.1
 
 services:
   ca.farmer:
@@ -33,7 +29,6 @@ services:
     container_name: ca_farmer
     networks:
       test:
-        ipv4_address: 192.168.144.11
 
   ca.manufacturer:
     image: hyperledger/fabric-ca:latest
@@ -54,7 +49,6 @@ services:
     container_name: ca_manufacturer
     networks:
       test:
-        ipv4_address: 192.168.144.12
 
   ca.distributor:
     image: hyperledger/fabric-ca:latest
@@ -75,7 +69,6 @@ services:
     container_name: ca_distributor
     networks:
       test:
-        ipv4_address: 192.168.144.13
 
   ca.retailer:
     image: hyperledger/fabric-ca:latest
@@ -96,7 +89,6 @@ services:
     container_name: ca_retailer
     networks:
       test:
-        ipv4_address: 192.168.144.14
 
   ca.orderer:
     image: hyperledger/fabric-ca:latest
@@ -117,4 +109,3 @@ services:
     container_name: ca_orderer
     networks:
       test:
-        ipv4_address: 192.168.144.15
