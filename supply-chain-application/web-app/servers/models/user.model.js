@@ -1,35 +1,27 @@
 "use strict";
 
 import network from "./network.model.js";
-import appUtil from "../utils/appUtil.js";
 
 const signup = async (orgName, params) => {
   try {
-    const { username, password, email, userType, address } = params;
 
-    const networkObj = await network.connect(orgName, "admin", "fsc");
-    const res = await networkObj.contract.submitTransaction(
-      "CreateUser",
-      username,
-      email,
-      userType,
-      address,
-      password
-    );
-    res = appUtil.prettyJSONString(res);
-    await network.registerUser(orgName, res.UserID);
+    const networkObj = await network.connect(orgName, "admin", "supplychain");
+    await network.invoke(networkObj, "CreateUser", ...params);
+    const res = await network.query(networkObj, "SignIn", params[0], params[1])
+    await network.registerUser(orgName, JSON.parse(res).UserId);
 
-    return {
-      data: res,
-      key: "signup",
-    };
+    // return {
+    //   data: res,
+    //   key: "signup",
+    // };
+    return res;
   } catch (err) {}
 };
 
 const signin = async (orgName, params) => {
   const { email, password, userType } = params;
 
-  const networkObj = await network.connect(orgName, "admin", "fsc");
+  const networkObj = await network.connect(orgName, "admin", "supplychain");
   const res = await networkObj.contract.evaluateTransaction(
     "SignIn",
     email,

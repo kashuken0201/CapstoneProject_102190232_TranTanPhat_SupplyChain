@@ -3,28 +3,11 @@
 import model from "../models/user.model.js";
 
 const signup = async (req, res) => {
-  const { userType, address, name, email, password } = req.body.user;
-  const { role } = req.params;
-
-  let modelRes = "";
-  if (role === "manufacturer") {
-    modelRes = await model.signup(true, false, {
-      userType,
-      address,
-      name,
-      email,
-      password,
-    });
-  } else if (role === "consumer") {
-    modelRes = await model.signup(false, true, {
-      userType,
-      address,
-      name,
-      email,
-      password,
-    });
-  }
-  res.send(modelRes);
+  const tmp = Object.values(req);
+  const params = Object.values(tmp[0]);
+  const ogrName = Object.values(tmp[1]).toString()
+  const response = await user.signup(ogrName, params);
+  res.send(response);
 };
 
 const signin = async (req, res) => {
@@ -60,8 +43,13 @@ const getAllUser = async (req, res) => {
   res.send(modelRes);
 };
 
+const getInfoUser = async (req, res) => {
+  res.send("")
+};
+
 export default {
   getAllUser,
+  getInfoUser,
   signin,
   signup,
 };

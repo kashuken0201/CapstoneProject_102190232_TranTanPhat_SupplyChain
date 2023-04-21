@@ -14,8 +14,8 @@ networks:
          gateway: 192.168.144.1
 
 services:
-  couchdb.farmer:
-    container_name: couchdb.farmer
+  couchdb.supplier:
+    container_name: couchdb.supplier
     image: couchdb:3.1.1
     labels:
       service: hyperledger-fabric
@@ -28,14 +28,14 @@ services:
       test:
         ipv4_address: 192.168.144.21
 
-  peer0.farmer.scm.com:
+  peer0.supplier.scm.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.farmer:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.supplier:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
     depends_on:
-      - couchdb.farmer
+      - couchdb.supplier
 
   couchdb.manufacturer:
     container_name: couchdb.manufacturer

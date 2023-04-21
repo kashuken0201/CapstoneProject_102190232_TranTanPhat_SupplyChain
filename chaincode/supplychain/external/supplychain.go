@@ -30,7 +30,7 @@ type User struct {
 }
 
 type ProductDates struct {
-	Cultivated     string `json:"Cultivated"` // farmer
+	Cultivated     string `json:"Cultivated"` // supplier
 	Harvested      string `json:"Harvested"`
 	Imported       string `json:"Imported"` // manufacturer
 	Manufacturered string `json:"Manufacturered"`
@@ -40,7 +40,7 @@ type ProductDates struct {
 }
 
 type ProductActors struct {
-	FarmerId       string `json:"FarmerId"`
+	SupplierId     string `json:"SupplierId"`
 	ManufacturerId string `json:"ManufacturerId"`
 	DistributorId  string `json:"DistributorId"`
 	RetailerId     string `json:"RetailerId"`
@@ -48,7 +48,7 @@ type ProductActors struct {
 
 // Unit: kg, box/boxes, bottle, bottles
 
-// Farmer: id, cultivate, harvest => cultivating, harvested
+// Supplier: id, cultivate, harvest => cultivating, harvested
 // Manufacturer: id, import, manufacture, export => imported, manufacturing, exported
 // Distributor: id, distribute => distributed/distributing
 // Retailer: id, sell => sold
@@ -79,7 +79,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	}
 
 	// create admin
-	_ = s.CreateUser(ctx, "farmer.admin@gmail.com", "adminpw", "Long Loz", "VietNam", "farmer", "admin")
+	_ = s.CreateUser(ctx, "supplier.admin@gmail.com", "adminpw", "Long Loz", "VietNam", "supplier", "admin")
 	_ = s.CreateUser(ctx, "manufacturer.admin@gmail.com", "adminpw", "Jay Chou", "China", "manufacturer", "admin")
 	_ = s.CreateUser(ctx, "distributor.admin@gmail.com", "adminpw", "Alex John", "USA", "distributor", "admin")
 	_ = s.CreateUser(ctx, "retailer.admin@gmail.com", "adminpw", "Chi Hoang", "VietNam", "retailer", "admin")
@@ -215,7 +215,7 @@ func (s *SmartContract) CreateUser(ctx contractapi.TransactionContextInterface, 
 	return ctx.GetStub().PutState(user.UserId, userAsBytes)
 }
 
-// FARMER FUNCTION
+// SUPPLIER FUNCTION
 // cultivate product
 func (s *SmartContract) CultivateProduct(ctx contractapi.TransactionContextInterface, userId string, productName string, price float64, description string) error {
 
@@ -229,8 +229,8 @@ func (s *SmartContract) CultivateProduct(ctx contractapi.TransactionContextInter
 	_ = json.Unmarshal(userBytes, &user)
 
 	// User type check for the function
-	if user.UserType != "farmer" {
-		return fmt.Errorf("User must be a farmer")
+	if user.UserType != "supplier" {
+		return fmt.Errorf("User must be a supplier")
 	}
 
 	productCounter, _ := getCounter(ctx, "ProductCounterNO")
@@ -246,7 +246,7 @@ func (s *SmartContract) CultivateProduct(ctx contractapi.TransactionContextInter
 	dates := ProductDates{}
 	dates.Cultivated = txTimeAsPtr
 	actors := ProductActors{}
-	actors.FarmerId = userId
+	actors.SupplierId = userId
 	var product = Product{
 		ProductId:   "Product" + strconv.Itoa(productCounter),
 		ProductName: productName,
@@ -276,8 +276,8 @@ func (s *SmartContract) HarvertProduct(ctx contractapi.TransactionContextInterfa
 	user := new(User)
 	_ = json.Unmarshal(userBytes, &user)
 
-	if user.UserType != "farmer" {
-		return fmt.Errorf("User must be a farmer")
+	if user.UserType != "supplier" {
+		return fmt.Errorf("User must be a supplier")
 	}
 
 	// get product details from the stub ie. Chaincode stub in network using the product id passed
@@ -304,8 +304,8 @@ func (s *SmartContract) HarvertProduct(ctx contractapi.TransactionContextInterfa
 	return ctx.GetStub().PutState(product.ProductId, updatedProductAsBytes)
 }
 
-// farmer update
-func (s *SmartContract) FarmerUpdateProduct(ctx contractapi.TransactionContextInterface, userId string, productId string, productName string, price float64, description string) error {
+// supplier update
+func (s *SmartContract) SupplierUpdateProduct(ctx contractapi.TransactionContextInterface, userId string, productId string, productName string, price float64, description string) error {
 
 	// get user details from the stub ie. Chaincode stub in network using the user id passed
 	userBytes, _ := ctx.GetStub().GetState(userId)
@@ -316,8 +316,8 @@ func (s *SmartContract) FarmerUpdateProduct(ctx contractapi.TransactionContextIn
 	user := new(User)
 	_ = json.Unmarshal(userBytes, &user)
 
-	if user.UserType != "farmer" {
-		return fmt.Errorf("User must be a farmer")
+	if user.UserType != "supplier" {
+		return fmt.Errorf("User must be a supplier")
 	}
 
 	// get product details from the stub ie. Chaincode stub in network using the product id passed

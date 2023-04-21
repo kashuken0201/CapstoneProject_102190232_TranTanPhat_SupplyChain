@@ -16,14 +16,14 @@ function json_ccp {
         organizations/ccp-template.json
 }
 
-ORG=farmer
-MSP=Farmer
+ORG=supplier
+MSP=Supplier
 P0PORT=7051
 CAPORT=7054
-PEERPEM=organizations/peerOrganizations/farmer.scm.com/tlsca/tlsca.farmer.scm.com-cert.pem
-CAPEM=organizations/peerOrganizations/farmer.scm.com/ca/ca.farmer.scm.com-cert.pem
+PEERPEM=organizations/peerOrganizations/supplier.scm.com/tlsca/tlsca.supplier.scm.com-cert.pem
+CAPEM=organizations/peerOrganizations/supplier.scm.com/ca/ca.supplier.scm.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/farmer.scm.com/connection-farmer.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/supplier.scm.com/connection-supplier.json
 
 ORG=manufacturer
 MSP=Manufacturer
@@ -53,7 +53,7 @@ CAPEM=organizations/peerOrganizations/retailer.scm.com/ca/ca.retailer.scm.com-ce
 echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.json
 
 
-cp -r "${PWD}/organizations/peerOrganizations/farmer.scm.com/connection-farmer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
+cp -r "${PWD}/organizations/peerOrganizations/supplier.scm.com/connection-supplier.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
 cp -r "${PWD}/organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
 cp -r "${PWD}/organizations/peerOrganizations/distributor.scm.com/connection-distributor.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
 cp -r "${PWD}/organizations/peerOrganizations/retailer.scm.com/connection-retailer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"

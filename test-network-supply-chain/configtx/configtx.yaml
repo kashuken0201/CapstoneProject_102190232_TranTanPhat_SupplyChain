@@ -43,15 +43,15 @@ Organizations:
 
         OrdererEndpoints:
             - orderer.scm.com:7050
-    - &Farmer
+    - &Supplier
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: FarmerMSP
+        Name: SupplierMSP
 
         # ID to load the MSP definition as
-        ID: FarmerMSP
+        ID: SupplierMSP
 
-        MSPDir: ../organizations/peerOrganizations/farmer.scm.com/msp
+        MSPDir: ../organizations/peerOrganizations/supplier.scm.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -59,16 +59,16 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('FarmerMSP.admin', 'FarmerMSP.peer', 'FarmerMSP.client')"
+                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.peer', 'SupplierMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('FarmerMSP.admin', 'FarmerMSP.client')"
+                Rule: "OR('SupplierMSP.admin', 'SupplierMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('FarmerMSP.admin')"
+                Rule: "OR('SupplierMSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('FarmerMSP.peer')"
+                Rule: "OR('SupplierMSP.peer')"
 
     - &Manufacturer
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -363,7 +363,7 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Farmer
+                - *Supplier
                 - *Manufacturer
                 - *Distributor
                 - *Retailer
@@ -375,7 +375,7 @@ Profiles:
     #     Application:
     #         <<: *ApplicationDefaults
     #         Organizations:
-    #             - *Farmer
+    #             - *Supplier
     #             - *Manufacturer
     #             - *Distributor
     #             - *Retailer

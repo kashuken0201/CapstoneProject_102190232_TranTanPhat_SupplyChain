@@ -1,8 +1,5 @@
 /asset-*
-/chaincode/fabcar
-/test-network
-/test-network-k8s
 /bin
 /builders
-/fabcar
 /config
+/ci

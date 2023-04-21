@@ -7,7 +7,7 @@ version: '3.7'
 
 volumes:
   orderer.scm.com:
-  peer0.farmer.scm.com:
+  peer0.supplier.scm.com:
   peer0.manufacturer.scm.com:
   peer0.distributor.scm.com:
   peer0.retailer.scm.com:
@@ -65,8 +65,8 @@ services:
       test:
         ipv4_address: 192.168.144.31
 
-  peer0.farmer.scm.com:
-    container_name: peer0.farmer.scm.com
+  peer0.supplier.scm.com:
+    container_name: peer0.supplier.scm.com
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -80,22 +80,22 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.farmer.scm.com
-      - CORE_PEER_ADDRESS=peer0.farmer.scm.com:7051
+      - CORE_PEER_ID=peer0.supplier.scm.com
+      - CORE_PEER_ADDRESS=peer0.supplier.scm.com:7051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.farmer.scm.com:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.supplier.scm.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.farmer.scm.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.farmer.scm.com:7051
-      - CORE_PEER_LOCALMSPID=FarmerMSP
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.supplier.scm.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.supplier.scm.com:7051
+      - CORE_PEER_LOCALMSPID=SupplierMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.farmer.scm.com:9444
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.supplier.scm.com:9444
       - CORE_METRICS_PROVIDER=prometheus
-      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0farmer"}
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0supplier"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/farmer.scm.com/peers/peer0.farmer.scm.com:/etc/hyperledger/fabric
-        - peer0.farmer.scm.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/supplier.scm.com/peers/peer0.supplier.scm.com:/etc/hyperledger/fabric
+        - peer0.supplier.scm.com:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -243,7 +243,7 @@ services:
         - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
         - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     depends_on:
-      - peer0.farmer.scm.com
+      - peer0.supplier.scm.com
       - peer0.manufacturer.scm.com
       - peer0.distributor.scm.com
       - peer0.retailer.scm.com

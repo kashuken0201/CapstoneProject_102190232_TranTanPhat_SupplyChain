@@ -5,8 +5,9 @@ import controller from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.post("/signup/:role", controller.signup);
-router.get("/:role", controller.getAllUser);
-router.post("/signin/:role", controller.signin);
+router.post("/signup/", controller.signup);
+router.post("/signin/", controller.signin);
+router.get("/info", controller.getInfoUser);
+router.get("/", controller.getAllUser);
 
 export default router;

@@ -8,10 +8,10 @@
 # ---------------------------------------------------------------------------
 PeerOrgs:
   # ---------------------------------------------------------------------------
-  # Farmer
+  # Supplier
   # ---------------------------------------------------------------------------
-  - Name: Farmer
-    Domain: farmer.supplychain.com
+  - Name: Supplier
+    Domain: supplier.supplychain.com
     EnableNodeOUs: true
     Template:
       Count: 1

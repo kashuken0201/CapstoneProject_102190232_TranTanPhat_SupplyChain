@@ -141,8 +141,8 @@ checkPrereqs
 packageChaincode
 
 ## Install chaincode on all peers
-infoln "Installing chaincode on peer0.farmer..."
-installChaincode farmer
+infoln "Installing chaincode on peer0.supplier..."
+installChaincode supplier
 infoln "Installing chaincode on peer0.manufacturer..."
 installChaincode manufacturer
 infoln "Installing chaincode on peer0.distributor..."
@@ -151,13 +151,13 @@ infoln "Installing chaincode on peer0.retailer..."
 installChaincode retailer
 
 ## query whether the chaincode is installed
-queryInstalled farmer
+queryInstalled supplier
 queryInstalled manufacturer
 queryInstalled distributor
 queryInstalled retailer
 
 ## approve the definition for all organizations and check
-approveForMyOrg farmer
+approveForMyOrg supplier
 approveForMyOrg manufacturer
 approveForMyOrg distributor
 approveForMyOrg retailer
@@ -170,10 +170,10 @@ approveForMyOrg retailer
 # checkCommitReadiness consumer "\"ManufacturerMSP\": true" "\"ConsumerMSP\": false"
 
 ## now that we know for sure all organizations have approved, commit the definition
-commitChaincodeDefinition farmer manufacturer distributor retailer
+commitChaincodeDefinition supplier manufacturer distributor retailer
 
 ## query on all organizations to see that the definition committed successfully
-queryCommitted farmer
+queryCommitted supplier
 queryCommitted manufacturer
 queryCommitted distributor
 queryCommitted retailer
@@ -182,7 +182,9 @@ queryCommitted retailer
 if [ "$CC_INIT_FCN" = "NA" ]; then
   infoln "Chaincode initialization is not required"
 else
-  chaincodeInvokeInit farmer manufacturer distributor retailer
+  chaincodeInvokeInit supplier manufacturer distributor retailer
 fi
+
+chaincodeQuery supplier
 
 exit 0

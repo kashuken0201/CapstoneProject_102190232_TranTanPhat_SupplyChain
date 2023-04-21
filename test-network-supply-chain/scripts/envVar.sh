@@ -12,7 +12,7 @@
 
 export CORE_PEER_TLS_ENABLED=true
 export ORDERER_CA=${PWD}/organizations/ordererOrganizations/scm.com/tlsca/tlsca.scm.com-cert.pem
-export PEER0_FARMER_CA=${PWD}/organizations/peerOrganizations/farmer.scm.com/tlsca/tlsca.farmer.scm.com-cert.pem
+export PEER0_SUPPLIER_CA=${PWD}/organizations/peerOrganizations/supplier.scm.com/tlsca/tlsca.supplier.scm.com-cert.pem
 export PEER0_MANUFACTURER_CA=${PWD}/organizations/peerOrganizations/manufacturer.scm.com/tlsca/tlsca.manufacturer.scm.com-cert.pem
 export PEER0_DISTRIBUTOR_CA=${PWD}/organizations/peerOrganizations/distributor.scm.com/tlsca/tlsca.distributor.scm.com-cert.pem
 export PEER0_RETAILER_CA=${PWD}/organizations/peerOrganizations/retailer.scm.com/tlsca/tlsca.retailer.scm.com-cert.pem
@@ -28,10 +28,10 @@ setGlobals() {
     USING_ORG="${OVERRIDE_ORG}"
   fi
   infoln "Using organization ${USING_ORG}"
-  if [ $USING_ORG = farmer ]; then
-    export CORE_PEER_LOCALMSPID="FarmerMSP"
-    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_FARMER_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/farmer.scm.com/users/Admin@farmer.scm.com/msp
+  if [ $USING_ORG = supplier ]; then
+    export CORE_PEER_LOCALMSPID="SupplierMSP"
+    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_SUPPLIER_CA
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/supplier.scm.com/users/Admin@supplier.scm.com/msp
     export CORE_PEER_ADDRESS=localhost:7051
 
   elif [ $USING_ORG = manufacturer ]; then
@@ -71,8 +71,8 @@ setGlobalsCLI() {
   else
     USING_ORG="${OVERRIDE_ORG}"
   fi
-  if [ $USING_ORG = farmer ]; then
-    export CORE_PEER_ADDRESS=peer0.farmer.scm.com:7051
+  if [ $USING_ORG = supplier ]; then
+    export CORE_PEER_ADDRESS=peer0.supplier.scm.com:7051
   elif [ $USING_ORG = manufacturer ]; then
     export CORE_PEER_ADDRESS=peer0.manufacturer.scm.com:7061
   elif [ $USING_ORG = distributor ]; then

@@ -2,7 +2,6 @@
 
 import pkg from "fabric-ca-client";
 import { Wallets, Gateway } from "fabric-network";
-import { BlockDecoder } from "fabric-common";
 import appUtil from "../utils/appUtil.js";
 import caUtil from "../utils/caUtil.js";
 import path from "path";
@@ -55,32 +54,12 @@ const connect = async (orgName, userId, contractName) => {
   }
 };
 
-const queryBlock = async (networkObj, ...funcAndArgs) => {
-  try {
-    console.log(`Query parameter: ${funcAndArgs}`);
-    const funcAndArgsStrings = funcAndArgs.map((elem) => String(elem));
-    let response = await networkObj.contract.evaluateTransaction(
-      ...funcAndArgsStrings
-    );
-    response = BlockDecoder.decode(response);
-    console.log(`Transaction ${funcAndArgs} has been evaluated: ${response}`);
-
-    return appUtil.prettyJSONString(response);
-  } catch (err) {
-    console.error(`Failed to evaluate transaction: ${err}`);
-    return { status: 500, error: err.toString() };
-  } finally {
-    if (networkObj.gatway) {
-      await networkObj.gateway.disconnect();
-    }
-  }
-};
-
-const queryLeger = async (networkObj, ...funcAndArgs) => {
+const query = async (networkObj, fcn, ...funcAndArgs) => {
   try {
     console.log(`Query parameter: ${funcAndArgs}`);
     const funcAndArgsStrings = funcAndArgs.map((elem) => String(elem));
     const response = await networkObj.contract.evaluateTransaction(
+      fcn,
       ...funcAndArgsStrings
     );
     console.log(`Transaction ${funcAndArgs} has been evaluated: ${response}`);
@@ -96,15 +75,15 @@ const queryLeger = async (networkObj, ...funcAndArgs) => {
   }
 };
 
-const invoke = async (networkObj, ...funcAndArgs) => {
+const invoke = async (networkObj, fcn, ...funcAndArgs) => {
   try {
     console.log(`Invoke parameter: ${funcAndArgs}`);
     const funcAndArgsStrings = funcAndArgs.map((elem) => String(elem));
     console.log(funcAndArgsStrings);
     const response = await networkObj.contract.submitTransaction(
+      fcn,
       ...funcAndArgsStrings
     );
-    console.log(response);
     console.log(`Transaction ${funcAndArgs} has been submitted: ${response}`);
 
     return appUtil.prettyJSONString(response);
@@ -175,33 +154,34 @@ const checkExistUser = async (userId) => {
 };
 
 const init = async () => {
-  await enrollAdmin("farmer");
+
+  // await enrollAdmin("supplier");
+  // let networkObj = await connect("supplier", "admin", "supplychain");
+  // let args = ["supplieradmin@gmail.com", "supplieradmin", "Luong Thanh Long", "Viet Nam", "supplier", "admin"];
+  // let res = await invoke(networkObj, "CreateUser", ...args);
+
   // await enrollAdmin("manufacturer");
+  // networkObj = await connect("manufacturer", "admin", "supplychain");
+  // args = ["manufactureradmin@gmail.com", "manufactureradmin", "Pham Van Khai", "Viet Nam", "manufacturer", "admin"];
+  // res = await invoke(networkObj, "CreateUser", ...args);
+
   // await enrollAdmin("distributor");
+  // networkObj = await connect("distributor", "admin", "supplychain");
+  // args = ["distributoradmin@gmail.com", "distributoradmin", "Le Thanh Nhan", "Viet Nam", "distributor", "admin"];
+  // res = await invoke(networkObj, "CreateUser", ...args);
+
   // await enrollAdmin("retailer");
-  const networkObj = await connect("farmer", "admin", "supplychain");
-  // const res = await networkObj.contract.submitTransaction(
-  //   "CreateUser",
-  //   "kashukiller@gmail.com",
-  //   "kashuken",
-  //   "kashuken",
-  //   "",
-  //   "farmer",
-  //   "client"
-  // );
-  // await registerUser("farmer", "User1");
-  const res = await networkObj.contract.evaluateTransaction(
-    "SignIn",
-    "kashukiller@gmail.com",
-    "kashuken"
-  );
-  console.log(appUtil.prettyJSONString(res));
+  // networkObj = await connect("retailer", "admin", "supplychain");
+  // args = ["retaileradmin@gmail.com", "retaileradmin", "Doan Chi Hoang", "Viet Nam", "retailer", "admin"];
+  // res = await invoke(networkObj, "CreateUser", ...args);
+
+  let res = await query(networkObj, "GetAllUsers");
+  console.log(appUtil.prettyJSONString(res))
 };
 
 export default {
   connect,
-  queryBlock,
-  queryLeger,
+  query,
   invoke,
   enrollAdmin,
   registerUser,

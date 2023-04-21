@@ -34,7 +34,7 @@ createChannelGenesisBlock() {
 }
 
 createChannel() {
-	setGlobals farmer
+	setGlobals supplier
 	# Poll in case the raft leader is not set yet
 	local rc=1
 	local COUNTER=1
@@ -92,8 +92,8 @@ createChannel
 successln "Channel '$CHANNEL_NAME' created"
 
 ## Join all the peers to the channel
-infoln "Joining farmer peer to the channel..."
-joinChannel farmer
+infoln "Joining supplier peer to the channel..."
+joinChannel supplier
 infoln "Joining manufacturer peer to the channel..."
 joinChannel manufacturer
 infoln "Joining distributor peer to the channel..."
@@ -102,8 +102,8 @@ infoln "Joining retailer peer to the channel..."
 joinChannel retailer
 
 ## Set the anchor peers for each org in the channel
-infoln "Setting anchor peer for farmer..."
-setAnchorPeer farmer
+infoln "Setting anchor peer for supplier..."
+setAnchorPeer supplier
 infoln "Setting anchor peer for manufacturer..."
 setAnchorPeer manufacturer
 infoln "Setting anchor peer for distributor..."
