@@ -17,7 +17,7 @@ trap "popd > /dev/null" EXIT
 . scripts/utils.sh
 
 : ${CONTAINER_CLI:="docker"}
-: ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI}-compose"}
+: ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI} compose"}
 infoln "Using ${CONTAINER_CLI} and ${CONTAINER_CLI_COMPOSE}"
 
 # Obtain CONTAINER_IDS and remove them
@@ -405,7 +405,7 @@ CC_VERSION="1.0"
 # Chaincode definition sequence
 CC_SEQUENCE=1
 # default database
-DATABASE="leveldb"
+DATABASE="leveldb" # couchdb
 
 # Get docker sock path from environment variable
 SOCK="${DOCKER_HOST:-/var/run/docker.sock}"
