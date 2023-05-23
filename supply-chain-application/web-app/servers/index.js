@@ -7,7 +7,7 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 
 import routes from "./routes/routes.js";
-import test from "./models/test.model.js";
+// import test from "./models/test.model.js";
 
 const port = process.env.NODE_SERVER_PORT || 5555;
 const hostname = process.env.NODE_SERVER_IP;
@@ -20,7 +20,7 @@ app.use("/api", routes);
 app.use(morgan("combined"));
 app.use(cookieParser());
 
-await test.test();
+// await test.test();
 
 const server = http.createServer(app);
 mongoose.set("strictQuery", false);
