@@ -53,7 +53,7 @@ CAPEM=organizations/peerOrganizations/retailer.scm.com/ca/ca.retailer.scm.com-ce
 echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.json
 
 
-cp -r "${PWD}/organizations/peerOrganizations/supplier.scm.com/connection-supplier.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/distributor.scm.com/connection-distributor.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/retailer.scm.com/connection-retailer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
+cp -r "${PWD}/organizations/peerOrganizations/supplier.scm.com/connection-supplier.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/distributor.scm.com/connection-distributor.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/retailer.scm.com/connection-retailer.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
