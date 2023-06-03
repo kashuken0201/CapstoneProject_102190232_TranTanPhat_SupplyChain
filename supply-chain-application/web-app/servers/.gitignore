@@ -76,5 +76,5 @@ typings/
 # Serverless directories
 .serverless
 
-identity
+wallet
 !wallet/.gitkeep

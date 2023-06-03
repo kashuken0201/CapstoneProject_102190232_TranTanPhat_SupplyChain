@@ -1,0 +1,1160 @@
+{
+    "swagger": "2.0",
+    "title": "Sample Pet Store App",
+    "description": "This is a sample server for a pet store.",
+    "termsOfService": "https://example.com/terms/",
+    "contact": {
+      "name": "API Support",
+      "url": "https://www.example.com/support",
+      "email": "support@example.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.1",
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Auth"
+      },
+      {
+        "name": "Customer"
+      },
+      {
+        "name": "Session"
+      },
+      {
+        "name": "Product",
+        "description": "Products API"
+      },
+      {
+        "name": "Order"
+      },
+      {
+        "name": "Payment"
+      },
+      {
+        "name": "Restaurant"
+      }
+    ],
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/api/user/login": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/loginRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Login success"
+            }
+          }
+        }
+      },
+      "/api/product": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Product"
+          ],
+          "summary": "Get all products",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/product/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Product"
+          ],
+          "summary": "Get product by id",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "schema": "integer",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/product/category": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Product"
+          ],
+          "summary": "Get all categories",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/product/tax": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Product"
+          ],
+          "summary": "Get all tax",
+          "parameters": [
+            {
+              "name": "authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/customer": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Customer"
+          ],
+          "summary": "Get all customer",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/customer/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Customer"
+          ],
+          "summary": "Get customer by id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/customer/add": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Customer"
+          ],
+          "summary": "Add customer",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/customerRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/customer/edit/{id}": {
+        "put": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Customer"
+          ],
+          "summary": "Edit customer",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/customerRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get session by id",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get session by id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/getclosingcontrol/:id": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/create": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createSessionRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/open": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/openSessionRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/close": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/closeSessionRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/session/cashinout": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Session"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/cashInOutRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/session/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/paid/config/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/payment/{id}": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Payment"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/payment/method": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Payment"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/paid/create": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createOrderPaidRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/invoice/create": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createOrderPaidRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/refund/create": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createOrderPaidRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/draft/create": {
+        "post": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createOrderPaidRequest"
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/order/deletedraft": {
+        "delete": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Order"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/restaurant/floor/:id": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Restaurant"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            },
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/restaurant/table/:id": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Restaurant"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            },
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/restaurant/table/add": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Restaurant"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            },
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/createTableRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      },
+      "/api/restaurant/table/edit/:id": {
+        "get": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "tags": [
+            "Restaurant"
+          ],
+          "summary": "Get all session",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "schema": "string"
+            },
+            {
+              "in": "path",
+              "name": "id",
+              "required": true
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/components/editTableRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {}
+          }
+        }
+      }
+    },
+    "components": {
+      "loginRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "admin"
+          },
+          "password": {
+            "type": "string",
+            "example": "admin"
+          }
+        }
+      },
+      "customerRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "MBF"
+          },
+          "email": {
+            "type": "string",
+            "example": "mgf@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "123456789"
+          }
+        }
+      },
+      "createSessionRequest": {
+        "type": "object",
+        "properties": {
+          "configId": {
+            "type": "interger",
+            "example": "1"
+          }
+        }
+      },
+      "openSessionRequest": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "interger",
+            "example": "1"
+          },
+          "cashboxValue": {
+            "type": "interger",
+            "example": "100"
+          },
+          "note": {
+            "type": "string",
+            "example": "note"
+          }
+        }
+      },
+      "closeSessionRequest": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "interger",
+            "example": "1"
+          },
+          "countedCash": {
+            "type": "interger",
+            "example": "100"
+          },
+          "note": {
+            "type": "string",
+            "example": "note"
+          }
+        }
+      },
+      "cashInOutRequest": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "interger",
+            "example": "1"
+          },
+          "type": {
+            "type": "string",
+            "example": "100"
+          },
+          "amount": {
+            "type": "interger",
+            "example": "note"
+          },
+          "reason": {
+            "type": "string",
+            "example": "reason"
+          }
+        }
+      },
+      "createOrderPaidRequest": {
+        "type": "object",
+        "properties": {
+          "valsOrder": {
+            "type": "object",
+            "properties": {
+              "sessionId": {
+                "type": "interger",
+                "example": "1"
+              },
+              "amountTax": {
+                "type": "interger",
+                "example": "0"
+              },
+              "amountPaid": {
+                "type": "interger",
+                "example": "140"
+              },
+              "amountReturn": {
+                "type": "interger",
+                "example": "0"
+              },
+              "amountTotal": {
+                "type": "interger",
+                "example": "140"
+              },
+              "partnerId": {
+                "type": "interger",
+                "partnerId": "16"
+              }
+            }
+          },
+          "orderLines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "interger",
+                  "example": "21"
+                },
+                "priceUnit": {
+                  "type": "interger",
+                  "example": "140"
+                },
+                "priceSubtotal": {
+                  "type": "interger",
+                  "example": "140"
+                },
+                "priceSubtotalIncl": {
+                  "type": "interger",
+                  "example": "140"
+                },
+                "qty": {
+                  "type": "interger",
+                  "example": "1"
+                },
+                "fullProductName": {
+                  "type": "string",
+                  "example": "Cabinet with Doors"
+                },
+                "taxIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "interger",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "string",
+                  "example": "140"
+                },
+                "paymentMethodId": {
+                  "type": "string",
+                  "example": "1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "createTableRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "table name"
+          },
+          "floorId": {
+            "type": "interger",
+            "example": 1
+          },
+          "seats": {
+            "type": "interger",
+            "example": 4
+          }
+        }
+      },
+      "editTableRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "table name"
+          },
+          "floorId": {
+            "type": "interger",
+            "example": 1
+          },
+          "seats": {
+            "type": "interger",
+            "example": 4
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "color": {
+            "type": "string",
+            "example": "rgb(53,211,116)"
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "in": "header",
+          "name": "Authorization",
+          "description": "Bearer Token",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ]
+  }

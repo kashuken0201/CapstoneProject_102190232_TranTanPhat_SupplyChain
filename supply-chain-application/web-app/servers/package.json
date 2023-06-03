@@ -22,13 +22,20 @@
     "ejs": "^3.0.2",
     "mongoose": "^7.0.3",
     "express": "^4.17.1",
+    "express-session": "^1.17.3",
     "fabric-ca-client": "^2.2.4",
     "fabric-common": "^2.2.16",
     "fabric-network": "^2.2.4",
     "@grpc/grpc-js": "^1.8.13",
     "js-sha256": "^0.9.0",
     "jsonwebtoken": "^9.0.0",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "node-fetch": "^3.3.1",
+    "nodemon": "^2.0.20",
+    "swagger-ui-express": "^4.6.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
+    "bcryptjs": "^2.4.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

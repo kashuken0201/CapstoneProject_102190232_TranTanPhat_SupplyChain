@@ -1,38 +1,55 @@
-import "dotenv/config";
-import express from "express";
-import cookieParser from "cookie-parser";
-import http from "http";
-import cors from "cors";
-import morgan from "morgan";
-import mongoose from "mongoose";
+"use strict"
 
-import routes from "./routes/routes.js";
-// import test from "./models/test.model.js";
+import "dotenv/config"
+import express from "express"
+import cookieParser from "cookie-parser"
+import http from "http"
+import cors from "cors"
+import morgan from "morgan"
+import mongoose from "mongoose"
+import swaggerUi from "swagger-ui-express"
+import swaggerDocument from "./src/swagger.json" assert { type: "json" }
+import { logger } from "./src/utils/logger.js"
+import db from "./src/models/index.model.js"
+import routes from "./src/routes/index.route.js"
+import userService from "./src/services/user.service.js"
 
-const port = process.env.NODE_SERVER_PORT || 5555;
-const hostname = process.env.NODE_SERVER_IP;
-const app = express();
+const port = process.env.NODE_SERVER_PORT || 5555
+const hostname = process.env.NODE_SERVER_IP
+const app = express()
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use("/api", routes);
-app.use(morgan("combined"));
-app.use(cookieParser());
+const corsOptions = {
+  origin: "http://localhost:8080"
+};
 
-// await test.test();
+app.use(cors(corsOptions))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use("/api", routes)
+app.use(morgan("combined"))
+app.use(cookieParser())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-const server = http.createServer(app);
-mongoose.set("strictQuery", false);
+const server = http.createServer(app)
+
+
+
+mongoose.set("strictQuery", false)
+
 await mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(db.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => {
-    console.log("Database connected");
+    logger.info("Database connected")
     server.listen(port, hostname, () => {
-      console.log(`Server running at http://${hostname}:${port}/`);
-    });
+      logger.info(`Server running at http://${hostname}:${port}/`)
+    })
   })
   .catch((err) => {
-    console.log({ err });
-    process.exit(1);
-  });
+    logger.error(err)
+    process.exit(1)
+  })
+
+// await userService.importData()

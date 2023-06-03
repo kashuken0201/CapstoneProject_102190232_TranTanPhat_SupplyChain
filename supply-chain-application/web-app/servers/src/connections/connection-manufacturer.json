@@ -1,0 +1,49 @@
+{
+    "name": "test-network-manufacturer",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Manufacturer",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                }
+            }
+        }
+    },
+    "organizations": {
+        "Manufacturer": {
+            "mspid": "ManufacturerMSP",
+            "peers": [
+                "peer0.manufacturer.scm.com"
+            ],
+            "certificateAuthorities": [
+                "ca.manufacturer.scm.com"
+            ]
+        }
+    },
+    "peers": {
+        "peer0.manufacturer.scm.com": {
+            "url": "grpcs://localhost:7061",
+            "tlsCACerts": {
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICFzCCAb2gAwIBAgIUdXndqSWWTBxCl8PH3Qi0ssqEHqYwCgYIKoZIzj0EAwIw\naDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK\nEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt\nY2Etc2VydmVyMB4XDTIzMDYwMzA0MTcwMFoXDTM4MDUzMDA0MTcwMFowaDELMAkG\nA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl\ncmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy\ndmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEBVQzh4O/lSQB7M9MzmVdoW+\nWLl6pSKftuQLpC/CZFD38eho3Flcet1kTV/fTRMzpV9/7tW+BqL3jT0+n36n8KNF\nMEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE\nFPrxTD5ijWtoEQBst6knsyzRokohMAoGCCqGSM49BAMCA0gAMEUCIQD2votJXyDM\nCJhKi1I3I5WTLK/eDY+Bg9AyH9zcJNX44QIgTqBAznE4g190oeyVw9IiYauRmFEs\nPzCmidcdRRG+h7Q=\n-----END CERTIFICATE-----\n"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.manufacturer.scm.com",
+                "hostnameOverride": "peer0.manufacturer.scm.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.manufacturer.scm.com": {
+            "url": "https://localhost:7064",
+            "caName": "ca-manufacturer",
+            "tlsCACerts": {
+                "pem": ["-----BEGIN CERTIFICATE-----\nMIICFzCCAb2gAwIBAgIUdXndqSWWTBxCl8PH3Qi0ssqEHqYwCgYIKoZIzj0EAwIw\naDELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK\nEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMt\nY2Etc2VydmVyMB4XDTIzMDYwMzA0MTcwMFoXDTM4MDUzMDA0MTcwMFowaDELMAkG\nA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBl\ncmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRkwFwYDVQQDExBmYWJyaWMtY2Etc2Vy\ndmVyMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEEBVQzh4O/lSQB7M9MzmVdoW+\nWLl6pSKftuQLpC/CZFD38eho3Flcet1kTV/fTRMzpV9/7tW+BqL3jT0+n36n8KNF\nMEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYE\nFPrxTD5ijWtoEQBst6knsyzRokohMAoGCCqGSM49BAMCA0gAMEUCIQD2votJXyDM\nCJhKi1I3I5WTLK/eDY+Bg9AyH9zcJNX44QIgTqBAznE4g190oeyVw9IiYauRmFEs\nPzCmidcdRRG+h7Q=\n-----END CERTIFICATE-----\n"]
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}
