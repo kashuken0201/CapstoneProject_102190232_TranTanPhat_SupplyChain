@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -97,6 +98,26 @@ CHECK USER
 
 func initCounter(ctx contractapi.TransactionContextInterface) error {
 
+	// Initializing User Counter
+	UserCounterBytes, _ := ctx.GetStub().GetState("UserCounterNO")
+	if UserCounterBytes == nil {
+		var UserCounter = CounterNO{Counter: 0}
+		UserCounterBytes, _ := json.Marshal(UserCounter)
+		err := ctx.GetStub().PutState("UserCounterNO", UserCounterBytes)
+		if err != nil {
+			return fmt.Errorf("failed to intitate user counter: %s", err.Error())
+		}
+	} else {
+		counter := new(CounterNO)
+		_ = json.Unmarshal(UserCounterBytes, counter)
+		var UserCounter = CounterNO{Counter: counter.Counter}
+		UserCounterBytes, _ := json.Marshal(UserCounter)
+		err := ctx.GetStub().PutState("UserCounterNO", UserCounterBytes)
+		if err != nil {
+			return fmt.Errorf("failed to intitate user counter: %s", err.Error())
+		}
+	}
+
 	// Initializing Raw Counter
 	RawCounterBytes, _ := ctx.GetStub().GetState("RawCounterNO")
 	if RawCounterBytes == nil {
@@ -137,25 +158,6 @@ func initCounter(ctx contractapi.TransactionContextInterface) error {
 		}
 	}
 
-	// Initializing User Counter
-	UserCounterBytes, _ := ctx.GetStub().GetState("UserCounterNO")
-	if UserCounterBytes == nil {
-		var UserCounter = CounterNO{Counter: 0}
-		UserCounterBytes, _ := json.Marshal(UserCounter)
-		err := ctx.GetStub().PutState("UserCounterNO", UserCounterBytes)
-		if err != nil {
-			return fmt.Errorf("failed to intitate user counter: %s", err.Error())
-		}
-	} else {
-		counter := new(CounterNO)
-		_ = json.Unmarshal(UserCounterBytes, counter)
-		var UserCounter = CounterNO{Counter: counter.Counter}
-		UserCounterBytes, _ := json.Marshal(UserCounter)
-		err := ctx.GetStub().PutState("UserCounterNO", UserCounterBytes)
-		if err != nil {
-			return fmt.Errorf("failed to intitate user counter: %s", err.Error())
-		}
-	}
 	return nil
 }
 
@@ -175,9 +177,9 @@ func incrementCounter(ctx contractapi.TransactionContextInterface, assetType str
 
 	json.Unmarshal(counterAsBytes, &counterAsset)
 	counterAsset.Counter++
-	counterAsBytes, _ = json.Marshal(counterAsset)
+	updateCounterAsBytes, _ := json.Marshal(counterAsset)
 
-	err := ctx.GetStub().PutState(assetType, counterAsBytes)
+	err := ctx.GetStub().PutState(assetType, updateCounterAsBytes)
 	if err != nil {
 		return -1, fmt.Errorf("failed to increment counter: %s", err.Error())
 	}
@@ -241,9 +243,8 @@ func (s *SmartContract) SignIn(ctx contractapi.TransactionContextInterface, emai
 	return nil, fmt.Errorf("user is not exists")
 }
 
-func (s *SmartContract) SignUp(ctx contractapi.TransactionContextInterface, userId string, email string, password string, username string, address string, userType string, status string) error {
-	userTmp, _ := s.GetUser(ctx, userId)
-	results, err := s.GetUsers(ctx, userTmp.UserType)
+func (s *SmartContract) SignUp(ctx contractapi.TransactionContextInterface, userType string, email string, password string, username string, address string, role string) error {
+	results, err := s.GetUsers(ctx, userType)
 
 	if err != nil {
 		return err
@@ -266,13 +267,13 @@ func (s *SmartContract) SignUp(ctx contractapi.TransactionContextInterface, user
 		UserName: username,
 		Address:  address,
 		UserType: userType,
-		Role:     "user",
+		Role:     role,
 		Status:   "ACTIVE",
 	}
 
 	userAsBytes, errMarshal := json.Marshal(user)
 	if errMarshal != nil {
-		return fmt.Errorf("marshal rrror in product: %s", errMarshal)
+		return fmt.Errorf("marshal rrror in user: %s", errMarshal)
 	}
 
 	incrementCounter(ctx, "UserCounterNO")
@@ -303,7 +304,7 @@ func (s *SmartContract) ChangeUserInfo(ctx contractapi.TransactionContextInterfa
 
 /* 	SUPPLIER FUNCTIONS
 CREATE RAW
-EDIT RAW
+UPDATE RAW
 SUPPLY RAW
 */
 
@@ -338,7 +339,7 @@ func (s *SmartContract) CreateRaw(ctx contractapi.TransactionContextInterface, s
 	return ctx.GetStub().PutState(raw.RawId, rawAsBytes)
 }
 
-func (s *SmartContract) EditRaw(ctx contractapi.TransactionContextInterface, supplierId string, rawId string, rawName string) error {
+func (s *SmartContract) UpdateRaw(ctx contractapi.TransactionContextInterface, supplierId string, rawId string, rawName string) error {
 
 	supplier, error := s.CheckUser(ctx, supplierId, "supplier")
 	if error != nil {
@@ -406,12 +407,12 @@ func (s *SmartContract) SupplyRaw(ctx contractapi.TransactionContextInterface, s
 
 /* 	MANUFACTURER FUNCTIONS
 CREATE PRODUCT
-EDIT PRODUCT
+UPDATE PRODUCT
 ORDER RAW
 PROVIDE PRODUCT
 */
 
-func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterface, manufacturerId string, productName string, price float64, description string, rawIds []string) error {
+func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterface, manufacturerId string, productName string, price float64, description string, rawIds string) error {
 
 	_, error := s.CheckUser(ctx, manufacturerId, "manufacturer")
 	if error != nil {
@@ -438,8 +439,8 @@ func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterfac
 	actors.RetailerId = ""
 
 	var raws []*Raw
-
-	for _, rawId := range rawIds {
+	rawIdsSplit := strings.Split(rawIds, ",")
+	for _, rawId := range rawIdsSplit {
 		raw, _ := s.GetRaw(ctx, rawId)
 		raws = append(raws, raw)
 	}
@@ -462,7 +463,7 @@ func (s *SmartContract) CreateProduct(ctx contractapi.TransactionContextInterfac
 	return ctx.GetStub().PutState(product.ProductId, productAsBytes)
 }
 
-func (s *SmartContract) EditProduct(ctx contractapi.TransactionContextInterface, manufacturerId string, productId string, productName string, price float64, description string, rawIds []string) error {
+func (s *SmartContract) UpdateProduct(ctx contractapi.TransactionContextInterface, manufacturerId string, productId string, productName string, price float64, description string, rawIds string) error {
 
 	_, error := s.CheckUser(ctx, manufacturerId, "manufacturer")
 	if error != nil {
@@ -477,13 +478,13 @@ func (s *SmartContract) EditProduct(ctx contractapi.TransactionContextInterface,
 	product := new(Product)
 	_ = json.Unmarshal(productAsBytes, product)
 
-	if product.Status != "CREATED" && product.Status != "EDITED" {
-		return fmt.Errorf("this product cannot be edited")
+	if product.Status != "CREATED" && product.Status != "UPDATED" {
+		return fmt.Errorf("this product cannot be updated")
 	}
 
 	var raws []*Raw
-
-	for _, rawId := range rawIds {
+	rawIdsSplit := strings.Split(rawIds, ",")
+	for _, rawId := range rawIdsSplit {
 		raw, _ := s.GetRaw(ctx, rawId)
 		raws = append(raws, raw)
 	}
@@ -491,7 +492,8 @@ func (s *SmartContract) EditProduct(ctx contractapi.TransactionContextInterface,
 	product.ProductName = productName
 	product.Price = price
 	product.Description = description
-	product.Status = "EDITED"
+	product.Status = "UPDATED"
+	product.Raws = raws
 
 	updatedProductAsBytes, _ := json.Marshal(product)
 
@@ -636,7 +638,7 @@ func (s *SmartContract) OrderProduct(ctx contractapi.TransactionContextInterface
 	product := new(Product)
 	_ = json.Unmarshal(productAsBytes, product)
 
-	if product.Status != "CREATED" && product.Status != "EDITED" {
+	if product.Status != "CREATED" && product.Status != "UPDATED" {
 		return fmt.Errorf("this product cannot be ordered")
 	}
 
@@ -803,7 +805,7 @@ func (s *SmartContract) GetProducts(ctx contractapi.TransactionContextInterface,
 
 	var products []*Product
 
-	user := new(User)
+	var user *User
 	user, _ = s.GetUser(ctx, userId)
 
 	for resultsIterator.HasNext() {
@@ -859,9 +861,6 @@ func (s *SmartContract) GetRaws(ctx contractapi.TransactionContextInterface, use
 
 	var raws []*Raw
 
-	user := new(User)
-	user, _ = s.GetUser(ctx, userId)
-
 	for resultsIterator.HasNext() {
 		response, err := resultsIterator.Next()
 
@@ -872,9 +871,9 @@ func (s *SmartContract) GetRaws(ctx contractapi.TransactionContextInterface, use
 		var raw Raw
 		_ = json.Unmarshal(response.Value, &raw)
 
-		if raw.SupplierId == userId && user.UserType != "supplier" {
+		if raw.SupplierId == userId {
 			raws = append(raws, &raw)
-		} else if user.UserType != "manufacturer" {
+		} else {
 			raws = append(raws, &raw)
 		}
 	}
