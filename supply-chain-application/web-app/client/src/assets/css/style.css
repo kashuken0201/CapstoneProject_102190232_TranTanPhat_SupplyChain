@@ -1,0 +1,65 @@
+p {
+    padding: 0;
+    margin: 0;
+}
+
+.background-gradient {
+    background-image: linear-gradient(to bottom, #fff, #0A2647);
+}
+
+.circle-border {
+    width: 50px;
+    height: 50px;
+    background: #FFFFFF;
+    border: 2px solid #43AC31;
+    border-radius: 50%;
+    line-height: 50px;
+}
+
+.circle-border.orange {
+    border: 2px solid #FF6000;
+}
+
+.box {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    height: 530px;
+}
+
+.box-item {
+    background: #FFFFFF;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+}
+
+.form {
+    position: relative;
+}
+
+.form .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #9ca3af;
+}
+
+.form-input {
+
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
+
+.form-input:focus {
+
+    box-shadow: none;
+    border: none;
+}
+
+.text-intro {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 35px;
+}

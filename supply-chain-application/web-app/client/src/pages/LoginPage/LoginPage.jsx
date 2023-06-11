@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import { signIn } from "../../context/authContext/services";
 
 export function LoginPage() {
+  const { dispatch } = useContext(AuthContext);
   return (
     <Container fluid style={{ maxHeight: "100vh" }}>
       <Row className="justify-content-center align-items-center">
@@ -16,16 +19,21 @@ export function LoginPage() {
 
             <input
               className="form-control form-control-lg mb-3"
-              id="formControlLg"
               type="email"
             />
             <input
               className="form-control form-control-lg mb-3"
-              id="formControlLg"
               type="password"
             />
 
-            <Button className="mb-4 px-5 w-100" color="info" size="lg">
+            <Button
+              className="mb-4 px-5 w-100"
+              color="info"
+              size="lg"
+              onClick={() => {
+                signIn({}, dispatch);
+              }}
+            >
               Login
             </Button>
           </div>

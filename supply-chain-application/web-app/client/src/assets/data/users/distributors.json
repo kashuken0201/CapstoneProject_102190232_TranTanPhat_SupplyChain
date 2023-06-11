@@ -1,0 +1,52 @@
+[
+    {
+        "UserId": "User11",
+        "Email": "distributor@admin.com",
+        "Password": "1234",
+        "UserName": "Distributor",
+        "Address": "VIE",
+        "UserType": "distributor",
+        "Role": "admin",
+        "Status": "ACTIVE"
+    },
+    {
+        "UserId": "User12",
+        "Email": "rick@gmail.com",
+        "Password": "1234",
+        "UserName": "Rick Novak",
+        "Address": "VIE",
+        "UserType": "distributor",
+        "Role": "user",
+        "Status": "ACTIVE"
+    },
+    {
+        "UserId": "User13",
+        "Email": "susan@gmail.com",
+        "Password": "1234",
+        "UserName": "Susan Connor",
+        "Address": "USA",
+        "UserType": "distributor",
+        "Role": "user",
+        "Status": "ACTIVE"
+    },
+    {
+        "UserId": "User14",
+        "Email": "lumin@gmail.com",
+        "Password": "1234",
+        "UserName": "Roger Lumin",
+        "Address": "UK",
+        "UserType": "distributor",
+        "Role": "user",
+        "Status": "DEACTIVE"
+    },
+    {
+        "UserId": "User15",
+        "Email": "smith@gmail.com",
+        "Password": "1234",
+        "UserName": "Jeff Smith",
+        "Address": "SIN",
+        "UserType": "distributor",
+        "Role": "user",
+        "Status": "ACTIVE"
+    }
+]

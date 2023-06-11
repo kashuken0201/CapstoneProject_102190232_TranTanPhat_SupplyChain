@@ -1,0 +1,66 @@
+[
+    {
+        "RawId": "Raw1",
+        "RawName": "Gold",
+        "CreateDate": "2023-06-07 03:05:22.652 +0000 UTC",
+        "SuppliedDate": "2023-06-07 03:05:35.624 +0000 UTC",
+        "SupplierId": "User2",
+        "ManufacturerId": "User6"
+    },
+    {
+        "RawId": "Raw2",
+        "RawName": "Wood",
+        "CreateDate": "2023-06-07 03:05:24.765 +0000 UTC",
+        "SuppliedDate": "2023-06-07 03:05:37.753 +0000 UTC",
+        "SupplierId": "User2",
+        "ManufacturerId": "User6"
+    },
+    {
+        "RawId": "Raw3",
+        "RawName": "Steel",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "",
+        "SupplierId": "User2",
+        "ManufacturerId": ""
+    },
+    {
+        "RawId": "Raw4",
+        "RawName": "Steel",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "",
+        "SupplierId": "User4",
+        "ManufacturerId": "User8"
+    },
+    {
+        "RawId": "Raw5",
+        "RawName": "Stone",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "",
+        "SupplierId": "User4",
+        "ManufacturerId": ""
+    },
+    {
+        "RawId": "Raw6",
+        "RawName": "Oil",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
+        "SupplierId": "User4",
+        "ManufacturerId": "User6"
+    },
+    {
+        "RawId": "Raw7",
+        "RawName": "Water",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
+        "SupplierId": "User2",
+        "ManufacturerId": "User8"
+    },
+    {
+        "RawId": "Raw8",
+        "RawName": "Plastic",
+        "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
+        "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
+        "SupplierId": "User4",
+        "ManufacturerId": "User7"
+    }
+]
