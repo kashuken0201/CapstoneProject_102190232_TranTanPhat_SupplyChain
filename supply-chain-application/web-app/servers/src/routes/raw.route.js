@@ -1,16 +1,19 @@
-"use strict"
+"use strict";
 
-import express from "express"
-import controller from "../controllers/raw.controller.js"
+import express from "express";
+import controller from "../controllers/raw.controller.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/:orgName/:userId", controller.getRaws)
-router.get("/:orgName/:userId/:rawId", controller.getRaw)
-router.get("/:orgName/:userId/:rawId/history", controller.getRawHistories)
-router.post("/:supplierId/create", controller.createRaw)
-router.post("/:supplierId/update", controller.updateRaw)
-router.post("/:supplierId/supply", controller.supplyRaw)
-router.post("/:manufacturerId/order", controller.orderRaw)
+router.get("/", authMiddleware.auth, controller.getRaws);
+router.get("/:rawId", authMiddleware.auth, controller.getRaw);
 
-export default router
+router.get("/:orgName/:userId/:rawId/history", controller.getRawHistories);
+
+router.post("/create", authMiddleware.auth, controller.createRaw);
+router.post("/:rawId/update", authMiddleware.auth, controller.updateRaw);
+router.post("/:rawId/supply", authMiddleware.auth, controller.supplyRaw);
+router.post("/:rawId/order", authMiddleware.auth, controller.orderRaw);
+
+export default router;

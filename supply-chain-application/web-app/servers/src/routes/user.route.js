@@ -1,14 +1,20 @@
-"use strict"
+"use strict";
 
-import express from "express"
-import controller from "../controllers/user.controller.js"
+import express from "express";
+import controller from "../controllers/user.controller.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.post("/:orgName/signup", controller.signUp)
-router.post("/:orgName/signin", controller.signIn)
-router.get("/:orgName/:userId", controller.getUser)
-router.post("/:orgName/:userId/update", controller.changeInfoUser)
-router.get("/:orgName/admin/:adminId", controller.getUsers)
+router.get("/dashboard", controller.getDashboard);
 
-export default router
+router.post("/", controller.signUp);
+router.post("/login", controller.signIn);
+router.post("/logout", authMiddleware.auth, controller.logOut);
+router.get("/me", authMiddleware.auth, controller.infoUser);
+
+router.post("/:organization/:userId/update", controller.changeInfoUser);
+router.get("/:userId/info", authMiddleware.auth, controller.getUser);
+router.get("/:organization", authMiddleware.auth, controller.getUsers);
+
+export default router;

@@ -1,8 +1,7 @@
 {
     "swagger": "2.0",
-    "title": "Sample Pet Store App",
-    "description": "This is a sample server for a pet store.",
-    "termsOfService": "https://example.com/terms/",
+    "title": "Supply Chain App",
+    "description": "This is a server for a supply chain management app.",
     "contact": {
       "name": "API Support",
       "url": "https://www.example.com/support",
@@ -13,7 +12,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "version": "1.0.1",
-    "host": "localhost:5000",
+    "host": "localhost:5555",
     "basePath": "/",
     "tags": [
       {

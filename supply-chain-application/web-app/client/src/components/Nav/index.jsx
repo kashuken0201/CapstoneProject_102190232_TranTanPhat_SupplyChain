@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Avatar from "../../assets/images/Avatar.png";
 import Dropdown from "react-bootstrap/Dropdown";
-import { logout } from "../../context/authContext/authAction";
 import { AuthContext } from "../../context/authContext/AuthContext";
+import { logout } from "../../context/authContext/services";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -46,9 +46,8 @@ function Nav() {
                 <i className="fa fa-user-circle me-3"></i>Profile
               </Dropdown.Item>
               <Dropdown.Item
-                href="/"
                 onClick={() => {
-                  dispatch(logout);
+                  logout(dispatch);
                 }}
                 className="text-center"
               >

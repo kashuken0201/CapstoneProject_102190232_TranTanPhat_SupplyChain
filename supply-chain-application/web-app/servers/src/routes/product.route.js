@@ -2,18 +2,22 @@
 
 import express from "express"
 import controller from "../controllers/product.controller.js"
+import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router()
 
-router.post("/:manufacturerId/create", controller.createProduct)
-router.post("/:manufacturerId/update", controller.updateProduct)
-router.get("/:orgName/:userId/:productId", controller.getProduct)
-router.get("/:orgName/:userId", controller.getProducts)
+router.post("/create", authMiddleware.auth, controller.createProduct)
+router.post("/:productId/update", authMiddleware.auth, controller.updateProduct)
+
+router.get("/:productId", authMiddleware.auth, controller.getProduct)
+router.get("/", authMiddleware.auth, controller.getProducts)
+
 router.get("/:orgName/:userId/:productId/history", controller.getProductHistories)
-router.post("/:manufacturerId/provide", controller.provideProduct)
-router.post("/:retailerId/order", controller.orderProduct)
-router.post("/:retailerId/receive", controller.receiveProduct)
-router.post("/:retailerId/sell", controller.sellProduct)
-router.post("/:distributorId/delivery", controller.deliveryProduct)
+
+router.post("/:productId/provide", authMiddleware.auth, controller.provideProduct)
+router.post("/:productId/order", authMiddleware.auth, controller.orderProduct)
+router.post("/:productId/receive", authMiddleware.auth, controller.receiveProduct)
+router.post("/:productId/sell", authMiddleware.auth, controller.sellProduct)
+router.post("/:productId/delivery", authMiddleware.auth, controller.deliveryProduct)
 
 export default router

@@ -7,6 +7,9 @@ const Page = () => {
   const numberOfPages = Math.ceil(data.data.length / data.limit);
 
   const navigateToPage = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > numberOfPages) {
+      return;
+    }
     dispatch(
       setPagination({
         ...data,
@@ -25,24 +28,34 @@ const Page = () => {
   return (
     <>
       {data.table}
-      {data.page > 2 && (
-        <button onClick={() => navigateToPage(1)}>First</button>
-      )}
-      {data.page > 1 && (
-        <button onClick={() => navigateToPage(data.page - 1)}>Prev</button>
-      )}
-      {[...Array(100)].slice(0, numberOfPages).map((x, i) => (
-        <button key={i} onClick={() => navigateToPage(i + 1)}>
-          {i + 1}
-        </button>
-      ))}
+      <div className="d-flex justify-content-center pagination">
+        {/* {data.page > 2 && (
+            <button onClick={() => navigateToPage(1)}>First</button>
+          )} */}
+        <div className="bg-white rounded-pill px-3">
+          <button onClick={() => navigateToPage(data.page - 1)}>
+            <i className="fa fa-angle-left"></i>
+          </button>
 
-      {data.page !== numberOfPages && (
-        <button onClick={() => navigateToPage(data.page + 1)}>Next</button>
-      )}
-      {data.page < Math.ceil(numberOfPages / 2 + 1) && (
-        <button onClick={() => navigateToPage(numberOfPages)}>Last</button>
-      )}
+          {[...Array(100)].slice(0, numberOfPages).map((x, i) => (
+            <button
+              className={`${data.page === i + 1 ? "active" : ""}`}
+              key={i}
+              onClick={() => navigateToPage(i + 1)}
+            >
+              <p>{i + 1}</p>
+            </button>
+          ))}
+
+          <button onClick={() => navigateToPage(data.page + 1)}>
+            <i className="fa fa-angle-right"></i>
+          </button>
+        </div>
+
+        {/* {data.page < Math.ceil(numberOfPages / 2 + 1) && (
+          <button onClick={() => navigateToPage(numberOfPages)}>Last</button>
+        )} */}
+      </div>
     </>
   );
 };

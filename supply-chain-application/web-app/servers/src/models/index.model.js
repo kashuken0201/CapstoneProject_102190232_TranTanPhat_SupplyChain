@@ -1,6 +1,5 @@
 import dbConfig from "../configs/db.config.js"
 import mongoose from "mongoose"
-import users from "./user.model.js"
 
 mongoose.Promise = global.Promise
 

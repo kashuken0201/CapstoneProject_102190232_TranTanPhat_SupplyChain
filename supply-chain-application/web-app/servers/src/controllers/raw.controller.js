@@ -6,7 +6,7 @@ import handleError from "../middlewares/error.middleware.js"
 
 const getRaw = async (req, res) => {
   try {
-    const rs = await rawService.getRaw(req.params)
+    const rs = await rawService.getRaw(req)
     response(rs, res)
   } catch (err) {
     handleError(500, err, res)
@@ -15,7 +15,7 @@ const getRaw = async (req, res) => {
 
 const getRaws = async (req, res) => {
   try {
-    const rs = await rawService.getRaws(req.params)
+    const rs = await rawService.getRaws(req)
     response(rs, res)
   } catch (err) {
     handleError(500, err, res)
@@ -33,8 +33,8 @@ const getRawHistories = async (req, res) => {
 
 const createRaw = async (req, res) => {
   try {
-    await rawService.createRaw(req.params, req.body)
-    response(true, res)
+    const rs = await rawService.createRaw(req)
+    response(rs, res)
   } catch (err) {
     handleError(500, err, res)
   }
@@ -42,8 +42,8 @@ const createRaw = async (req, res) => {
 
 const updateRaw = async (req, res) => {
   try {
-    await rawService.updateRaw(req.params, req.body)
-    response(true, res)
+    const rs = await rawService.updateRaw(req)
+    response(rs, res)
   } catch (err) {
     handleError(500, err, res)
   }
@@ -51,8 +51,8 @@ const updateRaw = async (req, res) => {
 
 const supplyRaw = async (req, res) => {
   try {
-    await rawService.supplyRaw(req.params, req.body)
-    response(true, res)
+    const rs = await rawService.supplyRaw(req)
+    response(rs, res)
   } catch (err) {
     handleError(500, err, res)
   }
@@ -60,8 +60,8 @@ const supplyRaw = async (req, res) => {
 
 const orderRaw = async (req, res) => {
   try {
-    await rawService.orderRaw(req.params, req.body)
-    response(true, res)
+    const rs = await rawService.orderRaw(req)
+    response(rs, res)
   } catch (err) {
     handleError(500, err, res)
   }

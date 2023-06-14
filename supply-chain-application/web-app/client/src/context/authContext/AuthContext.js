@@ -1,9 +1,15 @@
 import PropTypes from "prop-types";
 import React, { createContext, useReducer } from "react";
 import AuthReducer from "./authReducer";
+import { USER_LOGIN } from "../../utils/constants";
+
+let user = undefined;
+if (localStorage.getItem(USER_LOGIN)) {
+  user = JSON.parse(localStorage.getItem(USER_LOGIN));
+}
 
 const INITIAL_STATE = {
-  user: undefined,
+  user: user,
   isFetching: false,
   error: false,
 };

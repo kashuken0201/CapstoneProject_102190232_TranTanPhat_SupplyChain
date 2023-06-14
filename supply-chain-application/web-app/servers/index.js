@@ -22,7 +22,7 @@ const corsOptions = {
   origin: "http://localhost:8080"
 };
 
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use("/api", routes)
@@ -31,8 +31,6 @@ app.use(cookieParser())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 const server = http.createServer(app)
-
-
 
 mongoose.set("strictQuery", false)
 
@@ -52,4 +50,4 @@ await mongoose
     process.exit(1)
   })
 
-// await userService.importData()
+// await userService.importAdmin()

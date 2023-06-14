@@ -5,7 +5,8 @@
         "CreateDate": "2023-06-07 03:05:22.652 +0000 UTC",
         "SuppliedDate": "2023-06-07 03:05:35.624 +0000 UTC",
         "SupplierId": "User2",
-        "ManufacturerId": "User6"
+        "ManufacturerId": "User6",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw2",
@@ -13,7 +14,8 @@
         "CreateDate": "2023-06-07 03:05:24.765 +0000 UTC",
         "SuppliedDate": "2023-06-07 03:05:37.753 +0000 UTC",
         "SupplierId": "User2",
-        "ManufacturerId": "User6"
+        "ManufacturerId": "User6",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw3",
@@ -21,7 +23,8 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "",
         "SupplierId": "User2",
-        "ManufacturerId": ""
+        "ManufacturerId": "",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw4",
@@ -29,7 +32,8 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "",
         "SupplierId": "User4",
-        "ManufacturerId": "User8"
+        "ManufacturerId": "User8",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw5",
@@ -37,7 +41,8 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "",
         "SupplierId": "User4",
-        "ManufacturerId": ""
+        "ManufacturerId": "",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw6",
@@ -45,7 +50,8 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
         "SupplierId": "User4",
-        "ManufacturerId": "User6"
+        "ManufacturerId": "User6",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw7",
@@ -53,7 +59,8 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
         "SupplierId": "User2",
-        "ManufacturerId": "User8"
+        "ManufacturerId": "User8",
+        "Status": "CREATED"
     },
     {
         "RawId": "Raw8",
@@ -61,6 +68,7 @@
         "CreateDate": "2023-06-07 03:05:26.876 +0000 UTC",
         "SuppliedDate": "2023-06-07 03:05:39.855 +0000 UTC",
         "SupplierId": "User4",
-        "ManufacturerId": "User7"
+        "ManufacturerId": "User7",
+        "Status": "CREATED"
     }
 ]

@@ -1,6 +1,29 @@
+body {
+    font-size: 14px;
+}
+
 p {
     padding: 0;
     margin: 0;
+}
+
+.background-primary {
+    background-color: #0A2647;
+}
+
+.text-gray {
+    color: #747E92;
+}
+
+.sidebar {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+}
+
+a.text-gray:hover {
+    color: white;
 }
 
 .background-gradient {
@@ -57,9 +80,24 @@ p {
 }
 
 .text-intro {
-    font-family: 'Roboto';
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
     line-height: 35px;
+}
+
+.pagination button{
+    background-color: transparent;
+    border: none;
+    color:black;
+    padding: 10px;
+}
+
+.pagination button.active p{
+    background-color: #0A2647;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 100%;
+    color:white
 }

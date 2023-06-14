@@ -1,30 +1,63 @@
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    name: {
+    key: {
         type: String,
-        min: 3,
-        max: 255,
-        required: true,
     },
-    description: {
+    product_name: {
         type: String,
         required: true,
-        unique: true,
     },
     price: {
         type: Number,
     },
-    unit: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Unit",
-    },
-    categorys: [
+    raws: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Category",
+            ref: "Raw",
         },
     ],
+    status: {
+        type: String,
+        required: true,
+        default: "CREATED",
+    },
+    description: {
+        type: String,
+    },
+    timestamps: {
+        created_date: {
+            type: Date,
+            required: true,
+            default: Date.now,
+        },
+        ordered_date: {
+            type: Date,
+        },
+        delivered_date: {
+            type: Date,
+        },
+        received_date: {
+            type: Date,
+        },
+        sold_date: {
+            type: Date,
+        },
+    },
+    actors: {
+        manufacturer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        distributor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        retailer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    },
 });
 
 const Product = mongoose.model("product", productSchema);

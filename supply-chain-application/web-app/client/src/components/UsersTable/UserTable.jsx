@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import ProductRow from "./ProductRow";
 import { PaginationContext } from "../../context/paginationContext/PaginationContext";
+import UserRow from "./UserRow";
 
-function ProductTable() {
+function UserTable() {
   const { data } = useContext(PaginationContext);
-
+  console.log(data);
   return (
     <div>
       <table className="table text-center my-4">
@@ -12,16 +12,15 @@ function ProductTable() {
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Price</th>
-            <th>Date</th>
-            <th>Manufacturer</th>
+            <th>Email</th>
+            <th>Address</th>
             <th>Status</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {data.data.slice(data.start, data.perPage).map((item, i) => (
-            <ProductRow key={i} data={item} />
+            <UserRow key={i} data={item} />
           ))}
         </tbody>
       </table>
@@ -29,4 +28,4 @@ function ProductTable() {
   );
 }
 
-export default ProductTable;
+export default UserTable;

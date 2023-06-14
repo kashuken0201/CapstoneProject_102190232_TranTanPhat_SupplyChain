@@ -1,18 +1,31 @@
 import mongoose from "mongoose";
 
 const rawSchema = new mongoose.Schema({
+    key: {
+        type: String,
+    },
     raw_name: {
         type: String,
-        min: 3,
-        max: 255,
         required: true,
     },
     supplier: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Supplier",
+        required: true,
+        ref: "User",
+    },
+    manufacturer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
+    created_date: {
+        type: Date,
+        default: Date.now,
+    },
+    supplied_date: {
+        type: Date,
     },
 });
 
-const Raw = mongoose.model("raw", rawSchema);
+const Raw = mongoose.model("Raw", rawSchema);
 
 export default Raw;

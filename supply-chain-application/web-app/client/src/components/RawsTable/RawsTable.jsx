@@ -7,7 +7,7 @@ function RawsTable() {
 
   return (
     <div>
-      <table className="table table-striped">
+      <table className="table text-center">
         <thead>
           <tr>
             <th>ID</th>

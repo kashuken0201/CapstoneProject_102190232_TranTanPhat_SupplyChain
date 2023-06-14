@@ -5,11 +5,11 @@ const INITIAL_STATE = {
   data: {
     data: [],
     currentData: [],
-    limit: 10,
+    limit: 7,
     total: 10,
     start: 0,
     page: 1,
-    perPage: 10,
+    perPage: 7,
     showPrevButton: false,
     showFirstPageButton: false,
     showNextButton: false,

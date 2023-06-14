@@ -19,6 +19,6 @@ export const signInFailure = () => ({
   type: SIGN_IN_FAILURE,
 });
 
-export const logout = () => ({
+export const logOut = () => ({
   type: LOG_OUT,
 });
