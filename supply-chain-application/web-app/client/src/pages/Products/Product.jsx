@@ -1,26 +1,40 @@
 import React, { useContext, useEffect } from "react";
 import Pagination from "../../components/Pagination";
-import Products from "../../assets/data/products/products.json";
 import { PaginationContext } from "../../context/paginationContext/PaginationContext";
 import { setPagination } from "../../context/paginationContext/paginationAction";
 import ProductTable from "../../components/ProductTable/ProductTable";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import { notify } from "../../utils/showToast";
+import { ProductsContext } from "../../context/productContext/ProductContext";
+import { getProducts } from "../../context/productContext/services";
 function Product() {
   const { dispatch, data } = useContext(PaginationContext);
+  const { dispatch: dispatchProducts, products } = useContext(ProductsContext);
+  const { user } = useContext(AuthContext);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    dispatch(
-      setPagination({
-        ...data,
-        data: Products,
-        start: 0,
-        page: 1,
-        perPage: 7,
-        table: <ProductTable />,
-      })
-    );
+    if (user.organization === "supplier") {
+      notify("error", "You are not allowed to access this page");
+      navigate("/dashboard");
+      return;
+    }
+    !products && getProducts(dispatchProducts);
+    products &&
+      dispatch(
+        setPagination({
+          ...data,
+          data: products,
+          start: 0,
+          page: 1,
+          perPage: 7,
+          table: <ProductTable />,
+        })
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, products]);
   return (
     <div className="d-flex flex-column ">
       <div className="d-flex justify-content-between align-items-center mt-4">
@@ -29,9 +43,7 @@ function Product() {
           <button className="btn btn-success">+ Add</button>
         </div>
       </div>
-      <div>
-        <Pagination />
-      </div>
+      <div>{products && <Pagination />}</div>
     </div>
   );
 }

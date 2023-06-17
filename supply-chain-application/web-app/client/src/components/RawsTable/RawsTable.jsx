@@ -7,7 +7,7 @@ function RawsTable() {
 
   return (
     <div>
-      <table className="table text-center">
+      <table className="table text-center" style={{ borderCollapse: "separate", borderSpacing: "0 5px" }}>
         <thead>
           <tr>
             <th>ID</th>

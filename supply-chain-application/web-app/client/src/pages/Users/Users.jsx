@@ -1,28 +1,40 @@
 import React, { useContext, useEffect } from "react";
 import { PaginationContext } from "../../context/paginationContext/PaginationContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setPagination } from "../../context/paginationContext/paginationAction";
-import UserData from "../../assets/data/users/manufacturers.json";
 import UserTable from "../../components/UsersTable/UserTable";
 import Pagination from "../../components/Pagination";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import { notify } from "../../utils/showToast";
+import { UsersContext } from "../../context/userContext/UserContext";
+import { getUsers } from "../../context/userContext/services";
 
 function Users() {
   const { dispatch, data } = useContext(PaginationContext);
+  const { user } = useContext(AuthContext);  
+  const { dispatch: dispatchUsers, users } = useContext(UsersContext);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(
+    if (user.role !== "admin") {
+      notify("error", "You are not allowed to access this page");
+      navigate("/dashboard");
+      return;
+    }
+    !users && getUsers(dispatchUsers,user.organization);
+    users && dispatch(
       setPagination({
         ...data,
         start: 0,
         page: 1,
         perPage: 7,
-        data: UserData,
+        data: users,
         table: <UserTable />,
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, users]);
   return (
     <div className="d-flex flex-column">
       <div className="d-flex justify-content-between align-items-center mt-4">
@@ -31,9 +43,7 @@ function Users() {
           <button className="btn btn-success">+ Add</button>
         </div>
       </div>
-      <div>
-        <Pagination />
-      </div>
+      <div>{users && <Pagination />}</div>
     </div>
   );
 }

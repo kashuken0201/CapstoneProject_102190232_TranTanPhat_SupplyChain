@@ -7,12 +7,12 @@ function UserRow({ data }) {
   return (
     <>
       <tr onClick={() => setModalShow(true)}>
-        <td>{data.UserId}</td>
-        <td>{data.UserName}</td>
-        <td>{data.Email}</td>
-        <td>{data.Address}</td>
+        <td>{data._id}</td>
+        <td>{data.username}</td>
+        <td>{data.email}</td>
+        <td>{data.address}</td>
         <td>
-          <TextColorChanger text={data.Status} />
+          <TextColorChanger text={data.status} />
         </td>
         <td>...</td>
       </tr>

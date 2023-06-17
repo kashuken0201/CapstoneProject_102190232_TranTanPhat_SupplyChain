@@ -7,7 +7,10 @@ function ProductTable() {
 
   return (
     <div>
-      <table className="table text-center my-4">
+      <table
+        className="table text-center mt-4"
+        style={{ borderCollapse: "separate", borderSpacing: "0 5px" }}
+      >
         <thead>
           <tr>
             <th>ID</th>

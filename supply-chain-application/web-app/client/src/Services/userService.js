@@ -7,7 +7,11 @@ export class UserService extends baseService {
 
   login = (account) => {
     return this.post(`users/login`, account);
-}
+  };
+
+  getUserService = (organization) => {
+    return this.get(`users/${organization}`);
+  };
 }
 
 export const userService = new UserService();

@@ -2,6 +2,7 @@ import React from "react";
 import TextColorChanger from "../TextColorChanger";
 import RawModal from "./RawModal";
 import { Dropdown } from "react-bootstrap";
+import { subString } from "../../utils/substring";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -22,11 +23,13 @@ function RawRow({ data }) {
 
   return (
     <>
-      <tr>
-        <td onClick={() => setModalShow(true)}>{data.RawId}</td>
-        <td onClick={() => setModalShow(true)}>{data.RawName}</td>
-        <td onClick={() => setModalShow(true)}>{new Date(data.CreateDate).toLocaleDateString("en-US")}</td>
-        <td onClick={() => setModalShow(true)}>{data.SupplierId}</td>
+      <tr className="rounded-3">
+        <td onClick={() => setModalShow(true)}>{subString(data._id)}</td>
+        <td onClick={() => setModalShow(true)}>{data.raw_name}</td>
+        <td onClick={() => setModalShow(true)}>
+          {new Date(data.created_date).toLocaleDateString("en-US")}
+        </td>
+        <td onClick={() => setModalShow(true)}>{data.supplier.username}</td>
         <td onClick={() => setModalShow(true)}>
           <TextColorChanger text={data.Status} />
         </td>
@@ -38,7 +41,7 @@ function RawRow({ data }) {
 
             <Dropdown.Menu>
               <Dropdown.Item href="/" className="">
-                <i class="fa fa-pen me-3 text-info"></i>Edit
+                <i className="fa fa-pen me-3 text-info"></i>Edit
               </Dropdown.Item>
               <Dropdown.Item className="">
                 <i className="fa fa-history me-3"></i>History

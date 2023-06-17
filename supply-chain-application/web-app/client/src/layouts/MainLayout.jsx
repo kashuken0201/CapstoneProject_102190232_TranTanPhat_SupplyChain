@@ -8,7 +8,7 @@ function MainLayout() {
     <div className="container-fluid">
       <div className="row flex-nowrap">
         <Sidebar />
-        <div className="col background-gradient p-3">
+        <div className="col background-gradient py-3 px-5">
           <Nav />
           <Outlet />
         </div>

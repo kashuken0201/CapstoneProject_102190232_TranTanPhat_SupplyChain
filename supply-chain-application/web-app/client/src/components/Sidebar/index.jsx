@@ -6,12 +6,12 @@ function Sidebar() {
   return (
     <div
       className={`px-sm-2 px-0 background-primary sidebar ${
-        isOpen ? "col-auto col-md-3 col-xl-2" : "col-1"
+        isOpen ? "col-auto col-md-3 col-xl-2 " : "col-1 sidebar-open"
       }`}
       style={{ maxHeight: "100vh" }}
     >
       <div
-        className={`d-flex flex-column align-items-center align-items-sm-start ${
+        className={`d-flex flex-column align-items-start ${
           isOpen ? "px-3" : " px-0"
         } pt-2 text-white min-vh-100`}
       >
@@ -32,17 +32,21 @@ function Sidebar() {
             <i className="fa fa-bars"></i>
           </p>
         </div>
-        <div className="d-flex flex-column justify-content-between flex-grow-1 w-100 text-center align-items-center">
+        <div
+          className={`d-flex flex-column justify-content-between flex-grow-1 w-100 text-center ${
+            isOpen ? "align-items-start" : "align-items-center"
+          }`}
+        >
           <ul
-            className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start"
             id="menu"
           >
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >
@@ -54,12 +58,12 @@ function Sidebar() {
                 </span>
               </NavLink>
             </li>
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/products"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >
@@ -71,12 +75,12 @@ function Sidebar() {
                 </span>
               </NavLink>
             </li>
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/raws"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >
@@ -88,12 +92,12 @@ function Sidebar() {
                 </span>
               </NavLink>
             </li>
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/users"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >
@@ -107,15 +111,15 @@ function Sidebar() {
             </li>
           </ul>
           <ul
-            className="nav nav-pills flex-column mt-auto align-items-center py-3 w-100"
+            className="nav nav-pills flex-column mt-auto align-items-start py-3 "
             id="menu"
           >
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/#"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >
@@ -127,13 +131,13 @@ function Sidebar() {
                 </span>
               </NavLink>
             </li>
-            <li className="nav-item my-2">
+            <li className="nav-item my-3">
               <NavLink
                 to="/#submenu1"
                 data-bs-toggle="collapse"
                 className={({ isActive }) =>
                   `${
-                    isActive ? "text-white" : "text-gray"
+                    isActive ? "text-white bg-active" : "text-gray"
                   } nav-link align-middle px-0`
                 }
               >

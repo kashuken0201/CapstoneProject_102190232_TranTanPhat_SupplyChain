@@ -2,6 +2,7 @@ import React from "react";
 import TextColorChanger from "../TextColorChanger";
 import ProductModal from "./ProductModal";
 import { Dropdown } from "react-bootstrap";
+import { subString } from "../../utils/substring";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -22,15 +23,15 @@ function ProductRow({ data }) {
   return (
     <>
       <tr>
-        <td onClick={() => setModalShow(true)}>{data.ProductId}</td>
-        <td onClick={() => setModalShow(true)}>{data.ProductName}</td>
-        <td onClick={() => setModalShow(true)}>{data.Price}</td>
+        <td onClick={() => setModalShow(true)}>{subString(data._id)}</td>
+        <td onClick={() => setModalShow(true)}>{data.product_name}</td>
+        <td onClick={() => setModalShow(true)}>{data.price}</td>
         <td onClick={() => setModalShow(true)}>
-          {new Date(data.Dates.Manufacturered).toLocaleDateString("en-US")}
+          {new Date(data.timestamps.created_date).toLocaleDateString("en-US")}
         </td>
-        <td onClick={() => setModalShow(true)}>{data.Actors.ManufacturerId}</td>
+        <td onClick={() => setModalShow(true)}>{data.actors.manufacturer._id}</td>
         <td onClick={() => setModalShow(true)}>
-          <TextColorChanger text={data.Status} />
+          <TextColorChanger text={data.status} />
         </td>
         <td>
           <Dropdown>
@@ -40,7 +41,7 @@ function ProductRow({ data }) {
 
             <Dropdown.Menu>
               <Dropdown.Item href="/" className="">
-                <i class="fa fa-pen me-3 text-info"></i>Edit
+                <i className="fa fa-pen me-3 text-info"></i>Edit
               </Dropdown.Item>
               <Dropdown.Item className="">
                 <i className="fa fa-history me-3"></i>History

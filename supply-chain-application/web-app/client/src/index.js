@@ -7,14 +7,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthContextProvider } from "./context/authContext/AuthContext";
 import "./assets/css/style.css";
 import { PaginationProvider } from "./context/paginationContext/PaginationContext";
+import { RawContextProvider } from "./context/rawContext/RawContext";
+import { ProductsContextProvider } from "./context/productContext/ProductContext";
+import { UsersContextProvider } from "./context/userContext/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <PaginationProvider>
-        <App />
-      </PaginationProvider>
+      <ProductsContextProvider>
+        <RawContextProvider>
+          <UsersContextProvider>
+            <PaginationProvider>
+              <App />
+            </PaginationProvider>
+          </UsersContextProvider>
+        </RawContextProvider>
+      </ProductsContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

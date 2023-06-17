@@ -4,6 +4,7 @@ import { setPagination } from "../../context/paginationContext/paginationAction"
 
 const Page = () => {
   const { dispatch, data } = useContext(PaginationContext);
+  // console.log(data);
   const numberOfPages = Math.ceil(data.data.length / data.limit);
 
   const navigateToPage = (pageNumber) => {

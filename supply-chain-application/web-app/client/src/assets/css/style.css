@@ -7,6 +7,32 @@ p {
     margin: 0;
 }
 
+a{
+    color: white
+}
+
+.bg-active{
+    position: relative;
+    z-index: 10;
+}
+
+.bg-active::before{
+    content: "";
+    position: absolute;
+    margin-top: -20px;
+    left: -100px;
+    width: 250px;
+    height: 60px;
+    border-radius: 0px 30px 30px 0px;
+    display: block;
+    background-color: #144272;
+    z-index: -1;
+}
+
+.sidebar.sidebar-open .bg-active::before{
+    width: 150px;
+}
+
 .background-primary {
     background-color: #0A2647;
 }

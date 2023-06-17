@@ -12,11 +12,14 @@ import MainLayout from "./layouts/MainLayout";
 import Product from "./pages/Products/Product";
 import Raws from "./pages/Raws/Raws";
 import Users from "./pages/Users/Users";
+import { ToastContainer } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route
           path="*"
@@ -30,7 +33,7 @@ function App() {
         />
         <Route
           path="/login"
-          element={user ? <Navigate to="/" replace /> : <LoginPage />}
+          element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />}
         />
         {user && (
           <>

@@ -15,7 +15,7 @@ const data = [
 const TextColorChanger = ({ text }) => {
   const color = data.find((item) => item.text === text)?.color;
   return (
-    <div style={{ border: `1px solid ${color ? color : "black"}`, borderRadius:"30px", padding:"5px 10px" }}>
+    <div className="mx-auto" style={{ border: `1px solid ${color ? color : "black"}`, borderRadius:"30px", padding:"5px 10px", width:"fit-content" }}>
       <p style={{ color: color ? color : "black" }}>{text}</p>
     </div>
   );
