@@ -1,42 +1,57 @@
-"use strict"
+"use strict";
 
-import network from "./network.fabric.js"
+import network from "./network.fabric.js";
 
-const chaincode = process.env.CHAINCODE_NAME
-const orgName = "supplier"
+const chaincode = process.env.CHAINCODE_NAME;
+const orgName = "supplier";
 
-/**
- * @param {string} supplierId 
- * @param {string} rawName 
- */
-const createRaw = async (supplierId, rawName) => {
-  const networkObj = await network.connect(orgName, supplierId, chaincode)
-  await network.invoke(networkObj, "CreateRaw", supplierId, rawName)
-}
+const createRaw = async (
+    supplierId,
+    rawId,
+    rawName,
+    createDate,
+    status,
+    hashCode
+) => {
+    const networkObj = await network.connect(orgName, supplierId, chaincode);
+    await network.invoke(
+        networkObj,
+        "CreateRaw",
+        supplierId,
+        rawId,
+        rawName,
+        createDate,
+        status,
+        hashCode
+    );
+};
 
-/**
- * @param {string} supplierId 
- * @param {string} rawId 
- * @param {string} rawName
- */
-const updateRaw = async (supplierId, rawId, rawName) => {
-  const networkObj = await network.connect(orgName, supplierId, chaincode)
-  await network.invoke(networkObj, "UpdateRaw", supplierId, rawId, rawName)
-}
+const updateRaw = async (supplierId, rawId, rawName, status, hashCode) => {
+    const networkObj = await network.connect(orgName, supplierId, chaincode);
+    await network.invoke(
+        networkObj,
+        "UpdateRaw",
+        rawId,
+        rawName,
+        status,
+        hashCode
+    );
+};
 
-/**
- * @param {string} supplierId 
- * @param {string} rawId
- * @param {string} manufacturerId
- */
-const supplyRaw = async (supplierId, rawId, manufacturerId) => {
-  const networkObj = await network.connect(orgName, supplierId, chaincode)
-  await network.invoke(networkObj, "SupplyRaw", supplierId, rawId, manufacturerId)
-}
-
+const supplyRaw = async (supplierId, rawId, suppliedDate, status, hashCode) => {
+    const networkObj = await network.connect(orgName, supplierId, chaincode);
+    await network.invoke(
+        networkObj,
+        "SupplyRaw",
+        rawId,
+        suppliedDate,
+        status,
+        hashCode
+    );
+};
 
 export default {
-  createRaw,
-  updateRaw,
-  supplyRaw
-}
+    createRaw,
+    updateRaw,
+    supplyRaw,
+};

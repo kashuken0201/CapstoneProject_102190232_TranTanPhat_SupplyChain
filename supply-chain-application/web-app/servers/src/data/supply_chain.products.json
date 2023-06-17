@@ -1,0 +1,99 @@
+[{
+  "_id": {
+    "$oid": "648adbe652a56fa4a2dfb467"
+  },
+  "product_name": "Hahahaha",
+  "price": 123456,
+  "raws": [
+    {
+      "$oid": "648999bd79c11372436203ef"
+    },
+    {
+      "$oid": "648999c879c113724362040d"
+    }
+  ],
+  "status": "UPDATED",
+  "description": "XYZ",
+  "timestamps": {
+    "created_date": {
+      "$date": "2023-06-15T09:37:42.440Z"
+    }
+  },
+  "actors": {
+    "manufacturer": {
+      "$oid": "648946f4dfd87584b597bc93"
+    }
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "648adc0652a56fa4a2dfb46c"
+  },
+  "product_name": "Car",
+  "price": 1111000,
+  "raws": [
+    {
+      "$oid": "648999c579c1137243620403"
+    },
+    {
+      "$oid": "648999c179c11372436203f9"
+    },
+    {
+      "$oid": "648999cd79c1137243620417"
+    }
+  ],
+  "status": "ORDERED",
+  "description": "ghffqe",
+  "timestamps": {
+    "created_date": {
+      "$date": "2023-06-15T09:38:14.593Z"
+    },
+    "ordered_date": {
+      "$date": "2023-06-15T09:40:44.799Z"
+    }
+  },
+  "actors": {
+    "manufacturer": {
+      "$oid": "648946f4dfd87584b597bc93"
+    },
+    "retailer": {
+      "$oid": "648946f4dfd87584b597bc9b"
+    }
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "648adc2052a56fa4a2dfb471"
+  },
+  "product_name": "Televison",
+  "price": 4321123,
+  "raws": [
+    {
+      "$oid": "648999c879c113724362040d"
+    }
+  ],
+  "status": "DELIVERING",
+  "description": "ghfsdasdasdasdasdcascasdcascfqe",
+  "timestamps": {
+    "created_date": {
+      "$date": "2023-06-15T09:38:40.565Z"
+    },
+    "ordered_date": {
+      "$date": "2023-06-15T09:41:30.663Z"
+    }
+  },
+  "actors": {
+    "manufacturer": {
+      "$oid": "648946f4dfd87584b597bc93"
+    },
+    "retailer": {
+      "$oid": "648946f4dfd87584b597bc9b"
+    },
+    "distributor": {
+      "$oid": "648946f4dfd87584b597bc97"
+    }
+  },
+  "__v": 0
+}]

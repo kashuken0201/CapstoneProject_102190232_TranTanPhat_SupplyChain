@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    key: {
-        type: String,
-    },
     product_name: {
         type: String,
         required: true,
@@ -57,6 +54,10 @@ const productSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
+    },
+    hash_code: {
+        type: String,
+        required: true,
     },
 });
 

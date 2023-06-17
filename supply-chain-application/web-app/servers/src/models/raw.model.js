@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
 const rawSchema = new mongoose.Schema({
-    key: {
-        type: String,
-    },
     raw_name: {
         type: String,
         required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+        default: "CREATED",
     },
     supplier: {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +25,10 @@ const rawSchema = new mongoose.Schema({
     },
     supplied_date: {
         type: Date,
+    },
+    hash_code: {
+        type: String,
+        required: true,
     },
 });
 

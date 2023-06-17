@@ -6,83 +6,68 @@ import userModel from "../models/user.model.js";
 import rawModel from "../models/raw.model.js";
 import productModel from "../models/product.model.js";
 
-const signIn = async (req) => {
-    const { email, password } = req.body;
-    const user = await userModel.findByCredentials(email, password);
-    if (!user) {
-        return { error: "Login failed! Check authentication credentials" };
-    }
-    const token = await user.generateAuthToken();
-    return { user, token };
-    // return await fabricAdmin.signIn(params.orgName, "User1", body.email, body.password)
-};
-
-const infoUser = async (req) => {
-    const { email, password } = req.body;
-    const user = await userModel.findByCredentials(email, password);
-    if (!user) {
-        return { error: "Login failed! Check authentication credentials" };
-    }
-    return { user };
-    // return await fabricAdmin.signIn(params.orgName, "User1", body.email, body.password)
-};
-
 const signUp = async (req) => {
     const user = new userModel(req.body);
     await user.save();
-    await user.generateAuthToken();
+
+    await fabricAdmin.registerUser(user.organization, user._id);
+
+    return "Sign up successfully";
+};
+
+const signIn = async (req) => {
+    const { email, password } = req.body;
+    const user = await userModel.findByCredentials(email, password);
+
+    if (!user) {
+        return { error: "Login failed! Check authentication credentials" };
+    }
+
+    const token = await user.generateAuthToken();
+
+    return { token };
+};
+
+const infoUser = async (req) => {
+    const user = req.user;
+    if (!user) throw new Error("User not found");
+    user.password = "";
     return { user };
-    // await fabricAdmin.signUp(params.orgName, body.adminId, body.email, body.password, body.username, body.address, body.role)
 };
 
 const logOut = async (req) => {
-    req.user.tokens = req.user.tokens.filter((token) => {
-        return token.token !== req.token;
-    });
-    await req.user.save();
-    // return await fabricAdmin.signIn(params.orgName, "User1", body.email, body.password)
+    const user = await userModel.findById(req.user._id);
+    user.token = "";
+    await user.save();
+    return "Logged out";
 };
 
-const changeInfoUser = async (params, body) => {
-    await fabricAdmin.changeInfoUser(
-        params.orgName,
-        params.userId,
-        body.adminId,
-        body.password,
-        body.username,
-        body.address,
-        body.status
-    );
-};
+const changeInfoUser = async (req) => {};
 
 const getUser = async (req) => {
     const userId = req.params.userId;
+    if (!userId) throw new Error("Missing userId");
     const user = await userModel.findById(userId);
+    if (!user) throw new Error("User not found");
+    user.password = "";
     return user;
-    // const userFabric = await fabricUtil.getUser(params.orgName, params.userId);
-    // return userFabric;
 };
 
 const getUsers = async (req) => {
     const organization = req.params.organization;
     const users = await userModel.find({ organization: organization });
     return users;
-    // const userFabric = await fabricUtil.getUsers(
-    //     params.orgName,
-    //     params.adminId
-    // );
-    // return userFabric;
 };
 
 const getDashboard = async (req) => {
-    const organization = req.params.organization;
-    const users = await userModel.find({ organization: organization });
-    return users;
-    // const userFabric = await fabricUtil.getUsers(
-    //     params.orgName,
-    //     params.adminId
-    // );
-    // return userFabric;
+    const raws = await rawModel.find();
+    const products = await productsModel.find();
+    const users = await userModel.find();
+    return {
+        raws: raws,
+        products: products,
+        users: users,
+    };
 };
 
 const createAdmin = async (

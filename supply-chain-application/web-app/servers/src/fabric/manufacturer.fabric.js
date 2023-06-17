@@ -1,59 +1,111 @@
-"use strict"
+"use strict";
 
-import network from "./network.fabric.js"
+import network from "./network.fabric.js";
 
-const chaincode = process.env.CHAINCODE_NAME
-const orgName = "manufacturer"
+const chaincode = process.env.CHAINCODE_NAME;
+const orgName = "manufacturer";
 
-/**
- * @param {string} manufacturerId 
- * @param {string} productId 
- * @param {string} retailerId 
- * @param {string} distributorId 
- */
-const provideProduct = async (manufacturerId, productId, retailerId, distributorId) => {
-  const networkObj = await network.connect(orgName, manufacturerId, chaincode)
-  await network.invoke(networkObj, "ProvideProduct", manufacturerId, productId, retailerId, distributorId)
-}
+const orderRaw = async (manufacturerId, rawId, status, hashCode) => {
+    const networkObj = await network.connect(
+        orgName,
+        manufacturerId,
+        chaincode
+    );
+    await network.invoke(
+        networkObj,
+        "OrderRaw",
+        rawId,
+        manufacturerId,
+        status,
+        hashCode
+    );
+};
 
-/**
- * @param {string} manufacturerId 
- * @param {string} productId 
- * @param {string} productName 
- * @param {float} price 
- * @param {string} description 
- * @param {[]string} rawIds 
- */
-const updateProduct = async (manufacturerId, productId, productName, price, description, rawIds) => {
-  const networkObj = await network.connect(orgName, manufacturerId, chaincode)
-  await network.invoke(networkObj, "UpdateProduct", manufacturerId, productId, productName, price, description, rawIds)
-}
+const createProduct = async (
+    manufacturerId,
+    productId,
+    productName,
+    price,
+    rawIds,
+    status,
+    description,
+    createdDate,
+    hashCode
+) => {
+    const networkObj = await network.connect(
+        orgName,
+        manufacturerId,
+        chaincode
+    );
+    await network.invoke(
+        networkObj,
+        "CreateProduct",
+        manufacturerId,
+        productId,
+        productName,
+        price,
+        rawIds,
+        status,
+        description,
+        createdDate,
+        hashCode
+    );
+};
 
-/**
- * @param {string} manufacturerId 
- * @param {string} productName 
- * @param {float} price 
- * @param {string} description 
- * @param {[]string} rawIds 
- */
-const createProduct = async (manufacturerId, productName, price, description, rawIds) => {
-  const networkObj = await network.connect(orgName, manufacturerId, chaincode)
-  await network.invoke(networkObj, "CreateProduct", manufacturerId, productName, price, description, rawIds)
-}
+const updateProduct = async (
+    manufacturerId,
+    productId,
+    productName,
+    price,
+    rawIds,
+    status,
+    description,
+    hashCode
+) => {
+    const networkObj = await network.connect(
+        orgName,
+        manufacturerId,
+        chaincode
+    );
+    await network.invoke(
+        networkObj,
+        "UpdateProduct",
+        productId,
+        productName,
+        price,
+        rawIds,
+        status,
+        description,
+        hashCode
+    );
+};
 
-/**
- * @param {string} manufacturerId
- * @param {string} rawId
- * @param {string} supplierId
- */
-const orderRaw = async (manufacturerId, rawId, supplierId) => {
-  const networkObj = await network.connect(orgName, manufacturerId, chaincode)
-  await network.invoke(networkObj, "OrderRaw", manufacturerId, rawId, supplierId)
-}
+const provideProduct = async (
+    manufacturerId,
+    productId,
+    distributorId,
+    status,
+    hashCode
+) => {
+    const networkObj = await network.connect(
+        orgName,
+        manufacturerId,
+        chaincode
+    );
+    await network.invoke(
+        networkObj,
+        "ProvideProduct",
+        manufacturerId,
+        productId,
+        distributorId,
+        status,
+        hashCode
+    );
+};
 
 export default {
-  createProduct,
-  updateProduct,
-  provideProduct,
-  orderRaw
-}
+    orderRaw,
+    createProduct,
+    updateProduct,
+    provideProduct,
+};

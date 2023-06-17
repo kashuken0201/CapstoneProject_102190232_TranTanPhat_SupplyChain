@@ -22,6 +22,15 @@ const updateProduct = async (req, res) => {
     }
 };
 
+const orderProduct = async (req, res) => {
+    try {
+        const rs = await productService.orderProduct(req);
+        response(rs, res);
+    } catch (err) {
+        handleError(500, err, res);
+    }
+};
+
 const provideProduct = async (req, res) => {
     try {
         const rs = await productService.provideProduct(req);
@@ -31,9 +40,9 @@ const provideProduct = async (req, res) => {
     }
 };
 
-const orderProduct = async (req, res) => {
+const deliveryProduct = async (req, res) => {
     try {
-        const rs = await productService.orderProduct(req);
+        const rs = await productService.deliveryProduct(req);
         response(rs, res);
     } catch (err) {
         handleError(500, err, res);
@@ -58,9 +67,9 @@ const sellProduct = async (req, res) => {
     }
 };
 
-const deliveryProduct = async (req, res) => {
+const verifyProduct = async (req, res) => {
     try {
-        const rs = await productService.deliveryProduct(req);
+        const rs = await productService.verifyProduct(req);
         response(rs, res);
     } catch (err) {
         handleError(500, err, res);
@@ -95,14 +104,15 @@ const getProductHistories = async (req, res) => {
 };
 
 export default {
-    getProducts,
-    getProduct,
     createProduct,
     updateProduct,
-    provideProduct,
     orderProduct,
+    provideProduct,
+    deliveryProduct,
     receiveProduct,
     sellProduct,
-    deliveryProduct,
+    verifyProduct,
+    getProduct,
+    getProductHistories,
     getProductHistories,
 };

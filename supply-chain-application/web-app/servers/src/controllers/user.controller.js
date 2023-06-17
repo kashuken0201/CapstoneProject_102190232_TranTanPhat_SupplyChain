@@ -16,6 +16,7 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
     try {
         const rs = await userService.signIn(req);
+
         response(rs, res);
     } catch (err) {
         handleError(500, err, res);
@@ -49,18 +50,18 @@ const changeInfoUser = async (req, res) => {
     }
 };
 
-const getUsers = async (req, res) => {
+const getUser = async (req, res) => {
     try {
-        const rs = await userService.getUsers(req);
+        const rs = await userService.getUser(req);
         response(rs, res);
     } catch (err) {
         handleError(500, err, res);
     }
 };
 
-const getUser = async (req, res) => {
+const getUsers = async (req, res) => {
     try {
-        const rs = await userService.getUser(req);
+        const rs = await userService.getUsers(req);
         response(rs, res);
     } catch (err) {
         handleError(500, err, res);
@@ -77,12 +78,12 @@ const getDashboard = async (req, res) => {
 };
 
 export default {
-    getUsers,
-    getUser,
     signIn,
     signUp,
     logOut,
     infoUser,
     changeInfoUser,
-    getDashboard
+    getUser,
+    getUsers,
+    getDashboard,
 };
