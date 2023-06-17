@@ -24,7 +24,7 @@
     },
     "peers": {
         "peer0.${ORG}.scm.com": {
-            "url": "grpcs://localhost:${P0PORT}",
+            "url": "grpcs://${IP}:${P0PORT}",
             "tlsCACerts": {
                 "pem": "${PEERPEM}"
             },
@@ -36,7 +36,7 @@
     },
     "certificateAuthorities": {
         "ca.${ORG}.scm.com": {
-            "url": "https://localhost:${CAPORT}",
+            "url": "https://${IP}:${CAPORT}",
             "caName": "ca-${ORG}",
             "tlsCACerts": {
                 "pem": ["${CAPEM}"]

@@ -185,6 +185,6 @@ else
   chaincodeInvokeInit supplier manufacturer distributor retailer
 fi
 
-chaincodeQuery supplier
+# chaincodeQuery supplier
 
 exit 0
