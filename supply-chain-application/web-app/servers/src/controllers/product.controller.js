@@ -113,6 +113,6 @@ export default {
     sellProduct,
     verifyProduct,
     getProduct,
-    getProductHistories,
+    getProducts,
     getProductHistories,
 };

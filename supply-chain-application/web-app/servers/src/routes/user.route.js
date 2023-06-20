@@ -6,6 +6,8 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
+router.get("/dashboard", authMiddleware.auth, controller.getDashboard);
+
 router.post("/", controller.signUp);
 
 router.post("/login", controller.signIn);
@@ -19,7 +21,5 @@ router.post("/:organization/:userId/update", controller.changeInfoUser);
 router.get("/:userId/info", authMiddleware.auth, controller.getUser);
 
 router.get("/:organization", authMiddleware.auth, controller.getUsers);
-
-router.get("/dashboard", controller.getDashboard);
 
 export default router;

@@ -23,7 +23,7 @@ router.post(
 );
 
 router.post(
-    "/:productId/delivery",
+    "/:productId/deliver",
     authMiddleware.auth,
     controller.deliveryProduct
 );
