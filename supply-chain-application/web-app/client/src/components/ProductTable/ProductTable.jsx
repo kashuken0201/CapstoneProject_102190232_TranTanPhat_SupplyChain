@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import ProductRow from "./ProductRow";
 import { PaginationContext } from "../../context/paginationContext/PaginationContext";
 
-function ProductTable() {
+function ProductTable(props) {
   const { data } = useContext(PaginationContext);
 
   return (
@@ -24,7 +24,7 @@ function ProductTable() {
         </thead>
         <tbody>
           {data.data.slice(data.start, data.perPage).map((item, i) => (
-            <ProductRow key={i} data={item} />
+            <ProductRow key={i} data={item} distributors={props.distributors} />
           ))}
         </tbody>
       </table>

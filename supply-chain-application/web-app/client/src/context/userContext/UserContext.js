@@ -2,7 +2,6 @@ import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 import UserReducer from "./userReducer";
 
-
 const INITIAL_STATE = {
   users: undefined,
 };

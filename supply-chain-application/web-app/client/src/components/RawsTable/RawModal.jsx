@@ -1,9 +1,11 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import TextColorChanger from "../TextColorChanger";
+import { subString } from "../../utils/substring";
 
 function RawModal(props) {
   const { data } = props;
+
   return (
     <Modal
       {...props}
@@ -18,9 +20,10 @@ function RawModal(props) {
       </Modal.Header>
       <Modal.Body className="position-relative">
         <div className="position-absolute top-0 end-0 p-3">
-          <TextColorChanger text={data.Status} />
+          <TextColorChanger text={data.status} />
         </div>
         <div className="row justify-content-between">
+          <div className="d-flex justify-content-start col-2"></div>
           <div className="d-flex justify-content-start col-5">
             <div className="border-end p-2 fw-bold">
               <p>Raw ID</p>
@@ -28,23 +31,29 @@ function RawModal(props) {
               <p>Created Date</p>
             </div>
             <div className="p-2">
-              <p>{data.RawId}</p>
-              <p>{data.SupplierId}</p>
-              <p>{new Date(data.CreateDate).toLocaleDateString("en-US")}</p>
+              <p>{subString(data._id)}</p>
+              <p>{data.supplier?.username}</p>
+              <p>{new Date(data.created_date).toLocaleDateString("en-US")}</p>
             </div>
           </div>
-          <div className="d-flex justify-content-start col-7">
+          <div className="d-flex justify-content-start col-5">
             <div className="border-end p-2 fw-bold">
               <p>Raw Name</p>
               <p>Manufacturer</p>
               <p>Supplied Date</p>
             </div>
             <div className="p-2">
+              <p>{data.raw_name}</p>
               <p>
-                {data.RawName}
+                {data.manufacturer
+                  ? data.manufacturer.username
+                  : "No available"}
               </p>
-              <p>{data.ManufacturerId}</p>
-              <p>{new Date(data.SuppliedDate).toLocaleDateString("en-US")}</p>
+              <p>
+                {data.supplied_date
+                  ? new Date(data.supplied_date)?.toLocaleDateString("en-US")
+                  : "No available"}
+              </p>
             </div>
           </div>
         </div>

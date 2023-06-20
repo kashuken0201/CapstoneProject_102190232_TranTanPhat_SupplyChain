@@ -3,7 +3,7 @@ import RawReducer from "./rawReducer";
 import PropTypes from "prop-types";
 
 const INITIAL_STATE = {
-  raws: undefined
+  raws: undefined,
 };
 
 export const RawContext = createContext(INITIAL_STATE);

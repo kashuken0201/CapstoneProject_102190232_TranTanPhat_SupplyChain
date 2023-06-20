@@ -10,7 +10,15 @@ export class RawService extends baseService {
   };
 
   createRawService = (raw) => {
-    return this.post(`raws/create`, {raw_name: raw});
+    return this.post(`raws/create`, { raw_name: raw });
+  };
+
+  orderRaw = (rawId) => {
+    return this.post(`raws/${rawId}/order`);
+  };
+
+  supplyRaw = (rawId) => {
+    return this.post(`raws/${rawId}/supply`);
   };
 }
 

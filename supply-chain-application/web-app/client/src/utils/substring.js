@@ -1,3 +1,3 @@
 export const subString = (s) => {
-    return s.substring(0, 5)+"...";
-}
+  return s.substring(0, 10) + "...";
+};

@@ -21,7 +21,7 @@ function Sidebar() {
           } w-100`}
         >
           <div className={`fs-5 d-none  ${isOpen ? "d-sm-inline" : "d-none"}`}>
-            Menu
+            KaSC
           </div>
           <p
             onClick={() => {
@@ -71,7 +71,7 @@ function Sidebar() {
                 <span
                   className={`ms-3 d-none ${isOpen ? "d-sm-inline" : "d-none"}`}
                 >
-                  Product
+                  Products
                 </span>
               </NavLink>
             </li>
@@ -88,7 +88,7 @@ function Sidebar() {
                 <span
                   className={`ms-3 d-none ${isOpen ? "d-sm-inline" : "d-none"}`}
                 >
-                  Raw
+                  Raws
                 </span>
               </NavLink>
             </li>
@@ -110,7 +110,7 @@ function Sidebar() {
               </NavLink>
             </li>
           </ul>
-          <ul
+          {/* <ul
             className="nav nav-pills flex-column mt-auto align-items-start py-3 "
             id="menu"
           >
@@ -149,7 +149,7 @@ function Sidebar() {
                 </span>
               </NavLink>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </div>

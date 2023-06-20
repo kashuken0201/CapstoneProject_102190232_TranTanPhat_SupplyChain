@@ -2,7 +2,6 @@ import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 import ProductReducer from "./productReducer";
 
-
 const INITIAL_STATE = {
   products: undefined,
 };

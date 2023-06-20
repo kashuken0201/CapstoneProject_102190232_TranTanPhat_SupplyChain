@@ -2,7 +2,6 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 
 function UserModal(props) {
-  // const { data } = props;
   return (
     <Modal
       {...props}
@@ -15,9 +14,7 @@ function UserModal(props) {
           User Details
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="position-relative">
-      Hello
-      </Modal.Body>
+      <Modal.Body className="position-relative">Hello</Modal.Body>
     </Modal>
   );
 }

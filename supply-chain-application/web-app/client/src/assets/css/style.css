@@ -7,16 +7,16 @@ p {
     margin: 0;
 }
 
-a{
+a {
     color: white
 }
 
-.bg-active{
+.bg-active {
     position: relative;
     z-index: 10;
 }
 
-.bg-active::before{
+.bg-active::before {
     content: "";
     position: absolute;
     margin-top: -20px;
@@ -29,7 +29,7 @@ a{
     z-index: -1;
 }
 
-.sidebar.sidebar-open .bg-active::before{
+.sidebar.sidebar-open .bg-active::before {
     width: 150px;
 }
 
@@ -53,7 +53,7 @@ a.text-gray:hover {
 }
 
 .background-gradient {
-    background-image: linear-gradient(to bottom, #fff, #0A2647);
+    background-image: linear-gradient(to bottom, #fff, #17365a);
 }
 
 .circle-border {
@@ -112,18 +112,18 @@ a.text-gray:hover {
     line-height: 35px;
 }
 
-.pagination button{
+.pagination button {
     background-color: transparent;
     border: none;
-    color:black;
+    color: black;
     padding: 10px;
 }
 
-.pagination button.active p{
+.pagination button.active p {
     background-color: #0A2647;
     width: 30px;
     height: 30px;
     line-height: 30px;
     border-radius: 100%;
-    color:white
+    color: white
 }

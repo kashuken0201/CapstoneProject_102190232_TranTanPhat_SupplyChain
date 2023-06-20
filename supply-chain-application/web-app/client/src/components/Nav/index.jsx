@@ -21,6 +21,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 
 function Nav() {
   const { dispatch } = useContext(AuthContext);
+
   return (
     <div className="d-flex justify-content-between align-items-center">
       <div className="col-5">

@@ -9,6 +9,10 @@ export class UserService extends baseService {
     return this.post(`users/login`, account);
   };
 
+  logout = (account) => {
+    return this.post(`users/logout`, account);
+  };
+
   getUserService = (organization) => {
     return this.get(`users/${organization}`);
   };

@@ -1,16 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import TextColorChanger from "../TextColorChanger";
-import { RawContext } from "../../context/rawContext/RawContext";
-import { getRaws } from "../../context/rawContext/services";
 
 function ProductModal(props) {
-  const { dispatch, raws } = useContext(RawContext);
-  useEffect(() => {
-    getRaws(dispatch);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const { data } = props;
+
   return (
     <Modal
       {...props}
@@ -63,38 +57,66 @@ function ProductModal(props) {
                   <p>Retailer</p>
                 </div>
                 <div className="p-2">
-                  <p>{data.actors.manufacturer._id}</p>
-                  <p>{data.actors.manufacturer._id}</p>
-                  <p>{data.actors.manufacturer._id}</p>
+                  <p>
+                    {data.actors.manufacturer
+                      ? data.actors.manufacturer.username
+                      : "No available"}
+                  </p>
+                  <p>
+                    {data.actors.distributor
+                      ? data.actors.distributor.username
+                      : "No available"}
+                  </p>
+                  <p>
+                    {data.actors.retailer
+                      ? data.actors.retailer.username
+                      : "No available"}
+                  </p>
                 </div>
               </div>
               <div className="d-flex justify-content-start col-7">
                 <div className="border-end p-2 fw-bold">
                   <p>Manufactured Date</p>
+                  <p>Ordered Date</p>
                   <p>Distributed Date</p>
                   <p>Received Date</p>
                   <p>Sold Date</p>
                 </div>
                 <div className="p-2">
                   <p>
-                    {new Date(data.timestamps.created_date).toLocaleDateString(
-                      "en-US"
-                    )}
+                    {data.timestamps.created_date
+                      ? new Date(
+                          data.timestamps.created_date
+                        ).toLocaleDateString("en-US")
+                      : "No available"}
                   </p>
                   <p>
-                    {new Date(data.timestamps.created_date).toLocaleDateString(
-                      "en-US"
-                    )}
+                    {data.timestamps.ordered_date
+                      ? new Date(
+                          data.timestamps.ordered_date
+                        ).toLocaleDateString("en-US")
+                      : "No available"}
                   </p>
                   <p>
-                    {new Date(data.timestamps.created_date).toLocaleDateString(
-                      "en-US"
-                    )}
+                    {data.timestamps.delivered_date
+                      ? new Date(
+                          data.timestamps.delivered_date
+                        ).toLocaleDateString("en-US")
+                      : "No available"}
                   </p>
                   <p>
-                    {new Date(data.timestamps.created_date).toLocaleDateString(
-                      "en-US"
-                    )}
+                    {data.timestamps.received_date
+                      ? new Date(
+                          data.timestamps.received_date
+                        ).toLocaleDateString("en-US")
+                      : "No available"}
+                  </p>
+                  <p>
+                    {data.timestamps.sold_date
+                      ? new Date(data.timestamps.sold_date).toLocaleDateString(
+                          "en-US"
+                        )
+                      : "No available"}
                   </p>
                 </div>
               </div>
@@ -111,17 +133,22 @@ function ProductModal(props) {
             </tr>
           </thead>
           <tbody>
-            {data.raws.map((item) => {
-              const raw = raws.find((rawitem) => rawitem._id === item);
-              return (
-                <tr key={raw._id}>
-                  <th scope="row">{raw._id}</th>
-                  <td>{raw.raw_name}</td>
-                  <td>{new Date(raw.created_date).toLocaleDateString("en-US")}</td>
-                  <td>{raw.supplier.username}</td>
-                </tr>
-              );
-            })}
+            {data.raws
+              ? data.raws.map((item) => {
+                  return (
+                    <tr key={item?._id}>
+                      <th scope="row">{item?._id}</th>
+                      <td>{item?.raw_name}</td>
+                      <td>
+                        {new Date(item?.created_date).toLocaleDateString(
+                          "en-US"
+                        )}
+                      </td>
+                      <td>{item?.supplier?.username}</td>
+                    </tr>
+                  );
+                })
+              : null}
           </tbody>
         </table>
       </Modal.Body>

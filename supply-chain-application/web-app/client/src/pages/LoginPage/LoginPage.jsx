@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import LoginImage from "../../assets/images/login.jpeg";
 import { AuthContext } from "../../context/authContext/AuthContext";
 import { signIn } from "../../context/authContext/services";
 
 export function LoginPage() {
   const { dispatch } = useContext(AuthContext);
+
   const [state, setState] = React.useState({
     email: "",
     password: "",
@@ -31,7 +33,7 @@ export function LoginPage() {
         <Col sm="7" className="d-none d-sm-block px-0">
           <div>
             <img
-              src="https://images.squarespace-cdn.com/content/v1/6205140753fa5c6bd93e5b11/1648575696678-7SJATBCS6NT6YC9WN2VB/image-asset.jpeg"
+              src={LoginImage}
               alt="Login"
               className="w-100"
               style={{ height: "100vh", objectFit: "cover" }}
@@ -44,7 +46,8 @@ export function LoginPage() {
               className="fw-normal mb-3 pb-3"
               style={{ letterSpacing: "1px" }}
             >
-              Log in
+              Welcome to KaSC, <br />
+              This is a logistics supply chain platform
             </h3>
             <label className="mb-1">Username</label>
             <input

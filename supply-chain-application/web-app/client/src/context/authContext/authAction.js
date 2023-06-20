@@ -2,7 +2,7 @@ import {
   LOG_OUT,
   SIGN_IN_FAILURE,
   SIGN_IN_START,
-  SIGN_IN_SUCCESS
+  SIGN_IN_SUCCESS,
 } from "./authType";
 
 // SIGN IN
@@ -12,7 +12,7 @@ export const signInStart = () => ({
 
 export const signInSuccess = (user) => ({
   type: SIGN_IN_SUCCESS,
-  payload: user
+  payload: user,
 });
 
 export const signInFailure = () => ({

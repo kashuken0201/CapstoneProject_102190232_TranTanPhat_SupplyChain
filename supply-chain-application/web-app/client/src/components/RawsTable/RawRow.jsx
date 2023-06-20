@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextColorChanger from "../TextColorChanger";
-import RawModal from "./RawModal";
 import { Dropdown } from "react-bootstrap";
+import RawModal from "./RawModal";
+import { RawContext } from "../../context/rawContext/RawContext";
+import { AuthContext } from "../../context/authContext/AuthContext";
+import {
+  orderRaw,
+  supplyRaw,
+  updateRaw,
+} from "../../context/rawContext/services";
 import { subString } from "../../utils/substring";
+import { notify } from "../../utils/showToast";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -19,19 +27,24 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 ));
 
 function RawRow({ data }) {
+  const { dispatch } = useContext(RawContext);
+  const { user } = useContext(AuthContext);
+
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
     <>
       <tr className="rounded-3">
-        <td onClick={() => setModalShow(true)}>{subString(data._id)}</td>
-        <td onClick={() => setModalShow(true)}>{data.raw_name}</td>
         <td onClick={() => setModalShow(true)}>
-          {new Date(data.created_date).toLocaleDateString("en-US")}
+          <i style={{ color: "blue", cursor: "pointer" }}>
+            {subString(data._id)}
+          </i>
         </td>
-        <td onClick={() => setModalShow(true)}>{data.supplier.username}</td>
-        <td onClick={() => setModalShow(true)}>
-          <TextColorChanger text={data.Status} />
+        <td>{data.raw_name}</td>
+        <td>{new Date(data.created_date).toLocaleDateString("en-US")}</td>
+        <td>{data.supplier?.username}</td>
+        <td>
+          <TextColorChanger text={data.status} />
         </td>
         <td>
           <Dropdown>
@@ -40,17 +53,50 @@ function RawRow({ data }) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="/" className="">
+              {/* <Dropdown.Item
+                className=""
+                onClick={() => {
+                  if (user.organization === "manufacturer")
+                    updateRaw(dispatch, data._id);
+                  else
+                    notify(
+                      "error",
+                      "You are not allowed to excution this function"
+                    );
+                }}
+              >
                 <i className="fa fa-pen me-3 text-info"></i>Edit
-              </Dropdown.Item>
+              </Dropdown.Item> */}
               <Dropdown.Item className="">
                 <i className="fa fa-history me-3"></i>History
               </Dropdown.Item>
-              <Dropdown.Item className="">
+              <Dropdown.Item
+                className=""
+                onClick={() => {
+                  if (user.organization === "supplier")
+                    supplyRaw(dispatch, data._id);
+                  else
+                    notify(
+                      "error",
+                      "You are not allowed to excution this function"
+                    );
+                }}
+              >
                 <i className="fa fa-hand-holding me-3 text-info-emphasis"></i>
                 Provide
               </Dropdown.Item>
-              <Dropdown.Item className="">
+              <Dropdown.Item
+                className=""
+                onClick={() => {
+                  if (user.organization === "manufacturer")
+                    orderRaw(dispatch, data._id);
+                  else
+                    notify(
+                      "error",
+                      "You are not allowed to excution this function"
+                    );
+                }}
+              >
                 <i className="fa fa-cart-arrow-down me-3"></i>Order
               </Dropdown.Item>
             </Dropdown.Menu>

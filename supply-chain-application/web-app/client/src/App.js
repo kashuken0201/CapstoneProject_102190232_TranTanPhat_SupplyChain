@@ -12,8 +12,8 @@ import MainLayout from "./layouts/MainLayout";
 import Product from "./pages/Products/Product";
 import Raws from "./pages/Raws/Raws";
 import Users from "./pages/Users/Users";
-import { ToastContainer } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const { user } = useContext(AuthContext);

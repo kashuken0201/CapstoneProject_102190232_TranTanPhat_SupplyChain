@@ -3,20 +3,23 @@ import { Modal } from "react-bootstrap";
 import TextColorChanger from "../TextColorChanger";
 import { AuthContext } from "../../context/authContext/AuthContext";
 import { RawContext } from "../../context/rawContext/RawContext";
-import { createRaws } from "../../context/rawContext/services";
+import { createRaw } from "../../context/rawContext/services";
 
 function CreateRawModal(props) {
   const { dispatch } = useContext(RawContext);
   const { user } = useContext(AuthContext);
+
   const [state, setState] = React.useState({
     rawName: "",
   });
+
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
+
   return (
     <Modal
       {...props}
@@ -41,9 +44,9 @@ function CreateRawModal(props) {
               <p className="py-1">Created Date</p>
             </div>
             <div className="p-2">
-              <p className="py-1">null</p>
+              <p className="py-1">No available</p>
               <p className="py-1">{user.username}</p>
-              <p className="py-1">null</p>
+              <p className="py-1">No available</p>
             </div>
           </div>
           <div className="d-flex justify-content-start col-7">
@@ -59,16 +62,24 @@ function CreateRawModal(props) {
                 onChange={handleChange}
                 value={state.rawName}
               />
-              <p className="py-1">null</p>
-              <p className="py-1">null</p>
+              <p className="py-1">No available</p>
+              <p className="py-1">No available</p>
             </div>
           </div>
         </div>
         <div className="d-flex justify-content-center gap-5">
-          <button className="btn btn-success" onClick={()=>{
-            createRaws(dispatch,state.rawName)
-          }}>OK</button> 
-          <button className="btn btn-danger" onClick={props.onHide}>Cancel</button> 
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              createRaw(dispatch, state.rawName);
+              props.onHide();
+            }}
+          >
+            OK
+          </button>
+          <button className="btn btn-danger" onClick={props.onHide}>
+            Cancel
+          </button>
         </div>
       </Modal.Body>
     </Modal>
