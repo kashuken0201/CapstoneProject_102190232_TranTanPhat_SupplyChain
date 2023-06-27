@@ -68,8 +68,8 @@ function CreateProductModal(props) {
           <div className="d-flex justify-content-start col-5">
             <div className="border-end p-2 fw-bold">
               <p className="py-1">Product ID</p>
-              <p className="py-1">Product Name</p>
-              <p className="py-1">Price</p>
+              <p className="py-1 mt-1">Product Name</p>
+              <p className="py-1 mt-1">Price</p>
             </div>
             <div className="p-2">
               <p className="py-1">No available</p>
@@ -134,7 +134,7 @@ function CreateProductModal(props) {
                     <td>
                       {new Date(raw?.created_date).toLocaleDateString("en-US")}
                     </td>
-                    <td>{raw?.supplier.username}</td>
+                    <td>{raw?.supplier?.username}</td>
                   </tr>
                 );
               }

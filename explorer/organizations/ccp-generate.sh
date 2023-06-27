@@ -13,8 +13,11 @@ function json_ccp {
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
         -e "s/\${MSP}/$6/" \
+        -e "s/\${IP}/$7/" \
         organizations/ccp-template.json
 }
+
+IP=$(ip route get 8.8.8.8 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}')
 
 ORG=supplier
 MSP=Supplier
@@ -23,7 +26,7 @@ CAPORT=7054
 PEERPEM=organizations/peerOrganizations/supplier.scm.com/tlsca/tlsca.supplier.scm.com-cert.pem
 CAPEM=organizations/peerOrganizations/supplier.scm.com/ca/ca.supplier.scm.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/supplier.scm.com/connection-supplier.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP $IP)" > organizations/peerOrganizations/supplier.scm.com/connection-supplier.json
 
 ORG=manufacturer
 MSP=Manufacturer
@@ -32,7 +35,7 @@ CAPORT=7064
 PEERPEM=organizations/peerOrganizations/manufacturer.scm.com/tlsca/tlsca.manufacturer.scm.com-cert.pem
 CAPEM=organizations/peerOrganizations/manufacturer.scm.com/ca/ca.manufacturer.scm.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP $IP)" > organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json
 
 ORG=distributor
 MSP=Distributor
@@ -41,7 +44,7 @@ CAPORT=7074
 PEERPEM=organizations/peerOrganizations/distributor.scm.com/tlsca/tlsca.distributor.scm.com-cert.pem
 CAPEM=organizations/peerOrganizations/distributor.scm.com/ca/ca.distributor.scm.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/distributor.scm.com/connection-distributor.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP $IP)" > organizations/peerOrganizations/distributor.scm.com/connection-distributor.json
 
 ORG=retailer
 MSP=Retailer
@@ -50,10 +53,10 @@ CAPORT=7084
 PEERPEM=organizations/peerOrganizations/retailer.scm.com/tlsca/tlsca.retailer.scm.com-cert.pem
 CAPEM=organizations/peerOrganizations/retailer.scm.com/ca/ca.retailer.scm.com-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM $MSP $IP)" > organizations/peerOrganizations/retailer.scm.com/connection-retailer.json
 
 
-cp -r "${PWD}/organizations/peerOrganizations/supplier.scm.com/connection-supplier.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/distributor.scm.com/connection-distributor.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
-cp -r "${PWD}/organizations/peerOrganizations/retailer.scm.com/connection-retailer.json" "${PWD}/../supply-chain-application/web-app/servers/configs"
+cp -r "${PWD}/organizations/peerOrganizations/supplier.scm.com/connection-supplier.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/manufacturer.scm.com/connection-manufacturer.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/distributor.scm.com/connection-distributor.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"
+cp -r "${PWD}/organizations/peerOrganizations/retailer.scm.com/connection-retailer.json" "${PWD}/../supply-chain-application/web-app/servers/src/connections"

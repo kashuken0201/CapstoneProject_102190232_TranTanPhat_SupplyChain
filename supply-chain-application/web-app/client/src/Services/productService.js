@@ -36,6 +36,14 @@ export class ProductService extends baseService {
   sellProductService = (productId) => {
     return this.post(`products/${productId}/sell`);
   };
+
+  getProductHistoriesSerivce = (productId) => {
+    return this.get(`products/${productId}/history`);
+  };
+
+  verifyProductService = (productId) => {
+    return this.get(`products/${productId}/verify`);
+  };
 }
 
 export const productService = new ProductService();

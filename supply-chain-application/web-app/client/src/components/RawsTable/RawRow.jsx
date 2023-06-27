@@ -4,11 +4,7 @@ import { Dropdown } from "react-bootstrap";
 import RawModal from "./RawModal";
 import { RawContext } from "../../context/rawContext/RawContext";
 import { AuthContext } from "../../context/authContext/AuthContext";
-import {
-  orderRaw,
-  supplyRaw,
-  updateRaw,
-} from "../../context/rawContext/services";
+import { orderRaw, supplyRaw } from "../../context/rawContext/services";
 import { subString } from "../../utils/substring";
 import { notify } from "../../utils/showToast";
 
@@ -32,6 +28,53 @@ function RawRow({ data }) {
 
   const [modalShow, setModalShow] = React.useState(false);
 
+  const setButton = () => {
+    if (user.organization === "manufacturer") {
+      return (
+        <Dropdown.Item
+          className=""
+          onClick={() => {
+            if (user.organization === "manufacturer")
+              orderRaw(dispatch, data._id);
+            else
+              notify("error", "You are not allowed to excution this function");
+          }}
+        >
+          <i className="fa fa-cart-arrow-down me-3"></i>Order
+        </Dropdown.Item>
+      );
+    }
+    return (
+      <Dropdown.Item
+        className=""
+        onClick={() => {
+          if (user.organization === "supplier") supplyRaw(dispatch, data._id);
+          else notify("error", "You are not allowed to excution this function");
+        }}
+      >
+        <i className="fa fa-hand-holding me-3 text-info-emphasis"></i>
+        Provide
+      </Dropdown.Item>
+    );
+  };
+  const setAction = () => {
+    if (user.role !== "admin") {
+      return (
+        <Dropdown>
+          <Dropdown.Toggle as={CustomToggle} id="dropdown-basic">
+            <b>...</b>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            {/* <Dropdown.Item className="">
+              <i className="fa fa-history me-3"></i>History
+            </Dropdown.Item> */}
+            {setButton()}
+          </Dropdown.Menu>
+        </Dropdown>
+      );
+    }
+  };
   return (
     <>
       <tr className="rounded-3">
@@ -46,62 +89,7 @@ function RawRow({ data }) {
         <td>
           <TextColorChanger text={data.status} />
         </td>
-        <td>
-          <Dropdown>
-            <Dropdown.Toggle as={CustomToggle} id="dropdown-basic">
-              ...
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {/* <Dropdown.Item
-                className=""
-                onClick={() => {
-                  if (user.organization === "manufacturer")
-                    updateRaw(dispatch, data._id);
-                  else
-                    notify(
-                      "error",
-                      "You are not allowed to excution this function"
-                    );
-                }}
-              >
-                <i className="fa fa-pen me-3 text-info"></i>Edit
-              </Dropdown.Item> */}
-              <Dropdown.Item className="">
-                <i className="fa fa-history me-3"></i>History
-              </Dropdown.Item>
-              <Dropdown.Item
-                className=""
-                onClick={() => {
-                  if (user.organization === "supplier")
-                    supplyRaw(dispatch, data._id);
-                  else
-                    notify(
-                      "error",
-                      "You are not allowed to excution this function"
-                    );
-                }}
-              >
-                <i className="fa fa-hand-holding me-3 text-info-emphasis"></i>
-                Provide
-              </Dropdown.Item>
-              <Dropdown.Item
-                className=""
-                onClick={() => {
-                  if (user.organization === "manufacturer")
-                    orderRaw(dispatch, data._id);
-                  else
-                    notify(
-                      "error",
-                      "You are not allowed to excution this function"
-                    );
-                }}
-              >
-                <i className="fa fa-cart-arrow-down me-3"></i>Order
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </td>
+        <td>{setAction()}</td>
       </tr>
       <RawModal
         data={data}

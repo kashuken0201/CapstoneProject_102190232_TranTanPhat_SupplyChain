@@ -11,230 +11,253 @@ const options = ["_id", "email", "username", "address", "organization"];
 
 const createProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
-    if (user.organization !== "manufacturer")
-        return { message: "Organization is not illegal" };
+    if (!user) return { error: "User not found" };
+    if (user?.organization !== "manufacturer")
+        return { error: "Organization is not illegal" };
 
-    const product = new productModel(req.body.product);
+    const tmp = req.body.product;
+    if (tmp.product_name === "") return { error: "Missing name" };
+    if (tmp.price === "") return { error: "Missing price" };
+    if (tmp.raws.length === 0) return { error: "Missing raws" };
+
+    const product = new productModel(req.body?.product);
     product.actors.manufacturer = user;
-    product.hash_code = hash.hashData(product);
+    product.hash_code = await hash.hashData(product.price + product.status);
     await product.save();
 
     let rawIds = [];
-    product.raws.map((raw) => rawIds.push(raw._id.toString()));
+    product?.raws?.map((raw) => rawIds.push(raw._id.toString()));
 
-    // await fabricManufacturer.createProduct(
-    //     user._id,
-    //     product._id,
-    //     product.product_name,
-    //     product.price,
-    //     rawIds.toLocaleString(),
-    //     product.status,
-    //     product.description,
-    //     product.timestamps.created_date,
-    //     product.hash_code
-    // );
+    await fabricManufacturer.createProduct(
+        user?._id,
+        product?._id,
+        product?.product_name,
+        product?.price,
+        rawIds?.toLocaleString(),
+        product?.status,
+        product?.description,
+        product?.timestamps.created_date,
+        product?.hash_code
+    );
 
-    return "Create a new product successfully";
+    return { success: "Create successfully" };
 };
 
 const updateProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
-    if (user.organization !== "manufacturer")
-        return { message: "Organization is not illegal" };
+    if (!user) return { error: "User not found" };
+    if (user?.organization !== "manufacturer")
+        return { error: "Organization is not illegal" };
 
-    const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    const productId = req.params?.productId;
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (product.status !== "CREATED" || product.status !== "UPDATED") return { message: "Product cannot be updated" };
+    if (!product) return { error: "Product not found" };
+    if (product?.status !== "CREATED" || product?.status !== "UPDATED")
+        return { error: "Product cannot be updated" };
 
-    product.product_name = req.body.product.product_name;
-    product.price = req.body.product.price;
-    product.description = req.body.product.description;
-    product.raws = req.body.product.raws;
+    product.product_name = req.body?.product?.product_name;
+    product.price = req.body?.product?.price;
+    product.description = req.body?.product?.description;
+    product.raws = req.body?.product?.raws;
     product.status = "UPDATED";
-    product.hash_code = hash.hashData(product);
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
     let rawIds = [];
-    product.raws.map((raw) => rawIds.push(raw._id.toString()));
+    product?.raws?.map((raw) => rawIds.push(raw._id.toString()));
 
-    // await fabricManufacturer.updateProduct(
-    //     user._id,
-    //     product._id,
-    //     product.product_name,
-    //     product.price,
-    //     rawIds.toLocaleString(),
-    //     product.status,
-    //     product.description,
-    //     product.hash_code
-    // );
+    await fabricManufacturer.updateProduct(
+        user?._id,
+        product?._id,
+        product?.product_name,
+        product?.price,
+        rawIds?.toLocaleString(),
+        product?.status,
+        product?.description,
+        product?.hash_code
+    );
 
-    return "Update a product successfully";
+    return { success: "Update successfully" };
 };
 
 const orderProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
-    if (user.organization !== "retailer")
-        return { message: "Organization is not illegal" };
+    if (!user) return { error: "User not found" };
+    if (user?.organization !== "retailer")
+        return { error: "Organization is not illegal" };
 
-    const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    const productId = req.params?.productId;
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (product.status !== "CREATED" && product.status !== "UPDATED") return { message: "Product cannot be ordered" };
+    if (!product) return { error: "Product not found" };
+    if (product?.status !== "CREATED" && product?.status !== "UPDATED")
+        return { error: "This product is ordered or supplied" };
 
     product.actors.retailer = user;
     product.timestamps.ordered_date = Date.now();
     product.status = "ORDERED";
-    product.hash_code = hash.hashData(product);
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
-    // await fabricRetailer.orderProduct(
-    //     user._id,
-    //     product._id,
-    //     product.timestamps.ordered_date,
-    //     product.status,
-    //     product.hash_code
-    // );
+    await fabricRetailer.orderProduct(
+        user?._id,
+        product?._id,
+        product?.timestamps?.ordered_date,
+        product?.status,
+        product?.hash_code
+    );
 
-    return "Order a product successfully";
+    return { success: "Order successfully" };
 };
 
 const provideProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
     if (user.organization !== "manufacturer")
-        return { message: "Organization is not illegal" };
+        return { error: "Organization is not illegal" };
 
     const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (product.status !== "ORDERED") return { message: "Product cannot be provided" };
+    if (!product) return { error: "Product not found" };
+    if (product?.status !== "ORDERED")
+        return { error: "This product is provided or is not ordered" };
 
-    product.actors.distributor = req.body.distributor;
+    product.actors.distributor = req.body?.distributor;
     product.status = "DELIVERING";
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
-    // await fabricManufacturer.provideProduct(
-    //     user._id,
-    //     product._id,
-    //     product.actors.distributor._id,
-    //     product.status,
-    //     product.hash_code
-    // );
+    await fabricManufacturer.provideProduct(
+        user?._id,
+        product?._id,
+        product?.actors?.distributor?._id,
+        product?.status,
+        product?.hash_code
+    );
 
-    return "Provide a product successfully";
+    return { success: "Provide successfully" };
 };
 
 const deliveryProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
     if (user.organization !== "distributor")
-        return { message: "Organization is not illegal" };
+        return { error: "Organization is not illegal" };
 
     const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (product.actors.distributor) return { message: "Product cannot be delivered" };
+    if (!product) return { error: "Product not found" };
+    if (
+        !product.actors.distributor ||
+        product.status === "RECEIVED" ||
+        product.status === "SOLD"
+    )
+        return { error: "This product is delivered" };
 
     product.timestamps.delivered_date = Date.now();
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
-    // await fabricDistributor.deliveryProduct(
-    //     user._id,
-    //     product._id,
-    //     product.timestamps.delivered_date,
-    //     product.status,
-    //     product.hash_code
-    // );
+    await fabricDistributor.deliveryProduct(
+        user?._id,
+        product?._id,
+        product?.timestamps?.delivered_date,
+        product?.status,
+        product?.hash_code
+    );
 
-    return "Delivery a product successfully";
+    return { success: "Deliver successfully" };
 };
 
 const receiveProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
     if (user.organization !== "retailer")
-        return { message: "Organization is not illegal" };
+        return { error: "Organization is not illegal" };
 
     const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (!product.actors.distributor || product.status !== "DELIVERING") return { message: "Product cannot be received" };
+    if (!product) return { error: "Product not found" };
+    if (!product?.actors?.distributor || product?.status !== "DELIVERING")
+        return { error: "This product is received or sold" };
 
     product.timestamps.received_date = Date.now();
     product.status = "RECEIVED";
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
-    // await fabricRetailer.receiveProduct(
-    //     user._id,
-    //     product._id,
-    //     product.timestamps.received_date,
-    //     product.status,
-    //     product.hash_code
-    // );
+    await fabricRetailer.receiveProduct(
+        user?._id,
+        product?._id,
+        product?.timestamps?.received_date,
+        product?.status,
+        product?.hash_code
+    );
 
-    return "Receive a product successfully";
+    return { success: "Receive successfully" };
 };
 
 const sellProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
-    if (user.organization !== "retailer")
-        return { message: "Organization is not illegal" };
+    if (!user) return { error: "User not found" };
+    if (user?.organization !== "retailer")
+        return { error: "Organization is not illegal" };
 
-    const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    const productId = req.params?.productId;
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
-    if (product.status !== "RECEIVED") return { message: "Product cannot be sold" };
+    if (!product) return { error: "Product not found" };
+    if (product?.status !== "RECEIVED")
+        return { error: "This product is sold or is being deliver" };
 
     product.timestamps.sold_date = Date.now();
     product.status = "SOLD";
+    product.hash_code = await hash.hashData(product?.price + product?.status);
     await product.save();
 
-    // await fabricRetailer.sellProduct(
-    //     user._id,
-    //     product._id,
-    //     product.timestamps.sold_date,
-    //     product.status,
-    //     product.hash_code
-    // );
+    await fabricRetailer.sellProduct(
+        user?._id,
+        product?._id,
+        product?.timestamps?.sold_date,
+        product?.status,
+        product?.hash_code
+    );
 
-    return "Sell a product successfully";
+    return { success: "Sell successfully" };
 };
 
 const verifyProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
 
     const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    if (!productId) return { error: "Missing productId" };
     const product = await productModel.findById(productId);
-    if (!product) return { message: "Product not found" };
+    if (!product) return { error: "Product not found" };
 
-    // const productFabric = await fabricUtil.getProduct(
-    //     user.organization,
-    //     user._id,
-    //     product._id
-    // );
+    const hash_code = await hash.hashData(product?.price + product?.status);
 
-    return JSON.parse(productFabric).HashCode === product.hash_code;
+    const productFabric = await fabricUtil.getProduct(
+        user.organization,
+        user._id,
+        product._id
+    );
+
+    if (JSON.parse(productFabric).HashCode === hash_code)
+        return { success: "Valid data" };
+    return { error: "Invalid data" };
 };
 
 const getProduct = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
 
-    const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    const productId = req.params?.productId;
+    if (!productId) return { error: "Missing productId" };
 
     const product = await productModel
         .findById(productId)
@@ -243,18 +266,18 @@ const getProduct = async (req) => {
         .populate("actors.retailer", options)
         .populate("raws");
 
-    if (!product) return { message: "Product not found" };
+    if (!product) return { error: "Product not found" };
 
     return product;
 };
 
 const getProducts = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
-    if (user.organization === "supplier")
-        return { message: "Organization is not illegal" };
+    if (!user) return { error: "User not found" };
+    if (user?.organization === "supplier")
+        return { error: "Organization is not illegal" };
 
-    if (user.role === "admin" || user.organization === "retailer")
+    if (user?.role === "admin" || user?.organization === "retailer")
         return await productModel
             .find()
             .populate({
@@ -281,7 +304,7 @@ const getProducts = async (req) => {
                 },
             });
 
-    if (user.organization === "manufacturer") {
+    if (user?.organization === "manufacturer") {
         let res = [];
         await productModel
             .find()
@@ -309,7 +332,7 @@ const getProducts = async (req) => {
                 },
             })
             .then((products) => {
-                products.forEach((product) => {
+                products?.forEach((product) => {
                     if (
                         product.actors.manufacturer?._id.toString() ===
                         user._id.toString()
@@ -321,7 +344,7 @@ const getProducts = async (req) => {
         return res;
     }
 
-    if (user.organization === "distributor") {
+    if (user?.organization === "distributor") {
         let res = [];
         await productModel
             .find({})
@@ -349,7 +372,7 @@ const getProducts = async (req) => {
                 },
             })
             .then((products) => {
-                products.forEach((product) => {
+                products?.forEach((product) => {
                     if (
                         product.actors.distributor?._id.toString() ===
                         user._id.toString()
@@ -366,14 +389,14 @@ const getProducts = async (req) => {
 
 const getProductHistories = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
 
     const productId = req.params.productId;
-    if (!productId) return { message: "Missing productId" };
+    if (!productId) return { error: "Missing productId" };
 
     const productFabric = await fabricUtil.getProductHistories(
-        user.organization,
-        user._id,
+        user?.organization,
+        user?._id,
         productId
     );
 

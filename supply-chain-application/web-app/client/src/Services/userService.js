@@ -16,6 +16,10 @@ export class UserService extends baseService {
   getUserService = (organization) => {
     return this.get(`users/${organization}`);
   };
+
+  signUpService = (user) => {
+    return this.post(`users`, { user });
+  };
 }
 
 export const userService = new UserService();

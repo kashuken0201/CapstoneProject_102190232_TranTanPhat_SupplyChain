@@ -6,23 +6,29 @@ import {
   signInStart,
   signInSuccess,
 } from "./authAction";
+import { notify } from "../../utils/showToast";
 
 export const signIn = async (user, dispatch) => {
   dispatch(signInStart());
   try {
-    const userlogin = await userService.login(user);
-    localStorage.setItem(TOKEN, userlogin.data.token);
+    const res = await userService.login(user);
+    if (res.data.error) {
+      notify("error", res.data.error);
+      dispatch(signInFailure());
+    }
+    localStorage.setItem(TOKEN, res.data.token);
     localStorage.setItem(
       USER_LOGIN,
       JSON.stringify({
-        id: userlogin.data.user._id,
-        username: userlogin.data.user.username,
+        id: res.data.user._id,
+        username: res.data.user.username,
         organization: user.organization,
-        role: userlogin.data.user.role,
+        role: res.data.user.role,
       })
     );
+    notify("success", res.data.success);
     dispatch(
-      signInSuccess({ ...userlogin.data.user, organization: user.organization })
+      signInSuccess({ ...res.data.user, organization: user.organization })
     );
   } catch (err) {
     dispatch(signInFailure());

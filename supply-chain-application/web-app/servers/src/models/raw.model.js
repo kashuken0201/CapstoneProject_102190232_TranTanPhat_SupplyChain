@@ -28,7 +28,6 @@ const rawSchema = new mongoose.Schema({
     },
     hash_code: {
         type: String,
-        required: true,
     },
 });
 

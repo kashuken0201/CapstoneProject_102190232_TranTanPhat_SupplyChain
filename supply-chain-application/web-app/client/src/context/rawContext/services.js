@@ -12,11 +12,9 @@ export const getRaws = async (dispatch) => {
 export const createRaw = async (dispatch, raw) => {
   try {
     const res = await rawService.createRawService(raw);
-    if (res.status === 200) {
-      getRaws(dispatch);
-    } else {
-      notify("error", res.message);
-    }
+    if (res.data.error) notify("error", res.data.error);
+    if (res.data.success) notify("success", res.data.success);
+    getRaws(dispatch);
   } catch {}
 };
 
@@ -34,30 +32,17 @@ export const updateRaw = async (dispatch, rawId) => {
 export const orderRaw = async (dispatch, rawId) => {
   try {
     const res = await rawService.orderRaw(rawId);
-    if (res.data.message) {
-      getRaws(dispatch);
-      notify("error", res.data.message);
-    }
-    if (res.status === 200) {
-      getRaws(dispatch);
-      notify("success", res.data.message);
-    } else {
-      notify("error", res.message);
-    }
+    if (res.data.error) notify("error", res.data.error);
+    if (res.data.success) notify("success", res.data.success);
+    getRaws(dispatch);
   } catch {}
 };
 
 export const supplyRaw = async (dispatch, rawId) => {
   try {
     const res = await rawService.supplyRaw(rawId);
-    if (res.data.message) {
-      getRaws(dispatch);
-      notify("error", res.data.message);
-    } else if (res.status === 200) {
-      getRaws(dispatch);
-      notify("success", res.data.message);
-    } else {
-      notify("error", res.message);
-    }
+    if (res.data.error) notify("error", res.data.error);
+    if (res.data.success) notify("success", res.data.success);
+    getRaws(dispatch);
   } catch {}
 };

@@ -21,7 +21,7 @@ function Product() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [modalShow, setModalShow] = React.useState(false);
-
+  
   useEffect(() => {
     if (user.organization === "manufacturer") {
       !users && getUsers(distributorDispatch, "distributor");
@@ -54,27 +54,28 @@ function Product() {
     <div className="d-flex flex-column ">
       <div className="d-flex justify-content-between align-items-center mt-4">
         <h1 className="text-intro ">
-          {" "}
-          I'm {user.organization}, {user.username}
+          I'm a {user.organization}, {user.username}
         </h1>
         <div>
           {(() => {
-            if (user.organization === "manufacturer") {
-              return (
-                <div>
-                  <button
-                    className="btn btn-success"
-                    onClick={() => setModalShow(true)}
-                  >
-                    + Add
-                  </button>
-                </div>
-              );
-            }
+            if (user.organization === "manufacturer")
+              if (user.role !== "admin") {
+                return (
+                  <div>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => setModalShow(true)}
+                    >
+                      + Add
+                    </button>
+                  </div>
+                );
+              }
           })()}
         </div>
       </div>
       <div>{products && <Pagination />}</div>
+      
       <CreateProductModal show={modalShow} onHide={() => setModalShow(false)} />
     </div>
   );

@@ -1,11 +1,11 @@
 FROM node:18.16.0-alpine3.18
 
-WORKDIR /web-app/servers
+WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
-EXPOSE 5000
+EXPOSE 3000
 
 CMD ["npm", "start"]

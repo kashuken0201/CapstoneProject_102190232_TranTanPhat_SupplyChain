@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
-const hashData = (data) => {
-    return crypto.createHash("sha256").update(data.toString()).digest("hex");
+const hashData = async (data) => {
+    return await crypto.createHash("sha256").update(data.toString()).digest("hex");
 };
 
 export default {

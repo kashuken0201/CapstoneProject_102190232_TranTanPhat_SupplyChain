@@ -6,73 +6,74 @@ import rawModel from "../models/raw.model.js";
 import productModel from "../models/product.model.js";
 
 const signUp = async (req) => {
-    const user = new userModel(req.body);
+    const tmp = await userModel.findOne({ email: req.body?.user?.email });
+    if (tmp) return { error: "User is already signed" };
+    const user = new userModel(req.body?.user);
     await user.save();
 
-    // await fabricAdmin.registerUser(user.organization, user._id);
+    await fabricAdmin.registerUser(user?.organization, user?._id);
 
-    return "Sign up successfully";
+    return { success: "Sign up successfully" };
 };
 
 const signIn = async (req) => {
-    const { email, password, organization } = req.body;
     const user = await userModel.findByCredentials(
-        email,
-        password,
-        organization
+        req.body.email,
+        req.body.password,
+        req.body.organization
     );
 
-    if (!user)
-        return { error: "Login failed! Check authentication credentials" };
+    if (user.error)
+        return { error: user.error };
 
     const token = await user.generateAuthToken();
     user.password = "";
-    return { user, token };
+    return { user, token, success: "Login successfully" };
 };
 
 const infoUser = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
     user.password = "";
     return { user };
 };
 
 const logOut = async (req) => {
-    const user = await userModel.findById(req.user._id);
+    const user = await userModel.findById(req.user?._id);
     user.token = "";
     await user.save();
-    return "Logged out";
+    return { success: "Logged out" };
 };
 
 const changeInfoUser = async (req) => {};
 
 const getUser = async (req) => {
-    const userId = req.params.userId;
-    if (!userId) return { message: "Missing userId" };
+    const userId = req.params?.userId;
+    if (!userId) return { error: "Missing userId" };
     const user = await userModel.findById(userId);
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
     user.password = "";
     return user;
 };
 
 const getUsers = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
 
-    const organization = req.params.organization;
+    const organization = req.params?.organization;
     const users = await userModel.find({ organization: organization });
     return users;
 };
 
 const getDashboard = async (req) => {
     const user = req.user;
-    if (!user) return { message: "User not found" };
+    if (!user) return { error: "User not found" };
 
     const raw = (await rawModel.find()).length;
 
     const total_price = await productModel.find().then((products) => {
         let price = 0;
-        products.forEach((product) => {
+        products?.forEach((product) => {
             price = price + product.price;
         });
 
@@ -113,7 +114,10 @@ const getDashboard = async (req) => {
     ).length;
 
     const distributor_deactive_user = (
-        await userModel.find({ status: "DEACTIVE", organization: "distributor" })
+        await userModel.find({
+            status: "DEACTIVE",
+            organization: "distributor",
+        })
     ).length;
 
     const retailer_active_user = (
@@ -157,9 +161,11 @@ const createAdmin = async (
         organization: organization,
         role: "admin",
     };
+    const tmp = await userModel.findOne({ email: admin.email });
+    if (tmp) return { error: "User is already signed" };
     const user = new userModel(admin);
     await user.save();
-    // await fabricAdmin.enrollAdmin(user.organization, "admin"};
+    await fabricAdmin.enrollAdmin(user.organization, "admin");
 };
 
 const importAdmin = async () => {

@@ -14,12 +14,12 @@ import db from "./src/models/index.model.js";
 import routes from "./src/routes/index.route.js";
 import userService from "./src/services/user.service.js";
 
-const port = process.env.NODE_SERVER_PORT || 5555;
-const hostname = process.env.NODE_SERVER_IP;
+const port = process.env.NODE_SERVER_PORT || 5000;
+const hostname = process.env.NODE_SERVER_IP || "0.0.0.0";
 const app = express();
 
 const corsOptions = {
-    origin: "http://localhost:8080",
+    origin: "http://localhost:9000",
 };
 
 app.use(cors());
@@ -50,4 +50,4 @@ await mongoose
         process.exit(1);
     });
 
-// await userService.importAdmin()
+await userService.importAdmin()

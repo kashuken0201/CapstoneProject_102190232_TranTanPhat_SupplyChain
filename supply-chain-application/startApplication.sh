@@ -32,10 +32,7 @@ popd
 cd web-app/servers/
 rm -rf wallet
 
-# cd ../../
-# DOCKER_COMPOSE_FILE="docker-compose.yaml"
-# chmod a+x $DOCKER_COMPOSE_FILE
-# docker-compose up --build -d
-
-# docker network connect fabric_test fsc_node
-# docker network connect fabric_test fsc_react
+cd ../../
+DOCKER_COMPOSE_FILE="docker-compose.yaml"
+chmod a+x $DOCKER_COMPOSE_FILE
+docker compose up --build -d

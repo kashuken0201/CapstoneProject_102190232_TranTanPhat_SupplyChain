@@ -49,16 +49,22 @@ function Raws() {
     <div className="d-flex flex-column">
       <div className="d-flex justify-content-between align-items-center my-4">
         <h1 className="text-intro ">
-          {" "}
-          I'm {user.organization}, {user.username}
+          I'm a {user.organization}, {user.username}
         </h1>
         <div>
-          <button
-            className="btn btn-success"
-            onClick={() => setModalShow(true)}
-          >
-            + Add
-          </button>
+          {(() => {
+            if (user.organization === "supplier")
+              if (user.role !== "admin") {
+                return (
+                  <button
+                    className="btn btn-success"
+                    onClick={() => setModalShow(true)}
+                  >
+                    + Add
+                  </button>
+                );
+              }
+          })()}
         </div>
       </div>
       <div>{raws && <Pagination />}</div>

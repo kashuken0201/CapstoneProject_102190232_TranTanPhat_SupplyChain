@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minLength: 7,
+        minLength: 6,
     },
     address: {
         type: String,
@@ -71,15 +71,15 @@ userSchema.statics.findByCredentials = async (
 ) => {
     // Search for a user by email and password.
     const user = await User.findOne({ email });
-    if (user.organization !== organization)
-        throw new Error("Invalid organization");
     if (!user) {
-        throw new Error("Invalid login credentials");
+        return { error: "Account is not exist" };
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        throw new Error("Invalid login credentials");
+        return { error: "Invalid login credentials" };
     }
+    if (user?.organization !== organization)
+        return { error: "Invalid organization" };
     return user;
 };
 
