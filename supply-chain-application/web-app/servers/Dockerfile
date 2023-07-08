@@ -2,7 +2,7 @@ FROM node:18.16.0-alpine3.18
 
 WORKDIR /web-app/servers
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 

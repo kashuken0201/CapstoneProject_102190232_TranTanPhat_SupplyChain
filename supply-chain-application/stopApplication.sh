@@ -13,5 +13,7 @@ pushd ../test-network-supply-chain
 ./network.sh down
 popd
 
+docker compose down -d 
+
 cd web-app/servers/
 rm -rf identity

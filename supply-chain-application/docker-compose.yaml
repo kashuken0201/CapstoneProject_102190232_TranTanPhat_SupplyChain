@@ -7,7 +7,7 @@ services:
     ports:
       - "27077:27017"
     volumes:
-      - db_data:/data/db
+      - /data/db
     restart: always
 
   app_node:
@@ -21,7 +21,7 @@ services:
     volumes:
       - ./web-app/servers/.env:/web-app/servers/.env
       - ./web-app/servers:/web-app/servers
-      - ./web-app/servers/node_modules:/web-app/servers/node_modules
+      - /web-app/servers/node_modules
       
   app_react:
     container_name: app_react
@@ -32,12 +32,9 @@ services:
     ports:
       - 9000:3000
     volumes:
-      - ./web-app/client:/app
-      - ./web-app/client/node_modules:/app/node_modules
+      - ./web-app/client:/web-app/client
+      - /web-app/client/node_modules
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true 
-
-volumes:
-  db_data:
