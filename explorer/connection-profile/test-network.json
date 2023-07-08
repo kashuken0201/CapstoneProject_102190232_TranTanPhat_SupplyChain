@@ -29,7 +29,7 @@
 		"SupplierMSP": {
 			"mspid": "SupplierMSP",
 			"adminPrivateKey": {
-				"path": "/tmp/crypto/peerOrganizations/supplier.scm.com/users/User1@supplier.scm.com/msp/keystore/de5dd339cfab6c02fb160c6e2ff7bf5cecd60ef2efc171c7a6a25b6435f39c49_sk"
+				"path": "/tmp/crypto/peerOrganizations/supplier.scm.com/users/User1@supplier.scm.com/msp/keystore/958c7a112351761c01282dea91e643976a005e8b47acbd0f1d8e03721f8eb014_sk"
 			},
 			"peers": ["peer0.supplier.scm.com"],
 			"signedCert": {

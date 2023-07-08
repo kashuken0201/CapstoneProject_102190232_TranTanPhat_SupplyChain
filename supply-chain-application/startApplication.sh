@@ -31,6 +31,7 @@ popd
 
 cd web-app/servers/
 sudo rm -rf wallet
+mv .env.product .env
 
 cd ../../
 DOCKER_COMPOSE_FILE="docker-compose.yaml"

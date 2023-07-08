@@ -13,7 +13,8 @@ pushd ../test-network-supply-chain
 ./network.sh down
 popd
 
-docker compose down -d 
-
+docker compose down
+pwd
 cd web-app/servers/
-rm -rf identity
+rm -rf wallet
+mv .env .env.product
